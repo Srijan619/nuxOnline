@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import DeviceVersion from "./components/DeviceVersion.vue";
-import SelectedPreset from "./components/SelectedPreset.vue";
+import PresetViewer from "./components/PresetViewer.vue";
 </script>
 
 <template>
   <div>
     <DeviceVersion />
-    <SelectedPreset />
+    <PresetViewer />
   </div>
 </template>
 

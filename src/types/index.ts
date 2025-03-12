@@ -1,22 +1,24 @@
+export interface EffectOption {
+  id: string | undefined;
+  title: string;
+  onByte: string;
+  offByte: string;
+  category: string;
+  active: boolean;
+}
+
 interface Effect {
-  wahStatus: "On" | "Off";
-  wahType: number;
-  compTypeStatus: number;
-  efxStatus: "On" | "Off";
-  efxType: number;
-  ampStatus: number;
-  eqStatus: "On" | "Off";
-  eqType: number;
-  gateStatus: number;
-  modStatus: "On" | "Off";
-  modType: number;
-  delayTypeStatus: number;
-  reverbStatus: "On" | "Off";
-  reverbType: number;
-  irTypeStatus: number;
-  srStatus: "On" | "Off";
-  volStatus: number;
-  effectParams: number[];
+  wah: EffectOption;
+  comp: EffectOption;
+  efx: EffectOption;
+  amp: EffectOption;
+  eq: EffectOption;
+  gate: EffectOption;
+  mod: EffectOption;
+  delay: EffectOption;
+  reverb: EffectOption;
+  ir: EffectOption;
+  // effectParams: number[];
 }
 
 interface Scene {

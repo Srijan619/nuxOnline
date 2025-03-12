@@ -3,7 +3,9 @@ import type {
   Preset,
   DeviceVersion,
   Effect,
+  EffectOption,
 } from "../types";
+import effectsMapping from "./effects";
 
 export enum SysExRequest {
   DEVICE_VERSION = "F0 43 58 00 F7",
@@ -132,27 +134,49 @@ export class MIDIMock {
 
   // Extract various effect data
   private extractEffects(response: Uint8Array): Effect {
-    const effects: Effect = {
-      wahStatus: response[7] === 0 ? "On" : "Off",
-      wahType: response[8],
-      compTypeStatus: response[9],
-      efxStatus: response[10] === 0 ? "On" : "Off",
-      efxType: response[11],
-      ampStatus: response[12],
-      eqStatus: response[13] === 0 ? "On" : "Off",
-      eqType: response[14],
-      gateStatus: response[15],
-      modStatus: response[16] === 0 ? "On" : "Off",
-      modType: response[17],
-      delayTypeStatus: response[18],
-      reverbStatus: response[19] === 0 ? "On" : "Off",
-      reverbType: response[20],
-      irTypeStatus: response[21],
-      srStatus: response[22] === 0 ? "On" : "Off",
-      volStatus: response[24],
-      effectParams: response.slice(27, 138),
-    };
+    const getEffectOption = (
+      category: keyof typeof effectsMapping.effects,
+      byteValue: number,
+      active: boolean,
+    ): EffectOption => {
+      const effectCategory = effectsMapping.effects[category];
 
+      const effect = effectsMapping.effects[category]?.options?.find(
+        (data) => parseInt(data.onByte, 16) === byteValue,
+      );
+
+      if (!effect) {
+        return {
+          id: undefined,
+          title: "Unknown Effect",
+          onByte: "",
+          offByte: "",
+          category: "Unknown category",
+          active: false,
+        };
+      }
+      return {
+        id: effect.id,
+        title: effect.title,
+        onByte: effect.onByte,
+        offByte: effect.offByte,
+        category: effectCategory.category,
+        active: active,
+      };
+    };
+    const effects: Effect = {
+      wah: getEffectOption("wah", response[8], response[7] === 0),
+      comp: getEffectOption("cmp", response[9], response[9] === 0),
+      efx: getEffectOption("cmp", response[11], response[10] === 0),
+      amp: getEffectOption("amp", response[12], response[12] === 0),
+      eq: getEffectOption("cmp", response[14], response[13] === 0),
+      gate: getEffectOption("cmp", response[15], response[15] === 0),
+      mod: getEffectOption("cmp", response[17], response[16] === 0),
+      delay: getEffectOption("cmp", response[18], response[18] === 0),
+      reverb: getEffectOption("cmp", response[20], response[19] === 0),
+      ir: getEffectOption("cmp", response[21], response[21] === 0),
+      // effectParams: Array.from(response.slice(27, 138)),
+    };
     return effects;
   }
 }
