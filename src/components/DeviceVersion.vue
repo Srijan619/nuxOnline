@@ -4,7 +4,7 @@ import { MIDIMock, SysExRequest } from "../utils/mockMIDI.ts";
 const deviceVersion = ref<string>("");
 
 const sendMsg = () => {
-  const midiMock = new MIDIMock((msg, extractedData) => {
+  const midiMock = new MIDIMock((extractedData) => {
     deviceVersion.value = extractedData.version;
   });
 

@@ -26,14 +26,9 @@ const SYSEX_RESPONSES: Record<SysExRequest, SysExResponse> = {
 };
 
 export class MIDIMock {
-  private onMessageCallback: (
-    msg: Uint8Array,
-    extractedData: SysExResponseData,
-  ) => void;
+  private onMessageCallback: (extractedData: SysExResponseData) => void;
 
-  constructor(
-    onMessage: (msg: Uint8Array, extractedData: SysExResponseData) => void,
-  ) {
+  constructor(onMessage: (extractedData: SysExResponseData) => void) {
     this.onMessageCallback = onMessage;
   }
 
@@ -42,19 +37,19 @@ export class MIDIMock {
 
     const responseStr = SYSEX_RESPONSES[request];
     if (responseStr) {
-      const response = this.hexToBytes(responseStr);
       console.log("Matching SysEx detected. Sending response...");
+      const response = this.hexToBytes(responseStr);
       const extractedData = this.extractDataFromResponse(request, response);
 
-      this.sendResponse(response, extractedData);
+      this.sendResponse(extractedData);
     } else {
       console.log("No matching SysEx response found.");
     }
   }
 
-  private sendResponse(response: Uint8Array, extractedData: SysExResponseData) {
-    console.log("Sent SysEx Response:", this.bytesToHex(Array.from(response)));
-    this.onMessageCallback(response, extractedData);
+  private sendResponse(extractedData: SysExResponseData) {
+    // console.log("Sent SysEx Response:", this.bytesToHex(Array.from(response)));
+    this.onMessageCallback(extractedData);
   }
 
   private bytesToHex(bytes: number[]): string {
@@ -125,7 +120,7 @@ export class MIDIMock {
     let name = "";
     for (let i = 0; i < nameBytes.length; i += 3) {
       const char = String.fromCharCode(nameBytes[i]);
-      const code = nameBytes[i + 1];
+      // const code = nameBytes[i + 1];
       const secondChar = String.fromCharCode(nameBytes[i + 2] / 2);
       name += `${char}${secondChar}`;
     }
@@ -137,12 +132,13 @@ export class MIDIMock {
     const getEffectOption = (
       category: keyof typeof effectsMapping.effects,
       byteValue: number,
-      active: boolean,
     ): EffectOption => {
       const effectCategory = effectsMapping.effects[category];
 
-      const effect = effectsMapping.effects[category]?.options?.find(
-        (data) => parseInt(data.onByte, 16) === byteValue,
+      const effect = effectCategory?.options?.find(
+        (data) =>
+          parseInt(data.onByte, 16) === byteValue ||
+          parseInt(data.offByte, 16) === byteValue,
       );
 
       if (!effect) {
@@ -155,28 +151,30 @@ export class MIDIMock {
           active: false,
         };
       }
+
       return {
         id: effect.id,
         title: effect.title,
         onByte: effect.onByte,
         offByte: effect.offByte,
         category: effectCategory.category,
-        active: active,
+        active: parseInt(effect.onByte, 16) === byteValue,
       };
     };
+
     const effects: Effect = {
-      wah: getEffectOption("wah", response[8], response[7] === 0),
-      comp: getEffectOption("cmp", response[9], response[9] === 0),
-      efx: getEffectOption("cmp", response[11], response[10] === 0),
-      amp: getEffectOption("amp", response[12], response[12] === 0),
-      eq: getEffectOption("cmp", response[14], response[13] === 0),
-      gate: getEffectOption("cmp", response[15], response[15] === 0),
-      mod: getEffectOption("cmp", response[17], response[16] === 0),
-      delay: getEffectOption("cmp", response[18], response[18] === 0),
-      reverb: getEffectOption("cmp", response[20], response[19] === 0),
-      ir: getEffectOption("cmp", response[21], response[21] === 0),
-      // effectParams: Array.from(response.slice(27, 138)),
+      wah: getEffectOption("wah", response[8]),
+      comp: getEffectOption("cmp", response[9]),
+      efx: getEffectOption("cmp", response[11]),
+      amp: getEffectOption("amp", response[12]),
+      eq: getEffectOption("cmp", response[14]),
+      gate: getEffectOption("cmp", response[15]),
+      mod: getEffectOption("cmp", response[17]),
+      delay: getEffectOption("delay", response[18]),
+      reverb: getEffectOption("reverb", response[19]),
+      ir: getEffectOption("ir", response[21]),
     };
+
     return effects;
   }
 }

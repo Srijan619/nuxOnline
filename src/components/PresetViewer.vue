@@ -5,7 +5,7 @@ import EffectGroup from "./EffectGroup.vue";
 import effectsMapping from "../utils/effects.ts";
 
 const selectedPreset = ref<Preset | null>(null);
-const midiMock = new MIDIMock((msg, extractedData) => {
+const midiMock = new MIDIMock((extractedData) => {
   if (!selectedPreset.value) {
     selectedPreset.value = { ...extractedData };
   } else {
@@ -66,11 +66,6 @@ const toggleEffect = (key: string) => {
   margin: auto;
 }
 
-.preset-group-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
 .card {
   background: #222;
   color: #fff;

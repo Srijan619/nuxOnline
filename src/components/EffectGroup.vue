@@ -33,7 +33,7 @@ const groupedEffects = computed(() => {
       :key="category"
       class="effect-group"
     >
-      <h4>{{ category }}</h4>
+      <div class="category">{{ category }}</div>
       <div class="group-content">
         <div
           v-for="(effect, index) in effects"
@@ -62,12 +62,12 @@ const groupedEffects = computed(() => {
   background: #222;
   padding: 14px;
   border-radius: 8px;
-  margin-bottom: 12px;
 }
 
-h4 {
+.category {
+  font-weight: bold;
   color: #fff;
-  margin-bottom: 8px;
+  margin: 0.2rem;
 }
 
 .group-content {
