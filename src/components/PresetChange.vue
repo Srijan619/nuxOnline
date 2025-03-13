@@ -1,23 +1,46 @@
 <script setup lang="ts">
 import { ref, defineEmits } from "vue";
+import { nuxMidiController } from "../utils/NUXMidiController.ts";
+
+const MAX_PRESET = 127;
+const MIN_PRESET = 0;
 
 const presetNumber = ref(0);
-const emit = defineEmits(["change-preset"]);
+
+const emit = defineEmits<{
+  (e: "change-preset", newPresetNumber: number): void;
+}>();
 
 const changePreset = (direction: "up" | "down") => {
   if (direction === "up") {
-    presetNumber.value = Math.min(presetNumber.value + 1, 127);
+    presetNumber.value = Math.min(presetNumber.value + 1, MAX_PRESET);
   } else {
-    presetNumber.value = Math.max(presetNumber.value - 1, 0);
+    presetNumber.value = Math.max(presetNumber.value - 1, MIN_PRESET);
   }
-  emit("change-preset", presetNumber.value);
+
+  const basicData = nuxMidiController.getBasicPresetData(presetNumber.value);
+
+  if (basicData !== undefined) {
+    // If preset is valid, emit the new valid preset number
+    emit("change-preset", presetNumber.value);
+  } else {
+    console.warn(`⚠️ Invalid preset ${presetNumber.value}. Change aborted.`);
+    presetNumber.value = -1; //HACK: way to reset for now..
+  }
 };
 </script>
 
 <template>
   <div class="preset-change">
-    <button @click="changePreset('down')">⬅ Prev</button>
-    <button @click="changePreset('up')">Next ➡</button>
+    <button
+      @click="changePreset('down')"
+      :disabled="presetNumber <= MIN_PRESET"
+    >
+      ⬅ Prev
+    </button>
+    <button @click="changePreset('up')" :disabled="presetNumber >= MAX_PRESET">
+      Next ➡
+    </button>
   </div>
 </template>
 

@@ -7,7 +7,8 @@ import type {
 } from "../types";
 import effectsMapping from "./effects";
 
-export enum SysExRequest {
+//TODO: Commands needs to be hooked in to mock implementation somewhere
+enum SysExRequest {
   DEVICE_VERSION = "F0 43 58 00 F7",
   CURRENT_PRESET = "F0 43 58 70 15 00 F7",
   CURRENT_PRESET_DATA = "F0 43 58 70 0B 00 00 00 00 00 00 00 00 00 F7",
@@ -15,48 +16,63 @@ export enum SysExRequest {
 
 enum SysExResponse {
   DEVICE_VERSION = "F0 43 58 10 76 34 2E 30 2E 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4D 47 2D 33 30 00 00 00 F7",
-  CURRENT_PRESET = "F0 43 58 70 15 02 00 00 64 00 00 00 00 00 F7",
-  CURRENT_PRESET_DATA = "F0 43 58 70 0B 02 00 01 02 43 01 0A 02 01 02 01 01 02 42 00 04 14 01 02 01 00 00 32 02 00 04 00 68 25 00 4E 46 00 06 00 01 24 55 00 00 00 00 00 07 00 50 61 00 10 23 00 40 24 00 7E 4C 00 0E 3F 00 64 20 00 64 31 00 5E 32 00 64 32 00 64 32 00 64 02 00 28 32 00 00 00 00 08 3B 00 7E 24 03 2C 00 00 00 04 00 28 28 00 4F 55 00 00 00 00 00 00 00 08 4D 00 76 55 00 5A 06 00 00 00 00 64 00 01 48 00 00 04 32 00 64 02 00 00 64 00 64 00 00 00 62 00 00 00 00 02 05 00 04 03 00 12 04 00 14 06 00 0E 08 00 16 41 01 04 43 01 08 31 00 64 33 00 68 5B 01 38 5D 01 3C 61 01 44 63 01 48 0A 00 10 09 00 02 05 00 00 64 00 00 64 00 00 00 01 20 00 00 50 0B 00 78 0A 00 00 00 F7",
 }
 
-const SYSEX_RESPONSES: Record<SysExRequest, SysExResponse> = {
-  [SysExRequest.DEVICE_VERSION]: SysExResponse.DEVICE_VERSION,
-  [SysExRequest.CURRENT_PRESET]: SysExResponse.CURRENT_PRESET,
-  [SysExRequest.CURRENT_PRESET_DATA]: SysExResponse.CURRENT_PRESET_DATA,
+const SysExMockResponse: Record<number, { basic: string; detail: string }> = {
+  0: {
+    basic: "F0 43 58 70 15 02 00 00 64 00 00 00 00 00 F7",
+    detail:
+      "F0 43 58 70 0B 02 00 01 02 43 01 0A 02 01 02 01 01 02 42 00 04 14 01 02 01 00 00 32 02 00 04 00 68 25 00 4E 46 00 06 00 01 24 55 00 00 00 00 00 07 00 50 61 00 10 23 00 40 24 00 7E 4C 00 0E 3F 00 64 20 00 64 31 00 5E 32 00 64 32 00 64 32 00 64 02 00 28 32 00 00 00 00 08 3B 00 7E 24 03 2C 00 00 00 04 00 28 28 00 4F 55 00 00 00 00 00 00 00 08 4D 00 76 55 00 5A 06 00 00 00 00 64 00 01 48 00 00 04 32 00 64 02 00 00 64 00 64 00 00 00 62 00 00 00 00 02 05 00 04 03 00 12 04 00 14 06 00 0E 08 00 16 41 01 04 43 01 08 31 00 64 33 00 68 5B 01 38 5D 01 3C 61 01 44 63 01 48 0A 00 10 09 00 02 05 00 00 64 00 00 64 00 00 00 01 20 00 00 50 0B 00 78 0A 00 00 00 F7",
+  },
+  1: {
+    basic: "F0 43 58 70 15 02 01 00 64 03 00 00 00 00 F7",
+    detail:
+      "F0 43 58 70 0B 02 01 00 0A 0F 01 26 02 01 02 01 01 02 08 00 04 14 01 02 01 00 00 32 02 00 04 00 68 25 00 4E 46 00 06 00 01 24 55 00 00 00 00 00 07 00 50 61 00 10 23 00 40 24 00 7E 4C 00 0E 3F 00 64 20 00 64 31 00 5E 32 00 64 32 00 64 32 00 64 02 00 28 32 00 00 00 00 08 3B 00 7E 24 03 2C 00 00 00 04 00 28 28 00 4F 55 00 00 00 00 00 00 00 08 4D 00 76 55 00 5A 06 00 00 00 00 64 00 01 48 00 00 04 32 00 64 02 00 00 64 00 64 00 00 00 62 00 00 00 00 02 05 00 04 03 00 12 04 00 14 06 00 0E 08 00 16 41 01 04 43 01 08 31 00 64 33 00 68 5B 01 38 5D 01 3C 61 01 44 63 01 48 0A 00 10 09 00 02 05 00 00 64 00 00 64 00 00 00 01 20 00 00 50 0B 00 78 0A 00 00 00 F7",
+  },
 };
 
-export class MIDIMock {
-  private onMessageCallback: (extractedData: SysExResponseData) => void;
+class NUXMidiController {
+  constructor() { }
 
-  constructor(onMessage: (extractedData: SysExResponseData) => void) {
-    this.onMessageCallback = onMessage;
-  }
-
-  public receiveMessage(request: SysExRequest) {
-    console.log("Received SysEx:", request);
-
-    const responseStr = SYSEX_RESPONSES[request];
-    if (responseStr) {
-      console.log("Matching SysEx detected. Sending response...");
-      const response = this.hexToBytes(responseStr);
-      const extractedData = this.extractDataFromResponse(request, response);
-
-      this.sendResponse(extractedData);
-    } else {
-      console.log("No matching SysEx response found.");
+  private preparePresetData(index: number, type: "basic" | "detail") {
+    const presetData = SysExMockResponse[index];
+    if (!presetData) {
+      console.warn(`Preset data for index ${index} not found.`);
+      return;
     }
+
+    const sysExMessage = presetData[type];
+    if (!sysExMessage) {
+      console.warn(`No ${type} SysEx message found for index ${index}.`);
+      return;
+    }
+
+    const response = this.hexToBytes(sysExMessage);
+    return response;
   }
 
-  private sendResponse(extractedData: SysExResponseData) {
-    // console.log("Sent SysEx Response:", this.bytesToHex(Array.from(response)));
-    this.onMessageCallback(extractedData);
+  public getDeviceVersion() {
+    const mockDeviceVersionResponse = SysExResponse.DEVICE_VERSION;
+    const response = this.hexToBytes(mockDeviceVersionResponse);
+    return this.extractDeviceVersion(response);
   }
 
-  private bytesToHex(bytes: number[]): string {
-    return bytes
-      .map((b) => b.toString(16).toUpperCase().padStart(2, "0"))
-      .join(" ");
+  public getBasicPresetData(index: number) {
+    const data = this.preparePresetData(index, "basic");
+    if (!data) return;
+    return this.extractCurrentPreset(data);
   }
+
+  public getDetailPresetData(index: number) {
+    const data = this.preparePresetData(index, "detail");
+    if (!data) return;
+    return this.extractPresetData(data);
+  }
+
+  // private sendResponse(extractedData: SysExResponseData) {
+  //   // console.log("Sent SysEx Response:", this.bytesToHex(Array.from(response)));
+  //   this.onMessageCallback(extractedData);
+  // }
 
   private unitHexToBytes(response: Uint8Array): string[] {
     return Array.from(response, (byte) =>
@@ -66,23 +82,6 @@ export class MIDIMock {
 
   private hexToBytes(hexString: string): Uint8Array {
     return new Uint8Array(hexString.split(" ").map((h) => parseInt(h, 16)));
-  }
-
-  private extractDataFromResponse(
-    request: SysExRequest,
-    response: Uint8Array,
-  ): SysExResponseData {
-    switch (request) {
-      case SysExRequest.DEVICE_VERSION:
-        return this.extractDeviceVersion(response);
-      case SysExRequest.CURRENT_PRESET:
-        return this.extractCurrentPreset(response);
-      case SysExRequest.CURRENT_PRESET_DATA:
-        return this.extractPresetData(response);
-      default:
-        console.log("No extraction logic defined for this request.");
-        return "Unknown response format";
-    }
   }
 
   private extractDeviceVersion(response: Uint8Array): DeviceVersion {
@@ -147,9 +146,6 @@ export class MIDIMock {
       const effect = effectCategory?.options?.find(
         (data) => data.onByte === byteValue || data.offByte === byteValue,
       );
-      if (category === "delay") {
-        console.log("Status", effect, byteValue);
-      }
 
       if (!effect) {
         return {
@@ -196,3 +192,6 @@ export class MIDIMock {
     return effects;
   }
 }
+
+const nuxMidiController = new NUXMidiController();
+export { nuxMidiController, SysExRequest };

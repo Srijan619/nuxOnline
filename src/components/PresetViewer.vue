@@ -1,38 +1,23 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import { MIDIMock, SysExRequest, Preset } from "../utils/mockMIDI.ts";
+import { ref, computed } from "vue";
+import { nuxMidiController } from "../utils/NUXMidiController.ts";
 import EffectGroup from "./EffectGroup.vue";
 import PresetChange from "./PresetChange.vue";
-import effectsMapping from "../utils/effects.ts";
 
-const selectedPreset = ref<Preset | null>(null);
-const midiMock = new MIDIMock((extractedData) => {
-  if (!selectedPreset.value) {
-    selectedPreset.value = { ...extractedData };
-  } else {
-    selectedPreset.value = { ...selectedPreset.value, ...extractedData };
-  }
+const selectedPresetIndex = ref<number>(0);
+const selectedPreset = computed(() => {
+  return {
+    ...nuxMidiController.getBasicPresetData(selectedPresetIndex.value),
+    ...nuxMidiController.getDetailPresetData(selectedPresetIndex.value),
+  };
 });
-
-const sendMsg = async () => {
-  // Fetch basic preset info (number + scene)
-  midiMock.receiveMessage(SysExRequest.CURRENT_PRESET);
-  midiMock.receiveMessage(SysExRequest.CURRENT_PRESET_DATA);
-};
-
-onMounted(() => {
-  sendMsg();
-});
-
-const toggleEffect = (key: string) => {
-  if (selectedPreset.value?.effects) {
-    selectedPreset.value.effects[key] =
-      selectedPreset.value.effects[key] === "On" ? "Off" : "On";
-  }
-};
 
 const changePreset = (newPresetNumber: number) => {
-  selectedPreset.value.presetNumber = newPresetNumber; // TODO: This should happen in chain after send programChange is called
+  selectedPresetIndex.value = newPresetNumber;
+};
+
+const toggleEffect = (key: string) => {
+  console.log("🤮 Support coming soon...");
 };
 </script>
 
