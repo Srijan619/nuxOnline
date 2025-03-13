@@ -58,6 +58,12 @@ export class MIDIMock {
       .join(" ");
   }
 
+  private unitHexToBytes(response: Uint8Array): string[] {
+    return Array.from(response, (byte) =>
+      byte.toString(16).padStart(2, "0").toUpperCase(),
+    );
+  }
+
   private hexToBytes(hexString: string): Uint8Array {
     return new Uint8Array(hexString.split(" ").map((h) => parseInt(h, 16)));
   }
@@ -129,18 +135,21 @@ export class MIDIMock {
 
   // Extract various effect data
   private extractEffects(response: Uint8Array): Effect {
+    const hexValue = this.unitHexToBytes(response);
+
     const getEffectOption = (
       category: keyof typeof effectsMapping.effects,
-      byteValue: number,
+      byteValue: string,
       onOffByte?: number,
     ): EffectOption => {
       const effectCategory = effectsMapping.effects[category];
 
       const effect = effectCategory?.options?.find(
-        (data) =>
-          parseInt(data.onByte, 16) === byteValue ||
-          parseInt(data.offByte, 16) === byteValue,
+        (data) => data.onByte === byteValue || data.offByte === byteValue,
       );
+      if (category === "delay") {
+        console.log("Status", effect, byteValue);
+      }
 
       if (!effect) {
         return {
@@ -156,7 +165,7 @@ export class MIDIMock {
       // onOffByte overrides onByte/offByte of object
       const effectActiveStatus = onOffByte
         ? onOffByte == 0
-        : parseInt(effect.onByte, 16) === byteValue;
+        : effect.onByte === byteValue;
 
       return {
         id: effect.id,
@@ -170,16 +179,18 @@ export class MIDIMock {
 
     //For example in some case: 8th byte is wahstatus, wah object doesn't itself have on/off (or only says wah type)
     const effects: Effect = {
-      wah: getEffectOption("wah", response[8], response[7]),
-      comp: getEffectOption("cmp", response[9]),
-      efx: getEffectOption("cmp", response[11], response[10]),
-      amp: getEffectOption("amp", response[12]),
-      eq: getEffectOption("cmp", response[14], response[13]),
-      gate: getEffectOption("cmp", response[15]),
-      mod: getEffectOption("cmp", response[17], response[16]),
-      delay: getEffectOption("delay", response[18]),
-      reverb: getEffectOption("reverb", response[19], response[18]),
-      ir: getEffectOption("ir", response[21]),
+      wah: getEffectOption("wah", hexValue[8], response[7]),
+      comp: getEffectOption("cmp", hexValue[9]),
+      efx: getEffectOption("efx", hexValue[11], response[10]),
+      amp: getEffectOption("amp", hexValue[12]),
+      eq: getEffectOption("eq", hexValue[14], response[13]),
+      gate: getEffectOption("gate", hexValue[15]),
+      mod: getEffectOption("mod", hexValue[17], response[16]),
+      delay: getEffectOption("delay", hexValue[18]),
+      reverb: getEffectOption("reverb", hexValue[19], response[18]),
+      ir: getEffectOption("ir", hexValue[21]),
+      vol: getEffectOption("vol", hexValue[24]),
+      sr: getEffectOption("sr", hexValue[22]),
     };
 
     return effects;

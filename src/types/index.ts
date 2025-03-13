@@ -18,6 +18,8 @@ interface Effect {
   delay: EffectOption;
   reverb: EffectOption;
   ir: EffectOption;
+  sr: EffectOption;
+  vol: EffectOption;
   // effectParams: number[];
 }
 
