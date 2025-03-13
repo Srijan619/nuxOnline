@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
 import EffectGroup from "./EffectGroup.vue";
+import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 
 const selectedPresetIndex = ref<number>(0);
@@ -38,10 +39,14 @@ const toggleEffect = (key: string) => {
       <PresetChange @change-preset="changePreset" />
     </div>
 
-    <EffectGroup
+    <EffectChain
       :effects="selectedPreset.effects"
       :toggleEffect="toggleEffect"
     />
+    <!-- <EffectGroup -->
+    <!--   :effects="selectedPreset.effects" -->
+    <!--   :toggleEffect="toggleEffect" -->
+    <!-- /> -->
   </div>
 
   <div v-else class="loading">

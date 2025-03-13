@@ -127,7 +127,7 @@ export default {
     },
     delay: {
       byte: 18,
-      category: "🎵 Delay & Reverb",
+      category: "🎵 Delay",
       options: [
         {
           id: "DIGITAL_DELAY",

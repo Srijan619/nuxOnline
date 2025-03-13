@@ -4,10 +4,15 @@ import PresetViewer from "./components/PresetViewer.vue";
 </script>
 
 <template>
-  <div>
+  <div id="nux-container">
     <DeviceVersion />
     <PresetViewer />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#nux-container {
+  margin: 1rem;
+  padding: 1rem;
+}
+</style>

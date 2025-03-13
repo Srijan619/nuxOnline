@@ -1,0 +1,104 @@
+<template>
+  <div class="effect-chain">
+    <div
+      v-for="(effect, index) in effectList"
+      :key="effect.id"
+      :class="['effect-box', { inactive: !effect.active }]"
+      :onToggle="() => props.toggleEffect(effect.id)"
+    >
+      <div class="box-content">
+        <h3>{{ effect.title }}</h3>
+      </div>
+      <div v-if="index < effectList.length - 1" class="connector"></div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import ToggleSwitch from "./ToggleSwitch.vue";
+import { EffectOption } from "../types/index.ts";
+
+const props = defineProps<{
+  effects: Record<string, EffectOption>;
+  toggleEffect: (key: string) => void;
+}>();
+
+const effectList = computed(() => {
+  return Object.entries(props.effects)
+    .filter(([id]) => id != null)
+    .map(([id, effect]) => ({
+      ...effect,
+    }));
+});
+
+console.log(props.effects);
+</script>
+
+<style scoped>
+.effect-chain {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 20px;
+  overflow-x: scroll;
+}
+
+.effect-box {
+  position: relative;
+  width: 120px;
+  height: 100px;
+  border-radius: 8px;
+  box-shadow: 0 0 0.2rem green;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: #222;
+  transition: all 0.3s ease;
+  min-width: 10rem;
+}
+
+.effect-box.inactive {
+  opacity: 0.5;
+  box-shadow: 0 4px 8px grey;
+  color: #ccc;
+}
+
+.effect-box:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.box-content {
+  text-align: center;
+}
+
+.box-content h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.box-content p {
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.connector {
+  position: absolute;
+  top: 50%;
+  right: -20px; /* Half of gap */
+  transform: translateY(-50%);
+  width: 20px;
+  height: 2px;
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+
+.effect-box.inactive + .effect-box .connector,
+.effect-box + .effect-box.inactive .connector {
+  background-color: #666;
+}
+</style>

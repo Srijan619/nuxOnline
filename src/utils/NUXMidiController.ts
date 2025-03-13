@@ -183,10 +183,10 @@ class NUXMidiController {
       gate: getEffectOption("gate", hexValue[15]),
       mod: getEffectOption("mod", hexValue[17], response[16]),
       delay: getEffectOption("delay", hexValue[18]),
-      reverb: getEffectOption("reverb", hexValue[19], response[18]),
+      reverb: getEffectOption("reverb", hexValue[20], response[19]),
       ir: getEffectOption("ir", hexValue[21]),
-      vol: getEffectOption("vol", hexValue[24]),
       sr: getEffectOption("sr", hexValue[22]),
+      vol: getEffectOption("vol", hexValue[24]),
     };
 
     return effects;
