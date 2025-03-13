@@ -132,6 +132,7 @@ export class MIDIMock {
     const getEffectOption = (
       category: keyof typeof effectsMapping.effects,
       byteValue: number,
+      onOffByte?: number,
     ): EffectOption => {
       const effectCategory = effectsMapping.effects[category];
 
@@ -152,26 +153,32 @@ export class MIDIMock {
         };
       }
 
+      // onOffByte overrides onByte/offByte of object
+      const effectActiveStatus = onOffByte
+        ? onOffByte == 0
+        : parseInt(effect.onByte, 16) === byteValue;
+
       return {
         id: effect.id,
         title: effect.title,
         onByte: effect.onByte,
         offByte: effect.offByte,
         category: effectCategory.category,
-        active: parseInt(effect.onByte, 16) === byteValue,
+        active: effectActiveStatus,
       };
     };
 
+    //For example in some case: 8th byte is wahstatus, wah object doesn't itself have on/off (or only says wah type)
     const effects: Effect = {
-      wah: getEffectOption("wah", response[8]),
+      wah: getEffectOption("wah", response[8], response[7]),
       comp: getEffectOption("cmp", response[9]),
-      efx: getEffectOption("cmp", response[11]),
+      efx: getEffectOption("cmp", response[11], response[10]),
       amp: getEffectOption("amp", response[12]),
-      eq: getEffectOption("cmp", response[14]),
+      eq: getEffectOption("cmp", response[14], response[13]),
       gate: getEffectOption("cmp", response[15]),
-      mod: getEffectOption("cmp", response[17]),
+      mod: getEffectOption("cmp", response[17], response[16]),
       delay: getEffectOption("delay", response[18]),
-      reverb: getEffectOption("reverb", response[19]),
+      reverb: getEffectOption("reverb", response[19], response[18]),
       ir: getEffectOption("ir", response[21]),
     };
 
