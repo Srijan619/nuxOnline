@@ -42,6 +42,7 @@ console.log(props.effects);
   padding: 20px;
   gap: 20px;
   overflow-x: scroll;
+  z-index: 1000;
 }
 
 .effect-box {
@@ -49,7 +50,7 @@ console.log(props.effects);
   width: 120px;
   height: 100px;
   border-radius: 8px;
-  box-shadow: 0 0 0.2rem green;
+  box-shadow: 0 0 0.2rem #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -62,7 +63,7 @@ console.log(props.effects);
 
 .effect-box.inactive {
   opacity: 0.5;
-  box-shadow: 0 4px 8px grey;
+  box-shadow: 0 0 0.2rem grey;
   color: #ccc;
 }
 
@@ -89,16 +90,11 @@ console.log(props.effects);
 .connector {
   position: absolute;
   top: 50%;
-  right: -20px; /* Half of gap */
+  right: -1.2rem;
   transform: translateY(-50%);
-  width: 20px;
-  height: 2px;
+  width: 1.2rem;
+  height: 0.2rem;
   background-color: white;
   transition: background-color 0.3s ease;
-}
-
-.effect-box.inactive + .effect-box .connector,
-.effect-box + .effect-box.inactive .connector {
-  background-color: #666;
 }
 </style>

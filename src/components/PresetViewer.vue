@@ -43,10 +43,6 @@ const toggleEffect = (key: string) => {
       :effects="selectedPreset.effects"
       :toggleEffect="toggleEffect"
     />
-    <!-- <EffectGroup -->
-    <!--   :effects="selectedPreset.effects" -->
-    <!--   :toggleEffect="toggleEffect" -->
-    <!-- /> -->
   </div>
 
   <div v-else class="loading">
