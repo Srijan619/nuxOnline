@@ -66,7 +66,6 @@ export default {
         },
       ],
     },
-
     efx: {
       byte: 12,
       category: "🎛️ EFX",
@@ -112,7 +111,6 @@ export default {
         { id: "SCH_1", title: "SCH-1", onByte: "3A", offByte: "" },
       ],
     },
-
     amp: {
       byte: 13,
       category: "🎚️ Amp",
@@ -156,13 +154,11 @@ export default {
       category: "📡 S/R",
       options: [{ id: "S_R", title: "S/R", onByte: "00", offByte: "01" }],
     },
-
     vol: {
       byte: 25,
       category: "🔊 Volume",
       options: [{ id: "VOL", title: "Volume", onByte: "01", offByte: "41" }],
     },
-
     ir: {
       byte: 22,
       category: "🎛️ IR",
@@ -213,7 +209,6 @@ export default {
         { id: "CUSTOM_IR", title: "Custom IR", onByte: "14", offByte: "54" },
       ],
     },
-
     eq: {
       byte: 14,
       category: "🎛️ EQ",

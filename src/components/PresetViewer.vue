@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from "vue";
 import { MIDIMock, SysExRequest, Preset } from "../utils/mockMIDI.ts";
 import EffectGroup from "./EffectGroup.vue";
+import PresetChange from "./PresetChange.vue";
 import effectsMapping from "../utils/effects.ts";
 
 const selectedPreset = ref<Preset | null>(null);
@@ -29,6 +30,10 @@ const toggleEffect = (key: string) => {
       selectedPreset.value.effects[key] === "On" ? "Off" : "On";
   }
 };
+
+const changePreset = (newPresetNumber: number) => {
+  selectedPreset.value.presetNumber = newPresetNumber; // TODO: This should happen in chain after send programChange is called
+};
 </script>
 
 <template>
@@ -45,6 +50,7 @@ const toggleEffect = (key: string) => {
         <strong>Active Scene Number:</strong>
         {{ selectedPreset.activeSceneNumber }}
       </div>
+      <PresetChange @change-preset="changePreset" />
     </div>
 
     <EffectGroup
