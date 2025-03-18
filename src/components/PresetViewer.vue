@@ -25,10 +25,6 @@ watch(
     }
   },
 );
-
-const toggleEffect = (key: string) => {
-  console.log("🤮 Support coming soon...");
-};
 </script>
 
 <template>
@@ -51,7 +47,6 @@ const toggleEffect = (key: string) => {
     <EffectChain
       v-if="selectedPreset.effects"
       :effects="selectedPreset.effects"
-      :toggleEffect="toggleEffect"
     />
   </div>
 

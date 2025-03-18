@@ -4,7 +4,7 @@
       v-for="(effect, index) in effectList"
       :key="effect.id"
       :class="['effect-box', { inactive: !effect.active }]"
-      :onToggle="() => props.toggleEffect(effect.id)"
+      @click="toggleEffect(effect)"
     >
       <div class="box-content">
         <h3>{{ effect.title }}</h3>
@@ -18,21 +18,37 @@
 import { computed, ref } from "vue";
 import ToggleSwitch from "./ToggleSwitch.vue";
 import { EffectOption } from "../types/index.ts";
+import { nuxMidiController } from "../utils/NUXMidiController.ts";
 
 const props = defineProps<{
   effects: Record<string, EffectOption>;
-  toggleEffect: (key: string) => void;
 }>();
 
+//HACK: This needs to be strictly put in interface later...
+const orderedKeys: (keyof Effect)[] = [
+  "wah",
+  "comp",
+  "efx",
+  "amp",
+  "eq",
+  "gate",
+  "mod",
+  "delay",
+  "reverb",
+  "ir",
+  "sr",
+  "vol",
+];
+
 const effectList = computed(() => {
-  return Object.entries(props.effects)
-    .filter(([id]) => id != null)
-    .map(([id, effect]) => ({
-      ...effect,
-    }));
+  return orderedKeys
+    .map((key) => props.effects[key]) // Map keys to effects
+    .filter((effect): effect is EffectOption => effect !== undefined); // Remove any missing ones
 });
 
-console.log(props.effects);
+const toggleEffect = (effect: EffectOption) => {
+  nuxMidiController.value?.toggleEffect(effect);
+};
 </script>
 
 <style scoped>

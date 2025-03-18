@@ -16,7 +16,7 @@ export default {
         },
       ],
     },
-    cmp: {
+    comp: {
       byte: 10,
       category: "🎛️ Compressor",
       options: [

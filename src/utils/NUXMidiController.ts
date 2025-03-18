@@ -21,10 +21,6 @@ const CURRENT_PRESET_DATA_COMMAND = (index: number) => {
   return `58 70 0B 00 ${hexIndex(index)} 00 00 00 00 00 00 00`;
 };
 
-const CHANGE_PRESET_COMMAND = (index: number) => {
-  return `C0 ${hexIndex(index)}`;
-};
-
 //TODO: Commands needs to be hooked in to mock implementation somewhere
 enum SysExRequest {
   DEVICE_VERSION = "58 00",
@@ -95,6 +91,7 @@ class NUXMidiController {
     }
   }
   private handleSysExResponse(event: MessageEvent) {
+    console.log("Sysex response..", event.data);
     const data = event.data;
 
     // Dynamically check for the correct response type based on the SysExResponsePattern
@@ -158,6 +155,50 @@ class NUXMidiController {
 
     this.midiOutput!.send(message);
   }
+
+  public toggleEffect(effect: EffectOption) {
+    if (!effect || !effect.id) return;
+    this.checkDevice(); // Ensure the device is connected
+
+    console.log("Toggler..", effect);
+    const effectId = effect.category;
+
+    if (!effectId) return;
+
+    const byteToSend = effect.active ? effect.offByte : effect.onByte;
+
+    if (!byteToSend) {
+      console.error("Invalid byte value:", effect);
+      return;
+    }
+
+    // Optimistically update local state
+    this.updateEffectState(effectId, !effect.active);
+
+    // Send MIDI message
+    try {
+      const message = [0xb0, 0x00, parseInt(byteToSend, 16)];
+
+      this.midiOutput!.send(message);
+      console.log(`MIDI message sent: ${message}`);
+    } catch (error) {
+      console.error("Error sending MIDI message", error);
+      // Optionally, revert the local state change if the message failed
+      this.updateEffectState(effectId, effect.active);
+    }
+  }
+
+  // Method to update the local state (or store) of the effect
+  private updateEffectState(effectId: string, isActive: boolean) {
+    if (
+      this.currentPresetDetailData.effects &&
+      this.currentPresetDetailData.effects[effectId]
+    ) {
+      this.currentPresetDetailData.effects[effectId].active = isActive;
+      console.log("Toggling effect..", effectId, this.currentPresetDetailData);
+    }
+  }
+
   // private sendResponse(extractedData: SysExResponseData) {
   //   // console.log("Sent SysEx Response:", this.bytesToHex(Array.from(response)));
   //   this.onMessageCallback(extractedData);
@@ -265,7 +306,7 @@ class NUXMidiController {
         title: effect.title,
         onByte: effect.onByte,
         offByte: effect.offByte,
-        category: effectCategory.category,
+        category: category,
         active: effectActiveStatus,
       };
     };
@@ -274,7 +315,7 @@ class NUXMidiController {
 
     const effects: Effect = {
       wah: getEffectOption("wah", hexValue[9], response[8]),
-      comp: getEffectOption("cmp", hexValue[10]),
+      comp: getEffectOption("comp", hexValue[10]),
       efx: getEffectOption("efx", hexValue[12], response[11]),
       amp: getEffectOption("amp", hexValue[13]),
       eq: getEffectOption("eq", hexValue[15], response[14]),
