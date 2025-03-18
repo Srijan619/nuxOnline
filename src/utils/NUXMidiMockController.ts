@@ -8,105 +8,21 @@ import type {
 import effectsMapping from "./effects";
 import { SysExMockResponse } from "../mocks/mockNuxResponse";
 
-import { WebMidi, Output, Input } from "webmidi";
-import type { MessageEvent } from "webmidi";
-
-import { ref } from "vue";
-
 //TODO: Commands needs to be hooked in to mock implementation somewhere
 enum SysExRequest {
-  DEVICE_VERSION = "58 00",
+  DEVICE_VERSION = "F0 43 58 00 F7",
   CURRENT_PRESET = "F0 43 58 70 15 00 F7",
   CURRENT_PRESET_DATA = "F0 43 58 70 0B 00 00 00 00 00 00 00 00 00 F7",
 }
 
-const SysExResponsePattern = {
-  DEVICE_VERSION: [0xf0, 0x43, 0x58],
-};
+enum SysExResponse {
+  DEVICE_VERSION = "F0 43 58 10 76 34 2E 30 2E 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4D 47 2D 33 30 00 00 00 F7",
+}
 
 class NUXMidiController {
-  private isDeviceConnected = false;
-  private deviceName = "";
-  private deviceVersion = ref("");
-  private midiOutput: Output | null = null;
-  private midiInput: Input | null = null;
-
-  private constructor(output: Output, input: Input) {
-    this.midiOutput = output;
-    this.midiInput = input;
-    this.isDeviceConnected = true;
-    this.deviceName = output.name;
-
-    // Listen for SysEx responses
-    this.midiInput.addListener("sysex", (event: MessageEvent) =>
-      this.handleSysExResponse(event),
-    );
-  }
-
-  static async create(): Promise<NUXMidiController | null> {
-    try {
-      await WebMidi.enable({ sysex: true });
-
-      const nuxOutput = WebMidi.outputs.find(
-        (output) => output.name === "NUX MG-30",
-      );
-      const nuxInput = WebMidi.inputs.find(
-        (input) => input.name === "NUX MG-30",
-      );
-
-      if (!nuxOutput || !nuxInput) {
-        console.error("❌ NUX MG-30 not found. Controller not created.");
-        return null;
-      }
-
-      console.log("✅ NUX MG-30 detected:", nuxOutput.name);
-      const controller = new NUXMidiController(nuxOutput, nuxInput);
-
-      // Send the device version request after initialization
-      controller.getDeviceVersion();
-
-      window["nux"] = controller;
-      return controller;
-    } catch (error) {
-      console.error("❌ MIDI Initialization Error:", error);
-      return null;
-    }
-  }
-
-  private checkDevice() {
-    if (!this.isDeviceConnected) {
-      console.warn("NUX MG-30 is not connected yet.");
-      return;
-    }
-  }
-  private handleSysExResponse(event: MessageEvent) {
-    console.log("Response..", event);
-    const data = event.data;
-    console.log("🔹 Received SysEx:", data);
-
-    // Dynamically check for the correct response type based on the SysExResponsePattern
-    for (const [requestType, expectedPattern] of Object.entries(
-      SysExResponsePattern,
-    )) {
-      const match = expectedPattern.every(
-        (byte, index) => data[index] === byte,
-      );
-
-      if (match) {
-        console.log(`✅ ${requestType} Response matched.`);
-        if (requestType === "DEVICE_VERSION") {
-          this.deviceVersion.value = this.extractDeviceVersion(data)?.version;
-        }
-        return;
-      }
-    }
-
-    // If no match is found, log an error or handle accordingly
-    console.warn("⚠️ Unknown SysEx response:", data);
-  }
+  constructor() { }
 
   private preparePresetData(index: number, type: "basic" | "detail") {
-    this.checkDevice();
     const presetData = SysExMockResponse[index];
     if (!presetData) {
       console.warn(`Preset data for index ${index} not found.`);
@@ -123,27 +39,19 @@ class NUXMidiController {
     return response;
   }
 
-  public getDeviceName() {
-    this.checkDevice();
-    return this.deviceName;
-  }
-
   public getDeviceVersion() {
-    this.checkDevice();
-    console.log("🔹 Requesting device version...");
-    const message = this.hexToBytes(SysExRequest.DEVICE_VERSION);
-    this.midiOutput!.sendSysex(0x43, Array.from(message));
+    const mockDeviceVersionResponse = SysExResponse.DEVICE_VERSION;
+    const response = this.hexToBytes(mockDeviceVersionResponse);
+    return this.extractDeviceVersion(response);
   }
 
   public getBasicPresetData(index: number) {
-    this.checkDevice();
     const data = this.preparePresetData(index, "basic");
     if (!data) return;
     return this.extractCurrentPreset(data);
   }
 
   public getDetailPresetData(index: number) {
-    this.checkDevice();
     const data = this.preparePresetData(index, "detail");
     if (!data) return;
     return this.extractPresetData(data);
@@ -165,18 +73,10 @@ class NUXMidiController {
   }
 
   private extractDeviceVersion(response: Uint8Array): DeviceVersion {
-    if (response.length < 6) {
-      console.warn("⚠️ Unexpected SysEx response length:", response);
-      return { version: "Unknown" };
-    }
-
-    const versionBytes = response.slice(4, response.length - 1); // Avoid reading out of bounds
-    let version = String.fromCharCode(...versionBytes).trim();
-
-    version = version.replace(/\0+$/, "").split("MG-30")[0].trim();
-
+    const versionBytes = response.slice(4, 10);
+    let version = String.fromCharCode(...versionBytes);
     console.log(`🎸 Device version: ${version}`);
-    return { version: version || "Unknown" };
+    return { version: version.trim() };
   }
 
   // Extract basically only active preset number and active preset scene
@@ -281,11 +181,5 @@ class NUXMidiController {
   }
 }
 
-// 🔥 Global reactive instance of the MIDI controller
-const nuxMidiController = ref<NUXMidiController | null>(null);
-
-// ✅ Auto-init when the app starts
-NUXMidiController.create().then((controller) => {
-  nuxMidiController.value = controller;
-});
+const nuxMidiController = new NUXMidiController();
 export { nuxMidiController, SysExRequest };
