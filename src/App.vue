@@ -5,7 +5,7 @@ import PresetViewer from "./components/PresetViewer.vue";
 
 <template>
   <div id="nux-container">
-    <!-- <Device /> -->
+    <Device />
     <PresetViewer />
   </div>
 </template>

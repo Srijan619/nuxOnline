@@ -6,22 +6,12 @@ import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 
 const selectedPreset = ref("No preset selected");
-const selectedPresetIndex = ref(0);
+
 watch(
   () => nuxMidiController.value?.currentPresetBasicData,
   (newVal) => {
     if (newVal) {
       selectedPreset.value = newVal;
-      selectedPresetIndex.value = selectedPreset.value.presetNumber;
-    }
-  },
-);
-
-watch(
-  () => selectedPresetIndex.value,
-  (newVal) => {
-    if (newVal) {
-      nuxMidiController.value.getDetailPresetData(selectedPresetIndex.value);
     }
   },
 );
@@ -31,14 +21,9 @@ watch(
   (newVal) => {
     if (newVal) {
       selectedPreset.value = { ...selectedPreset.value, ...newVal };
-      console.log("Preset changed....", selectedPreset.value);
     }
   },
 );
-
-const changePreset = (newPresetNumber: number) => {
-  selectedPresetIndex.value = newPresetNumber;
-};
 
 const toggleEffect = (key: string) => {
   console.log("🤮 Support coming soon...");
@@ -59,10 +44,11 @@ const toggleEffect = (key: string) => {
         <strong>Active Scene Number:</strong>
         {{ selectedPreset.activeSceneNumber }}
       </div>
-      <PresetChange @change-preset="changePreset" />
+      <PresetChange />
     </div>
 
     <EffectChain
+      v-if="selectedPreset.effects"
       :effects="selectedPreset.effects"
       :toggleEffect="toggleEffect"
     />

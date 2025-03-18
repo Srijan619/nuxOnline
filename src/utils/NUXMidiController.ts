@@ -32,7 +32,7 @@ enum SysExRequest {
 }
 
 const SysExResponsePattern = {
-  DEVICE_VERSION: [0xf0, 0x43, 0x58],
+  DEVICE_VERSION: [0xf0, 0x43, 0x58, 0x10],
   CURRENT_PRESET_BASIC: [0xf0, 0x43, 0x58, 0x70, 0x15, 0x02],
   CURRENT_PRESET_DETAIL: [0xf0, 0x43, 0x58, 0x70, 0x0b, 0x02],
 };
@@ -95,7 +95,6 @@ class NUXMidiController {
     }
   }
   private handleSysExResponse(event: MessageEvent) {
-    console.log("REsponse..", event);
     const data = event.data;
 
     // Dynamically check for the correct response type based on the SysExResponsePattern
@@ -128,24 +127,6 @@ class NUXMidiController {
 
     // If no match is found, log an error or handle accordingly
     console.warn("⚠️ Unknown SysEx response:", data);
-  }
-
-  private preparePresetData(index: number, type: "basic" | "detail") {
-    this.checkDevice();
-    const presetData = SysExMockResponse[index];
-    if (!presetData) {
-      console.warn(`Preset data for index ${index} not found.`);
-      return;
-    }
-
-    const sysExMessage = presetData[type];
-    if (!sysExMessage) {
-      console.warn(`No ${type} SysEx message found for index ${index}.`);
-      return;
-    }
-
-    const response = this.hexToBytes(sysExMessage);
-    return response;
   }
 
   public getDeviceName() {
