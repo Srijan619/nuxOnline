@@ -271,19 +271,20 @@ class NUXMidiController {
     };
 
     //For example in some case: 8th byte is wahstatus, wah object doesn't itself have on/off (or only says wah type)
+
     const effects: Effect = {
-      wah: getEffectOption("wah", hexValue[8], response[7]),
-      comp: getEffectOption("cmp", hexValue[9]),
-      efx: getEffectOption("efx", hexValue[11], response[10]),
-      amp: getEffectOption("amp", hexValue[12]),
-      eq: getEffectOption("eq", hexValue[14], response[13]),
-      gate: getEffectOption("gate", hexValue[15]),
-      mod: getEffectOption("mod", hexValue[17], response[16]),
-      delay: getEffectOption("delay", hexValue[18]),
-      reverb: getEffectOption("reverb", hexValue[20], response[19]),
-      ir: getEffectOption("ir", hexValue[21]),
-      sr: getEffectOption("sr", hexValue[22]),
-      vol: getEffectOption("vol", hexValue[24]),
+      wah: getEffectOption("wah", hexValue[9], response[8]),
+      comp: getEffectOption("cmp", hexValue[10]),
+      efx: getEffectOption("efx", hexValue[12], response[11]),
+      amp: getEffectOption("amp", hexValue[13]),
+      eq: getEffectOption("eq", hexValue[15], response[14]),
+      gate: getEffectOption("gate", hexValue[16]),
+      mod: getEffectOption("mod", hexValue[18], response[17]),
+      delay: getEffectOption("delay", hexValue[19]),
+      reverb: getEffectOption("reverb", hexValue[21], response[20]),
+      ir: getEffectOption("ir", hexValue[22]),
+      sr: getEffectOption("sr", hexValue[23]),
+      vol: getEffectOption("vol", hexValue[25]),
     };
 
     return effects;

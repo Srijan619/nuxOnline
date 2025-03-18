@@ -21,6 +21,7 @@ watch(
   (newVal) => {
     if (newVal) {
       selectedPreset.value = { ...selectedPreset.value, ...newVal };
+      console.log("Effects", selectedPreset.value?.effects);
     }
   },
 );
