@@ -18,15 +18,8 @@ const changePreset = (direction: "up" | "down") => {
     presetNumber.value = Math.max(presetNumber.value - 1, MIN_PRESET);
   }
 
-  const basicData = nuxMidiController.getBasicPresetData(presetNumber.value);
-
-  if (basicData !== undefined) {
-    // If preset is valid, emit the new valid preset number
-    emit("change-preset", presetNumber.value);
-  } else {
-    console.warn(`⚠️ Invalid preset ${presetNumber.value}. Change aborted.`);
-    presetNumber.value = -1; //HACK: way to reset for now..
-  }
+  nuxMidiController.value.changePreset(presetNumber.value);
+  emit("change-preset", presetNumber.value);
 };
 </script>
 

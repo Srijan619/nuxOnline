@@ -13,21 +13,36 @@ import type { MessageEvent } from "webmidi";
 
 import { ref } from "vue";
 
+const hexIndex = (index: number) => {
+  return index.toString(16).padStart(2, "0").toUpperCase();
+};
+
+const CURRENT_PRESET_DATA_COMMAND = (index: number) => {
+  return `58 70 0B 00 ${hexIndex(index)} 00 00 00 00 00 00 00`;
+};
+
+const CHANGE_PRESET_COMMAND = (index: number) => {
+  return `C0 ${hexIndex(index)}`;
+};
+
 //TODO: Commands needs to be hooked in to mock implementation somewhere
 enum SysExRequest {
   DEVICE_VERSION = "58 00",
-  CURRENT_PRESET = "F0 43 58 70 15 00 F7",
-  CURRENT_PRESET_DATA = "F0 43 58 70 0B 00 00 00 00 00 00 00 00 00 F7",
+  CURRENT_PRESET_BASIC = "58 70 15 00",
 }
 
 const SysExResponsePattern = {
   DEVICE_VERSION: [0xf0, 0x43, 0x58],
+  CURRENT_PRESET_BASIC: [0xf0, 0x43, 0x58, 0x70, 0x15, 0x02],
+  CURRENT_PRESET_DETAIL: [0xf0, 0x43, 0x58, 0x70, 0x0b, 0x02],
 };
 
 class NUXMidiController {
   private isDeviceConnected = false;
   private deviceName = "";
   private deviceVersion = ref("");
+  private currentPresetBasicData = ref({});
+  private currentPresetDetailData = ref({});
   private midiOutput: Output | null = null;
   private midiInput: Input | null = null;
 
@@ -62,8 +77,8 @@ class NUXMidiController {
       console.log("✅ NUX MG-30 detected:", nuxOutput.name);
       const controller = new NUXMidiController(nuxOutput, nuxInput);
 
-      // Send the device version request after initialization
       controller.getDeviceVersion();
+      controller.getCurrentPresetBasicData();
 
       window["nux"] = controller;
       return controller;
@@ -80,9 +95,8 @@ class NUXMidiController {
     }
   }
   private handleSysExResponse(event: MessageEvent) {
-    console.log("Response..", event);
+    console.log("REsponse..", event);
     const data = event.data;
-    console.log("🔹 Received SysEx:", data);
 
     // Dynamically check for the correct response type based on the SysExResponsePattern
     for (const [requestType, expectedPattern] of Object.entries(
@@ -94,10 +108,21 @@ class NUXMidiController {
 
       if (match) {
         console.log(`✅ ${requestType} Response matched.`);
-        if (requestType === "DEVICE_VERSION") {
-          this.deviceVersion.value = this.extractDeviceVersion(data)?.version;
+        switch (requestType) {
+          case "DEVICE_VERSION":
+            this.deviceVersion.value =
+              this.extractDeviceVersion(data)?.version || "Unknown";
+            break;
+
+          case "CURRENT_PRESET_BASIC":
+            console.log("🎸 Current preset basic data received!");
+            this.currentPresetBasicData.value =
+              this.extractCurrentPresetBasicData(data);
+            break;
+          case "CURRENT_PRESET_DETAIL":
+            console.log("Current preset detail data received!");
+            this.currentPresetDetailData.value = this.extractPresetData(data);
         }
-        return;
       }
     }
 
@@ -130,25 +155,28 @@ class NUXMidiController {
 
   public getDeviceVersion() {
     this.checkDevice();
-    console.log("🔹 Requesting device version...");
     const message = this.hexToBytes(SysExRequest.DEVICE_VERSION);
     this.midiOutput!.sendSysex(0x43, Array.from(message));
   }
 
-  public getBasicPresetData(index: number) {
+  public getCurrentPresetBasicData() {
     this.checkDevice();
-    const data = this.preparePresetData(index, "basic");
-    if (!data) return;
-    return this.extractCurrentPreset(data);
+    const message = this.hexToBytes(SysExRequest.CURRENT_PRESET_BASIC);
+    this.midiOutput!.sendSysex(0x43, Array.from(message));
   }
 
   public getDetailPresetData(index: number) {
     this.checkDevice();
-    const data = this.preparePresetData(index, "detail");
-    if (!data) return;
-    return this.extractPresetData(data);
+    const message = this.hexToBytes(CURRENT_PRESET_DATA_COMMAND(index));
+    this.midiOutput!.sendSysex(0x43, Array.from(message));
   }
 
+  public changePreset(index: number) {
+    this.checkDevice();
+    const message = [0xc0, parseInt(hexIndex(index), 16)];
+
+    this.midiOutput!.send(message);
+  }
   // private sendResponse(extractedData: SysExResponseData) {
   //   // console.log("Sent SysEx Response:", this.bytesToHex(Array.from(response)));
   //   this.onMessageCallback(extractedData);
@@ -180,7 +208,7 @@ class NUXMidiController {
   }
 
   // Extract basically only active preset number and active preset scene
-  private extractCurrentPreset(response: Uint8Array): Partial<Preset> {
+  private extractCurrentPresetBasicData(response: Uint8Array): Partial<Preset> {
     const presetNumber = response[6];
     const presetScene = response[9];
     const preset = {

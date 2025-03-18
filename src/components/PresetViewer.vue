@@ -1,17 +1,40 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
 import EffectGroup from "./EffectGroup.vue";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 
-const selectedPresetIndex = ref<number>(0);
-const selectedPreset = computed(() => {
-  return {
-    ...nuxMidiController.getBasicPresetData(selectedPresetIndex.value),
-    ...nuxMidiController.getDetailPresetData(selectedPresetIndex.value),
-  };
-});
+const selectedPreset = ref("No preset selected");
+const selectedPresetIndex = ref(0);
+watch(
+  () => nuxMidiController.value?.currentPresetBasicData,
+  (newVal) => {
+    if (newVal) {
+      selectedPreset.value = newVal;
+      selectedPresetIndex.value = selectedPreset.value.presetNumber;
+    }
+  },
+);
+
+watch(
+  () => selectedPresetIndex.value,
+  (newVal) => {
+    if (newVal) {
+      nuxMidiController.value.getDetailPresetData(selectedPresetIndex.value);
+    }
+  },
+);
+
+watch(
+  () => nuxMidiController.value?.currentPresetDetailData,
+  (newVal) => {
+    if (newVal) {
+      selectedPreset.value = { ...selectedPreset.value, ...newVal };
+      console.log("Preset changed....", selectedPreset.value);
+    }
+  },
+);
 
 const changePreset = (newPresetNumber: number) => {
   selectedPresetIndex.value = newPresetNumber;

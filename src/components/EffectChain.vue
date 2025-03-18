@@ -1,5 +1,5 @@
 <template>
-  <div class="effect-chain">
+  <div class="effect-chain" v-if="effects">
     <div
       v-for="(effect, index) in effectList"
       :key="effect.id"
