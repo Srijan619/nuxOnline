@@ -22,14 +22,14 @@ watch(
   (newVal) => {
     if (newVal) {
       selectedPreset.value = { ...selectedPreset.value, ...newVal };
-      console.log("Effects", selectedPreset.value?.effects);
+      console.log("Selected preset", selectedPreset.value);
     }
   },
 );
 </script>
 
 <template>
-  <div class="main-container" v-if="selectedPreset">
+  <div class="main-container" v-if="selectedPreset && nuxMidiController">
     <div class="preset-card">
       <PresetDetail :selectedPreset="selectedPreset" />
       <PresetChange />
@@ -38,10 +38,6 @@ watch(
       v-if="selectedPreset.effects"
       :effects="selectedPreset.effects"
     />
-  </div>
-
-  <div v-else class="loading">
-    <p>Loading preset...</p>
   </div>
 </template>
 
