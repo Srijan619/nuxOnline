@@ -32,8 +32,6 @@ watch(
     }
   },
 );
-
-//TODO: Add back && nuxMidiController to template
 </script>
 
 <template>
