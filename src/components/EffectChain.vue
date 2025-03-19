@@ -56,6 +56,7 @@ const toggleEffect = (effect: EffectOption) => {
 <style scoped>
 .effect-chain-wrapper {
   width: 100%;
+  scrollbar-width: none;
 }
 
 .effect-chain {
@@ -63,7 +64,6 @@ const toggleEffect = (effect: EffectOption) => {
   align-items: center;
   padding: 1rem;
   gap: 1.5rem;
-  font-family: "Courier New", Courier, monospace;
   scroll-behavior: smooth;
 }
 
@@ -222,15 +222,6 @@ const toggleEffect = (effect: EffectOption) => {
 
   .effect-chain-wrapper::-webkit-scrollbar {
     height: 8px;
-  }
-
-  .effect-chain-wrapper::-webkit-scrollbar-thumb {
-    background: var(--wah-color);
-    border-radius: 4px;
-  }
-
-  .effect-chain-wrapper::-webkit-scrollbar-track {
-    background: var(--retro-bg);
   }
 
   .effect-chain {

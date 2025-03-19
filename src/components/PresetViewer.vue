@@ -5,13 +5,15 @@ import EffectGroup from "./EffectGroup.vue";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 import PresetDetail from "./PresetDetail.vue";
+import Device from "./Device.vue";
+
 import { PresetMockResponse } from "../mocks/mockNuxResponse.ts";
 
 const selectedPreset = ref("No preset selected");
 
 //TODO: Only for testing use mock
+//selectedPreset.value = PresetMockResponse;
 
-selectedPreset.value = PresetMockResponse;
 watch(
   () => nuxMidiController.value?.currentPresetBasicData,
   (newVal) => {
@@ -38,7 +40,7 @@ watch(
   <div class="main-container" v-if="selectedPreset">
     <div class="preset-card">
       <PresetDetail :selectedPreset="selectedPreset" />
-      <PresetChange />
+      <PresetChange><Device /></PresetChange>
     </div>
     <EffectChain
       v-if="selectedPreset.effects"
@@ -58,8 +60,7 @@ watch(
 
 .preset-card {
   position: relative;
-  width: 20rem; /* Slightly wider to accommodate both components */
-  background: linear-gradient(135deg, #1a0b2e, #2d1b4e); /* Musical gradient */
+  width: 20rem;
   border-radius: 1.25rem;
   padding: 1rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);

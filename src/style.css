@@ -1,5 +1,6 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
+
   line-height: 1.5;
   font-weight: 400;
 
@@ -11,6 +12,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Amp */
+  --amp-border: #1f1f1f;
+  --amp-accent: #ffaa00;
+  --amp-bg: #2b2b2b;
+  --amp-inner: #3c3c3c;
 
   /* Base Colors */
   --retro-bg: #0d0d0d; /* Near-black matte background */
@@ -66,7 +73,6 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;

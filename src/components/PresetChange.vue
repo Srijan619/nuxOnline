@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, defineEmits, watch } from "vue";
+import { ref, watch } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
 
-const MAX_PRESET = 127;
-const MIN_PRESET = 0;
-
 const presetNumber = ref(0);
+const MIN_PRESET = 0;
+const MAX_PRESET = 127;
 
 const emit = defineEmits<{
   (e: "change-preset", newPresetNumber: number): void;
@@ -48,13 +47,13 @@ watch(
     >
       <span class="icon">〈</span> Prev
     </button>
-    <div class="preset-indicator">Preset: {{ presetNumber }}</div>
+    <slot></slot>
     <button
       class="preset-btn next"
       @click="changePreset('up')"
       :disabled="presetNumber >= MAX_PRESET"
     >
-      Next <span class="icon">&#9002</span>
+      Next <span class="icon">〉</span>
     </button>
   </div>
 </template>
@@ -64,32 +63,90 @@ watch(
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 18rem; /* Match PresetDetail width */
-  padding: 0.5rem 1rem;
-  background: linear-gradient(
-    135deg,
-    #1a0b2e,
-    #2d1b4e
-  ); /* Match PresetDetail */
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  margin-top: 1rem;
+  width: 18rem;
+  padding: 0.75rem 1rem;
+  background: var(--amp-bg);
+  border-radius: 0.25rem;
+  border: 3px solid var(--amp-border);
+  box-shadow:
+    inset 0 0 5px var(--retro-shadow),
+    0 0 10px var(--retro-shadow);
   position: relative;
   overflow: hidden;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+/* Weathered metal texture */
+.preset-change:before {
+  position: absolute;
+  content: "";
+  inset: 0.125rem;
+  border-radius: 0.125rem;
+  background: var(--amp-inner);
+  /* Weathered metal texture with scratches */
+  background-image:
+    linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.1) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(0, 0, 0, 0.1) 75%,
+      rgba(0, 0, 0, 0.1)
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.05) 75%,
+      rgba(255, 255, 255, 0.05)
+    );
+  background-size: 8px 8px;
+  z-index: 1;
+}
+
+/* Input jack (left) */
+.preset-change:after {
+  position: absolute;
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: var(--amp-border);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 3px rgba(0, 0, 0, 0.8),
+    0 0 5px var(--retro-shadow);
+  z-index: 2;
+}
+
+/* Output jack (right) */
+.preset-change::after {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  top: 0.5rem;
+  right: 0.5rem;
+  position: absolute;
+  background: var(--amp-border);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 3px rgba(0, 0, 0, 0.8),
+    0 0 5px var(--retro-shadow);
+  z-index: 2;
 }
 
 .preset-btn {
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.5rem 1rem;
-  background: rgba(26, 11, 46, 0.9);
-  border: none;
-  border-radius: 0.5rem;
-  color: #ff6b6b; /* Match PresetDetail --color */
+  padding: 0.5rem 0.5rem;
+  background: var(--amp-inner);
+  border: 2px solid var(--amp-border);
+  border-radius: 0.25rem;
+  color: var(--retro-text-primary);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: bold;
   cursor: pointer;
   transition: all 300ms ease-in-out;
   position: relative;
@@ -97,10 +154,10 @@ watch(
 }
 
 .preset-btn:hover:not(:disabled) {
-  background: #ff6b6b;
-  color: #fff;
+  background: var(--amp-accent);
+  color: var(--retro-text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 0 8px var(--retro-glow);
 }
 
 .preset-btn:disabled {
@@ -110,27 +167,10 @@ watch(
 
 .icon {
   font-size: 1.1rem;
+  transition: transform 300ms ease-in-out;
 }
 
 .preset-btn:hover:not(:disabled) .icon {
   transform: scale(1.2);
 }
-
-.preset-indicator {
-  color: #e0dede; 
-  font-size: 0.9rem;
-  text-align: center;
-  z-index: 2;
-}
-
-.preset-change:before {
-  position: absolute;
-  content: "";
-  inset: 0.0625rem;
-  border-radius: 0.6875rem;
-  background: rgba(26, 11, 46, 0.95);
-  z-index: 1;
-}
-
-
 </style>

@@ -22,7 +22,7 @@ const props = defineProps<{
   </div>
 </template>
 
-<style>
+<style scoped>
 .notification {
   text-align: start;
   display: flex;
@@ -30,32 +30,32 @@ const props = defineProps<{
   isolation: isolate;
   position: relative;
   height: 8rem;
-  background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
-  border-radius: 1rem;
+  background: var(--retro-card-bg);
+  border-radius: 0.25rem;
+  border: 2px solid var(--retro-border);
   overflow: hidden;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  --gradient: linear-gradient(to bottom, #ff6b6b, #4ecdc4, #45b7d1);
-  --color: #ff6b6b;
 }
 
 .notification:before {
   position: absolute;
   content: "";
-  inset: 0.0625rem;
-  border-radius: 0.9375rem;
-  background: rgba(26, 11, 46, 0.95);
+  inset: 0.125rem;
+  border-radius: 0.125rem;
+  background: var(--retro-card-inner); /* Inner layer */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQYV2NkYGD4z8DAwMgABXAGNgGwSgAAAP8HFR4J1PAAAAAElFTkSuQmCC");
+  background-size: 4px 4px;
   z-index: 2;
 }
 
 .notification:after {
   position: absolute;
   content: "";
-  width: 0.25rem;
+  width: 0.35rem;
   inset: 0.65rem auto 0.65rem 0.5rem;
   border-radius: 0.125rem;
-  background: var(--gradient);
+  /* TODO: This would actual come from active effect that is being toggled or edited..?  */
+  background: var(--wah-color);
   transition:
     transform 400ms ease-in-out,
     opacity 400ms ease-in-out;
@@ -68,24 +68,24 @@ const props = defineProps<{
 }
 
 .notititle {
-  color: var(--color);
+  color: var(--retro-text-primary);
   padding: 0.65rem 0.25rem 0.4rem 1.5rem;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 1.2rem;
   transition:
     transform 400ms ease-in-out,
     color 400ms ease-in-out;
   z-index: 5;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 0 4px var(--retro-glow);
 }
 
 .notification:hover .notititle {
   transform: translateX(0.3rem);
-  color: #4ecdc4;
+  color: var(--wah-color);
 }
 
 .notibody {
-  color: #e0dede;
+  color: var(--retro-text-primary);
   padding: 0.5rem 1.5rem;
   transition: transform 400ms ease-in-out;
   z-index: 5;
@@ -104,7 +104,7 @@ const props = defineProps<{
   transform: translate(-50%, -50%);
   background: radial-gradient(
     circle closest-side at center,
-    rgba(255, 107, 107, 0.3),
+    var(--retro-glow),
     transparent
   );
   opacity: 0;
@@ -115,7 +115,7 @@ const props = defineProps<{
 
 .notiglow {
   z-index: 3;
-  filter: blur(20px);
+  filter: blur(25px);
 }
 
 .notiborderglow {
@@ -124,12 +124,12 @@ const props = defineProps<{
 }
 
 .notification:hover .notiglow {
-  opacity: 0.2;
+  opacity: 0.3; /* More pronounced glow */
   transform: translate(-50%, -50%) scale(1.1);
 }
 
 .notification:hover .notiborderglow {
-  opacity: 0.15;
+  opacity: 0.2;
   transform: translate(-50%, -50%) scale(1.15);
 }
 
@@ -137,7 +137,7 @@ const props = defineProps<{
   position: absolute;
   top: 10px;
   right: 15px;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--retro-text-secondary);
   font-size: 1.2rem;
   z-index: 3;
   animation: floatNotes 2s infinite ease-in-out;
