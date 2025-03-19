@@ -39,7 +39,12 @@ watch(
 </script>
 
 <template>
-  <div class="preset-change">
+  <div
+    class="preset-change"
+    :style="{
+      '--amp-active': nuxMidiController ? 'var(--amp-on)' : 'var(--amp-off)',
+    }"
+  >
     <button
       class="preset-btn prev"
       @click="changePreset('down')"
@@ -112,23 +117,7 @@ watch(
   height: 0.5rem;
   top: 0.5rem;
   left: 0.5rem;
-  background: var(--amp-border);
-  border-radius: 50%;
-  box-shadow:
-    inset 0 0 3px rgba(0, 0, 0, 0.8),
-    0 0 5px var(--retro-shadow);
-  z-index: 2;
-}
-
-/* Output jack (right) */
-.preset-change::after {
-  content: "";
-  width: 0.5rem;
-  height: 0.5rem;
-  top: 0.5rem;
-  right: 0.5rem;
-  position: absolute;
-  background: var(--amp-border);
+  background: var(--amp-active);
   border-radius: 50%;
   box-shadow:
     inset 0 0 3px rgba(0, 0, 0, 0.8),

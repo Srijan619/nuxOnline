@@ -13,9 +13,7 @@ const props = defineProps<{
     <div class="notiborderglow"></div>
     <div class="notititle">🎸 Selected Preset</div>
     <div class="notibody">
-      <div>
-        <strong>Name:</strong> {{ selectedPreset.name || "Loading..." }}
-      </div>
+      <div><strong>Name:</strong> {{ selectedPreset.name || "Unknown" }}</div>
       <div><strong>Preset:</strong> {{ selectedPreset.presetNumber }}</div>
       <div><strong>Scene:</strong> {{ selectedPreset.activeSceneNumber }}</div>
     </div>
