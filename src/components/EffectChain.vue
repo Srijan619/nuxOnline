@@ -59,6 +59,7 @@ const toggleEffect = (effect: EffectOption) => {
   gap: 20px;
   overflow-x: scroll;
   z-index: 1000;
+  width: 100%;
 }
 
 .effect-box {

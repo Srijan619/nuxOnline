@@ -164,7 +164,7 @@ class NUXMidiController {
     //For example in some case: 8th byte is wahstatus, wah object doesn't itself have on/off (or only says wah type)
     const effects: Effect = {
       wah: getEffectOption("wah", hexValue[8], response[7]),
-      comp: getEffectOption("cmp", hexValue[9]),
+      comp: getEffectOption("comp", hexValue[9]),
       efx: getEffectOption("efx", hexValue[11], response[10]),
       amp: getEffectOption("amp", hexValue[12]),
       eq: getEffectOption("eq", hexValue[14], response[13]),
