@@ -30,7 +30,7 @@ const mockEffects = {
     title: "Compressor",
     onByte: "0x01",
     offByte: "0x00",
-    category: "cmp",
+    category: "comp",
     active: true,
   },
   efx: {

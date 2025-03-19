@@ -5,9 +5,13 @@ import EffectGroup from "./EffectGroup.vue";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 import PresetDetail from "./PresetDetail.vue";
+import { PresetMockResponse } from "../mocks/mockNuxResponse.ts";
 
 const selectedPreset = ref("No preset selected");
 
+//TODO: Only for testing use mock
+
+selectedPreset.value = PresetMockResponse;
 watch(
   () => nuxMidiController.value?.currentPresetBasicData,
   (newVal) => {
@@ -26,10 +30,12 @@ watch(
     }
   },
 );
+
+//TODO: Add back && nuxMidiController to template
 </script>
 
 <template>
-  <div class="main-container" v-if="selectedPreset && nuxMidiController">
+  <div class="main-container" v-if="selectedPreset">
     <div class="preset-card">
       <PresetDetail :selectedPreset="selectedPreset" />
       <PresetChange />

@@ -13,6 +13,6 @@ import PresetViewer from "./components/PresetViewer.vue";
 <style scoped>
 #nux-container {
   margin: 1rem;
-  padding: 1rem;
+  overflow: hidden;
 }
 </style>
