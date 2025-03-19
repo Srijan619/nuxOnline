@@ -45,7 +45,7 @@ watch(
       @click="changePreset('down')"
       :disabled="presetNumber <= MIN_PRESET"
     >
-      <span class="icon">〈</span> Prev
+      〈
     </button>
     <slot></slot>
     <button
@@ -53,7 +53,7 @@ watch(
       @click="changePreset('up')"
       :disabled="presetNumber >= MAX_PRESET"
     >
-      Next <span class="icon">〉</span>
+      〉
     </button>
   </div>
 </template>
@@ -137,15 +137,8 @@ watch(
 }
 
 .preset-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.5rem 0.5rem;
-  background: var(--amp-inner);
-  border: 2px solid var(--amp-border);
-  border-radius: 0.25rem;
+  background: transparent;
   color: var(--retro-text-primary);
-  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 300ms ease-in-out;
@@ -163,14 +156,5 @@ watch(
 .preset-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.icon {
-  font-size: 1.1rem;
-  transition: transform 300ms ease-in-out;
-}
-
-.preset-btn:hover:not(:disabled) .icon {
-  transform: scale(1.2);
 }
 </style>
