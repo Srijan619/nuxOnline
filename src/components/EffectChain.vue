@@ -151,8 +151,8 @@ const toggleEffect = (effect: EffectOption) => {
 .effect-box.active:after {
   position: absolute;
   content: "";
-  width: 0.35rem;
-  inset: 0.5rem auto 0.5rem 0.5rem;
+  width: 0.2rem;
+  inset: 0;
   border-radius: 0.125rem;
   background: var(--effect-color);
   transition: transform 300ms ease-in-out;
@@ -184,14 +184,14 @@ const toggleEffect = (effect: EffectOption) => {
 }
 
 .box-content {
-  text-align: center;
+  text-align: start;
   z-index: 3;
   width: 100%;
   padding: 0.5rem;
 }
 
 .box-content h3 {
-  margin: 0 0 0.5rem 0;
+  margin: 1rem;
   font-size: 1.1rem;
   font-weight: bold;
   color: var(--retro-text-primary); /* Simple, consistent text color */
@@ -204,7 +204,7 @@ const toggleEffect = (effect: EffectOption) => {
   right: -1.5rem;
   transform: translateY(-50%);
   width: 1.5rem;
-  height: 0.25rem;
+  height: 0.15rem;
   background: var(--effect-color); /* Full category color */
   transition: opacity 0.3s ease-in-out;
   z-index: 1;
