@@ -209,7 +209,6 @@ const toggleEffect = (effect: EffectOption) => {
   transition: opacity 0.3s ease-in-out;
   z-index: 1;
 }
-
 .effect-box.inactive .connector {
   background: var(--retro-text-secondary);
 }
