@@ -4,6 +4,7 @@ import { nuxMidiController } from "../utils/NUXMidiController.ts";
 import EffectGroup from "./EffectGroup.vue";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
+import PresetDetail from "./PresetDetail.vue";
 
 const selectedPreset = ref("No preset selected");
 
@@ -29,20 +30,9 @@ watch(
 
 <template>
   <div class="preset-container" v-if="selectedPreset">
-    <div class="card">
-      <h3>🎸 Selected Preset</h3>
-      <div>
-        <strong>Name:</strong> {{ selectedPreset.name || "Loading..." }}
-      </div>
-      <div>
-        <strong>Preset Number:</strong> {{ selectedPreset.presetNumber }}
-      </div>
-      <div>
-        <strong>Active Scene Number:</strong>
-        {{ selectedPreset.activeSceneNumber }}
-      </div>
-      <PresetChange />
-    </div>
+    <PresetDetail :selectedPreset="selectedPreset" />
+
+    <!-- <PresetChange /> -->
 
     <EffectChain
       v-if="selectedPreset.effects"
