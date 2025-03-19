@@ -29,7 +29,6 @@ const props = defineProps<{
   flex-direction: column;
   isolation: isolate;
   position: relative;
-  width: 18rem;
   height: 8rem;
   background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
   border-radius: 1rem;

@@ -29,11 +29,11 @@ watch(
 </script>
 
 <template>
-  <div class="preset-container" v-if="selectedPreset">
-    <PresetDetail :selectedPreset="selectedPreset" />
-
-    <!-- <PresetChange /> -->
-
+  <div class="main-container" v-if="selectedPreset">
+    <div class="preset-card">
+      <PresetDetail :selectedPreset="selectedPreset" />
+      <PresetChange />
+    </div>
     <EffectChain
       v-if="selectedPreset.effects"
       :effects="selectedPreset.effects"
@@ -46,26 +46,25 @@ watch(
 </template>
 
 <style scoped>
-.preset-container {
+.main-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 16px;
   margin: auto;
 }
 
-.card {
-  background: #222;
-  color: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  justify-content: flex-start;
+.preset-card {
+  position: relative;
+  width: 20rem; /* Slightly wider to accommodate both components */
+  background: linear-gradient(135deg, #1a0b2e, #2d1b4e); /* Musical gradient */
+  border-radius: 1.25rem;
+  padding: 1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-h3 {
-  margin-bottom: 8px;
+  gap: 0.5rem;
 }
 </style>
