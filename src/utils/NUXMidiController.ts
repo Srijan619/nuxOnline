@@ -31,6 +31,7 @@ const SysExResponsePattern = {
   DEVICE_VERSION: [0xf0, 0x43, 0x58, 0x10],
   CURRENT_PRESET_BASIC: [0xf0, 0x43, 0x58, 0x70, 0x15, 0x02],
   CURRENT_PRESET_DETAIL: [0xf0, 0x43, 0x58, 0x70, 0x0b, 0x02],
+  PRESET_CHANGED: [0xc0],
 };
 
 class NUXMidiController {
@@ -49,9 +50,34 @@ class NUXMidiController {
     this.deviceName = output.name;
 
     // Listen for SysEx responses
-    this.midiInput.addListener("sysex", (event: MessageEvent) =>
-      this.handleSysExResponse(event),
-    );
+    this.midiInput.addListener("sysex", (event: MessageEvent) => {
+      this.handleSysExResponse(event);
+    });
+    this.setupListeners(input);
+  }
+
+  private setupListeners(input) {
+    // Listen for note-on events (key pressed)
+    input.addListener("noteon", "all", (e) => {
+      console.log(`Note On: ${e.note.identifier} (Velocity: ${e.velocity})`);
+    });
+
+    let debounceTimeout;
+
+    input.addListener("noteoff", "all", (e) => {
+      console.log(`Note Off: ${e.note.identifier}`);
+    });
+
+    // Listen for control changes (e.g., knobs, sliders)
+
+    input.addListener("controlchange", "all", (e) => {
+      console.log("Control Change: Controller", e);
+    });
+    // Listen for all MIDI messages (generic)
+    input.addListener("midimessage", "all", (e) => {
+      console.log("Raw MIDI message:", e);
+      this.handleSysExResponse(e);
+    });
   }
 
   static async create(): Promise<NUXMidiController | null> {
@@ -118,6 +144,22 @@ class NUXMidiController {
           case "CURRENT_PRESET_DETAIL":
             console.log("Current preset detail data received!");
             this.currentPresetDetailData.value = this.extractPresetData(data);
+            break;
+          case "PRESET_CHANGED":
+            console.log("Preset change detected!");
+            console.log(
+              "Current preset number:",
+              this.currentPresetBasicData.value.presetNumber,
+            );
+
+            // Fetch the next preset based on current preset number
+            const nextPresetNumber =
+              this.currentPresetBasicData.value.presetNumber + 1;
+            console.log("Fetching next preset:", nextPresetNumber);
+
+            this.getCurrentPresetBasicData();
+            this.getDetailPresetData(nextPresetNumber);
+            break;
         }
       }
     }
