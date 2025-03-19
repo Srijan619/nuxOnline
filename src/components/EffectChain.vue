@@ -56,10 +56,6 @@ const toggleEffect = (effect: EffectOption) => {
 <style scoped>
 .effect-chain-wrapper {
   width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  scrollbar-color: #ff6b6b #0f071a;
 }
 
 .effect-chain {
@@ -67,91 +63,95 @@ const toggleEffect = (effect: EffectOption) => {
   align-items: center;
   padding: 1rem;
   gap: 1.5rem;
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-family: "Courier New", Courier, monospace;
   scroll-behavior: smooth;
 }
 
-/* Base styles for effect boxes */
 .effect-box {
   position: relative;
   width: 10rem;
   height: 6rem;
-  border-radius: 0.75rem;
+  border-radius: 0.25rem;
+  border: 2px solid var(--retro-border);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
+  background: var(--retro-card-bg);
   transition: all 0.3s ease-in-out;
   isolation: isolate;
   flex-shrink: 0;
-  overflow: visible; /* Ensure connectors aren’t clipped */
+  overflow: visible;
 }
 
 .effect-box:before {
   position: absolute;
   content: "";
-  inset: 0.0625rem;
-  border-radius: 0.6875rem;
-  background: rgba(26, 11, 46, 0.95);
+  inset: 0.125rem;
+  border-radius: 0.125rem;
+  background: var(--retro-card-inner);
   z-index: 1;
+  /* Subtle grain texture */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQYV2NkYGD4z8DAwMgABXAGNgGwSgAAAP8HFR4J1PAAAAAElFTkSuQmCC");
+  background-size: 4px 4px;
 }
 
 .effect-box.active {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px var(--retro-shadow);
 }
 
 .effect-box.inactive {
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .effect-box:hover {
-  transform: scale(1.05) translateY(-2px);
+  transform: scale(1.03);
+  box-shadow: 0 0 15px var(--retro-glow);
 }
 
-/* Category-specific colors */
+/* Category-specific colors for vertical tag and connector */
 .wah {
-  --effect-color: #ff6b6b;
+  --effect-color: var(--wah-color);
 }
 .comp {
-  --effect-color: #4ecdc4;
+  --effect-color: var(--comp-color);
 }
 .efx {
-  --effect-color: #45b7d1;
+  --effect-color: var(--efx-color);
 }
 .amp {
-  --effect-color: #f7d794;
+  --effect-color: var(--amp-color);
 }
 .eq {
-  --effect-color: #95e07b;
+  --effect-color: var(--eq-color);
 }
 .gate {
-  --effect-color: #ff9f1c;
+  --effect-color: var(--gate-color);
 }
 .mod {
-  --effect-color: #9b59b6;
+  --effect-color: var(--mod-color);
 }
 .delay {
-  --effect-color: #3498db;
+  --effect-color: var(--delay-color);
 }
 .reverb {
-  --effect-color: #e74c3c;
+  --effect-color: var(--reverb-color);
 }
 .ir {
-  --effect-color: #2ecc71;
+  --effect-color: var(--ir-color);
 }
 .sr {
-  --effect-color: #e67e22;
+  --effect-color: var(--sr-color);
 }
 .vol {
-  --effect-color: #ecf0f1;
+  --effect-color: var(--vol-color);
 }
 
 .effect-box.active:after {
   position: absolute;
   content: "";
-  width: 0.25rem;
+  width: 0.35rem;
   inset: 0.5rem auto 0.5rem 0.5rem;
   border-radius: 0.125rem;
   background: var(--effect-color);
@@ -176,11 +176,11 @@ const toggleEffect = (effect: EffectOption) => {
   opacity: 0;
   transition: opacity 300ms ease-in-out;
   z-index: 0;
-  filter: blur(20px);
+  filter: blur(25px);
 }
 
 .effect-box:hover .box-glow {
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 .box-content {
@@ -193,40 +193,44 @@ const toggleEffect = (effect: EffectOption) => {
 .box-content h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--effect-color);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  color: var(--retro-text-primary); /* Simple, consistent text color */
+  text-shadow: 0 0 4px var(--retro-glow); /* Retro glow */
 }
 
 .connector {
   position: absolute;
   top: 50%;
-  right: -1.5rem; /* Position outside the box */
+  right: -1.5rem;
   transform: translateY(-50%);
   width: 1.5rem;
-  height: 0.2rem;
-  background: linear-gradient(to right, #fff, var(--effect-color));
-  transition: background 0.3s ease-in-out;
+  height: 0.25rem;
+  background: var(--effect-color); /* Full category color */
+  transition: opacity 0.3s ease-in-out;
   z-index: 1;
 }
 
 .effect-box.inactive .connector {
-  background: #999;
+  background: var(--retro-text-secondary);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .effect-chain-wrapper {
+    overflow-x: auto;
+  }
+
   .effect-chain-wrapper::-webkit-scrollbar {
     height: 8px;
   }
 
   .effect-chain-wrapper::-webkit-scrollbar-thumb {
-    background: #ff6b6b;
+    background: var(--wah-color);
     border-radius: 4px;
   }
 
   .effect-chain-wrapper::-webkit-scrollbar-track {
-    background: #0f071a;
+    background: var(--retro-bg);
   }
 
   .effect-chain {
@@ -251,17 +255,17 @@ const toggleEffect = (effect: EffectOption) => {
 }
 
 @media (min-width: 769px) {
+  .effect-chain-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
   .effect-chain {
     flex-wrap: nowrap;
-    width: max-content; /* Ensure all boxes are visible, scroll if needed */
+    width: max-content;
     justify-content: flex-start;
     padding: 1rem;
     gap: 1.5rem;
-  }
-
-  .effect-box {
-    width: 10rem;
-    height: 6rem;
   }
 }
 </style>

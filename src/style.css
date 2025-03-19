@@ -11,6 +11,32 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Base Colors */
+  --retro-bg: #0d0d0d; /* Near-black matte background */
+  --retro-card-bg: #1f2521; /* Dark greenish-gray card base */
+  --retro-card-inner: #2e3733; /* Retro green-gray inner layer */
+  --retro-text-primary: #d9d9d9; /* Off-white for text */
+  --retro-text-secondary: #7a8780; /* Muted green-gray */
+  --retro-border: #2e3733; /* Border color */
+
+  /* Neon Accent Colors */
+  --wah-color: #ff007f; /* Neon pink */
+  --comp-color: #00ffff; /* Cyan */
+  --efx-color: #ff00ff; /* Magenta */
+  --amp-color: #ffff00; /* Neon yellow */
+  --eq-color: #00ff00; /* Lime green */
+  --gate-color: #ff8000; /* Neon orange */
+  --mod-color: #8000ff; /* Electric purple */
+  --delay-color: #00b7eb; /* Bright teal */
+  --reverb-color: #ff4040; /* Retro red */
+  --ir-color: #40ff40; /* Vivid green */
+  --sr-color: #ffaa00; /* Amber */
+  --vol-color: #e6e6e6; /* Bright off-white */
+
+  /* Effects */
+  --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
+  --retro-shadow: rgba(255, 255, 255, 0.2); /* Retro shadow */
 }
 
 a {
