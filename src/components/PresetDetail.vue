@@ -1,9 +1,30 @@
 <script setup lang="ts">
+import { ref, computed, watch } from "vue";
+import { nuxMidiController } from "../utils/NUXMidiController.ts";
+import effectsMapping from "../utils/effects.ts";
+
 import Preset from "../types/index.ts";
+import EffectListDropdown from "../components/EffectListDropdown.vue";
 
 const props = defineProps<{
   selectedPreset: Preset;
 }>();
+
+const selectedEffect = ref<EffectOption | null>(null);
+
+const getAllEffectsForCategory = computed(() => {
+  if (!selectedEffect.value) return [];
+  return effectsMapping.effects[selectedEffect.value.category]?.options || [];
+});
+
+watch(
+  () => nuxMidiController.value?.selectedEffect,
+  (newVal) => {
+    if (newVal) {
+      selectedEffect.value = newVal;
+    }
+  },
+);
 </script>
 
 <template>
@@ -13,9 +34,16 @@ const props = defineProps<{
     <div class="notiborderglow"></div>
     <div class="notititle">🎸 Selected Preset</div>
     <div class="notibody">
-      <div><strong>Name:</strong> {{ selectedPreset.name || "Unknown" }}</div>
-      <div><strong>Preset:</strong> {{ selectedPreset.presetNumber }}</div>
-      <div><strong>Scene:</strong> {{ selectedPreset.activeSceneNumber }}</div>
+      <div class="leftPresetDetails">
+        <div><strong>Name:</strong> {{ selectedPreset.name || "Unknown" }}</div>
+        <div><strong>Preset:</strong> {{ selectedPreset.presetNumber }}</div>
+        <div>
+          <strong>Scene:</strong> {{ selectedPreset.activeSceneNumber }}
+        </div>
+      </div>
+      <div class="effectOptionsScroller">
+        <EffectListDropdown :options="getAllEffectsForCategory" />
+      </div>
     </div>
   </div>
 </template>
@@ -86,6 +114,8 @@ const props = defineProps<{
   transition: transform 400ms ease-in-out;
   z-index: 5;
   line-height: 1.4;
+  display: flex;
+  flex-direction: row;
 }
 
 .notification:hover .notibody {
@@ -147,5 +177,10 @@ const props = defineProps<{
   50% {
     transform: translateY(-5px);
   }
+}
+
+.effectOptionsScroller {
+  right: 1rem;
+  position: absolute;
 }
 </style>

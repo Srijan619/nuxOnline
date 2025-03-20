@@ -22,6 +22,7 @@
 import { computed } from "vue";
 import { EffectOption } from "../types/index.ts";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
+import EffectListDropdown from "../components/EffectListDropdown.vue";
 
 const props = defineProps<{
   effects: Record<string, EffectOption>;
@@ -48,7 +49,7 @@ const effectList = computed(() => {
     .filter((effect): effect is EffectOption => effect !== undefined);
 });
 
-const toggleEffect = (effect: EffectOption) => {
+const toggleEffect = (effect: any) => {
   nuxMidiController.value?.toggleEffect(effect);
 };
 </script>

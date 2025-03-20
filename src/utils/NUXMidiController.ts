@@ -40,6 +40,7 @@ class NUXMidiController {
   private deviceVersion = ref("");
   private currentPresetBasicData = ref({});
   private currentPresetDetailData = ref({});
+  private selectedEffect: EffectOption = ref({});
   private midiOutput: Output | null = null;
   private midiInput: Input | null = null;
 
@@ -237,6 +238,7 @@ class NUXMidiController {
       this.currentPresetDetailData.effects[effectId]
     ) {
       this.currentPresetDetailData.effects[effectId].active = isActive;
+      this.selectedEffect = this.currentPresetDetailData.effects[effectId];
       console.log("Toggling effect..", effectId, this.currentPresetDetailData);
     }
   }
