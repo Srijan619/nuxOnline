@@ -5,7 +5,7 @@ import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 import PresetDetail from "./PresetDetail.vue";
 import Device from "./Device.vue";
-import KnobControl from "./KnobControl.vue";
+import KnobContainer from "./KnobContainer.vue";
 
 const selectedPreset = ref("No preset selected");
 
@@ -52,11 +52,7 @@ const updateValue = (controlPane: number, value: number) => {
       </PresetChange>
     </div>
     <EffectChain v-if="selectedPreset.effects" :effects="selectedPreset.effects" />
-    <div class="knob-container">
-      <KnobControl :size="100" @update:value="(value) => updateValue(18, value)" />
-      <KnobControl :size="100" @update:value="(value) => updateValue(19, value)" />
-      <KnobControl :size="100" @update:value="(value) => updateValue(20, value)" />
-    </div>
+    <KnobContainer :updateValue="updateValue" />
   </div>
 </template>
 

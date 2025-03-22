@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import effectsMapping from "../utils/effects.ts";
+import effectsMapping from "../effects";
 
 import Preset from "../types/index.ts";
 import EffectListDropdown from "../components/EffectListDropdown.vue";

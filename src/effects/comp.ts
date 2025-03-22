@@ -1,0 +1,40 @@
+export default {
+  comp: {
+    knobControlStart: [14, 15, 16],
+    category: "🎛️ Compressor",
+    options: [
+      { id: "ROSE_COMP", title: "Rose Comp", onByte: "01", offByte: "41" },
+      { id: "K_COMP", title: "K Comp", onByte: "02", offByte: "42" },
+      {
+        id: "STUDIO_COMP",
+        title: "Studio Comp",
+        onByte: "03",
+        offByte: "43",
+      },
+      {
+        id: "DISTORTION_PLUS",
+        title: "Distortion +",
+        onByte: "04",
+        offByte: "44",
+      },
+      { id: "RC_BOOST", title: "RC Boost", onByte: "05", offByte: "45" },
+      { id: "AC_BOOST", title: "AC Boost", onByte: "06", offByte: "46" },
+      { id: "DIST_ONE", title: "Dist One", onByte: "07", offByte: "47" },
+      { id: "T_SCREAM", title: "T Scream", onByte: "08", offByte: "48" },
+      { id: "BLUES_DRV", title: "Blues Drive", onByte: "09", offByte: "49" },
+      {
+        id: "MORNING_DRV",
+        title: "Morning Drive",
+        onByte: "0A",
+        offByte: "4A",
+      },
+      { id: "EAT_DIST", title: "Eat Dist", onByte: "0B", offByte: "4B" },
+      { id: "RED_DIRT", title: "Red Dirt", onByte: "0C", offByte: "4C" },
+      { id: "CRUNCH", title: "Crunch", onByte: "0D", offByte: "4D" },
+      { id: "MUFF_FUZZ", title: "Muff Fuzz", onByte: "0E", offByte: "4E" },
+      { id: "KATANA", title: "Katana", onByte: "0F", offByte: "4F" },
+      { id: "ST_SINGER", title: "ST Singer", onByte: "10", offByte: "50" },
+      { id: "RED_FUZZ", title: "Red Fuzz", onByte: "11", offByte: "51" },
+    ],
+  },
+};

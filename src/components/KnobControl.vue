@@ -5,12 +5,15 @@
       <circle class="track-bg" :cx="radius" :cy="radius" :r="trackRadius" />
       <circle class="track-fill" :cx="radius" :cy="radius" :r="trackRadius" :style="fillStyle" />
     </svg>
+    <div class="slider-title" :style="titleStyle">
+      <span>{{ title }}</span>
+    </div>
     <div class="slider-knob" :style="knobStyle">
       <div class="knob-inner"></div>
       <div class="knob-indicator"></div>
     </div>
     <div class="slider-labels" :style="labelStyle">
-      <span>{{ value }}%</span>
+      <span>{{ value }}</span>
     </div>
   </div>
 </template>
@@ -20,10 +23,11 @@ import { ref, computed, onMounted } from "vue";
 
 const props = defineProps<{
   initialValue?: number;
-  minValue?: number;
-  maxValue?: number;
+  min?: number;
+  max?: number;
   size?: number;
   startAngle?: number;
+  title?: string;
 }>();
 
 const emit = defineEmits<{
@@ -39,8 +43,9 @@ const knobRadius = computed(() => size * 0.09);
 const trackRadius = computed(
   () => radius.value - knobRadius.value - size * 0.045,
 );
-const minValue = props.minValue || 0;
-const maxValue = props.maxValue || 100;
+const minValue = props.min || 0;
+const maxValue = props.max || 100;
+const title = props.title || "";
 const startAngle = props.startAngle || 200; // Default: bottom left (225°)
 
 const sliderStyle = computed(() => ({
@@ -62,6 +67,15 @@ const fillStyle = computed(() => {
     transform: `rotate(${startAngle - 90}deg)`,
   };
 });
+
+const titleStyle = computed(() => ({
+  position: "absolute",
+  top: `${radius.value - trackRadius.value - knobRadius.value - size * 0.1}px`,
+  left: "50%",
+  transform: "translateX(-50%)",
+  fontSize: `${size * 0.12}px`,
+  whiteSpace: "nowrap",
+}));
 
 const knobStyle = computed(() => {
   const rad = (angle.value - 90) * (Math.PI / 180);
@@ -120,7 +134,9 @@ const stopDrag = () => {
 
 const onWheel = (e) => {
   e.preventDefault();
-  const delta = e.deltaY < 0 ? 5 : -5;
+  const range = maxValue - minValue;
+  const step = Math.max(1, Math.round(range / 20));
+  const delta = e.deltaY < 0 ? step : -step;
   const newValue = Math.max(minValue, Math.min(maxValue, value.value + delta));
   value.value = newValue;
   emit("update:value", value.value);
@@ -198,6 +214,13 @@ defineExpose({ value });
   left: 50%;
   transform: translateX(-50%);
   border-radius: 2px;
+}
+
+.slider-title {
+  color: var(--retro-text-primary);
+  font-weight: bold;
+  text-shadow: 0 0 2px var(--retro-glow);
+  pointer-events: none;
 }
 
 .slider-labels {

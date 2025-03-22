@@ -5,7 +5,7 @@ import type {
   Effect,
   EffectOption,
 } from "../types";
-import effectsMapping from "./effects";
+import effectsMapping from "../effects";
 
 import { WebMidi, Output, Input } from "webmidi";
 import type { MessageEvent } from "webmidi";
