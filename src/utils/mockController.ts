@@ -181,5 +181,5 @@ class NUXMockMidiController {
   }
 }
 
-const nuxMidiController = new NUXMockMidiController();
-export { nuxMidiController, SysExRequest };
+const nuxMidiMockController = new NUXMockMidiController();
+export { nuxMidiMockController, SysExRequest };
