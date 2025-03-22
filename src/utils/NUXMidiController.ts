@@ -42,6 +42,7 @@ class NUXMidiController {
   private currentPresetDetailData = ref({});
   private midiOutput: Output | null = null;
   private midiInput: Input | null = null;
+  private selectedEffect = {};
 
   private constructor(output: Output, input: Input) {
     this.midiOutput = output;
