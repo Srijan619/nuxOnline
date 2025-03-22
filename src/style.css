@@ -46,6 +46,11 @@
   /* Effects */
   --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
   --retro-shadow: rgba(255, 255, 255, 0.2); /* Retro shadow */
+
+  --hover-border-color: #ff6347; /* Border color on hover */
+  --hover-text-color: #ffffff; /* Text color on hover */
+  --hover-connector-color: #ff6347; /* Connector color on hover */
+  --hover-glow-color: rgba(255, 99, 71, 0.5); /* Glow color on hover */
 }
 
 a {

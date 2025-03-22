@@ -6,7 +6,6 @@ import type {
   EffectOption,
 } from "../types";
 import effectsMapping from "./effects";
-import { SysExMockResponse } from "../mocks/mockNuxResponse";
 
 import { WebMidi, Output, Input } from "webmidi";
 import type { MessageEvent } from "webmidi";
@@ -40,7 +39,6 @@ class NUXMidiController {
   private deviceVersion = ref("");
   private currentPresetBasicData = ref({});
   private currentPresetDetailData = ref({});
-  private selectedEffect: EffectOption = ref({});
   private midiOutput: Output | null = null;
   private midiInput: Input | null = null;
 
@@ -85,11 +83,11 @@ class NUXMidiController {
     try {
       await WebMidi.enable({ sysex: true });
 
-      const nuxOutput = WebMidi.outputs.find(
-        (output) => output.name === "NUX MG-30",
+      const nuxOutput = WebMidi.outputs.find((output) =>
+        output.name.includes("NUX MG-30"),
       );
-      const nuxInput = WebMidi.inputs.find(
-        (input) => input.name === "NUX MG-30",
+      const nuxInput = WebMidi.inputs.find((input) =>
+        input.name.includes("NUX MG-30"),
       );
 
       if (!nuxOutput || !nuxInput) {
@@ -199,6 +197,10 @@ class NUXMidiController {
     this.midiOutput!.send(message);
   }
 
+  public selectEffect(effect: EffectOption) {
+    this.selectedEffect = this.currentPresetDetailData.effects[effect.category];
+  }
+
   public toggleEffect(effect: EffectOption) {
     if (!effect || !effect.id) return;
     this.checkDevice(); // Ensure the device is connected
@@ -238,7 +240,6 @@ class NUXMidiController {
       this.currentPresetDetailData.effects[effectId]
     ) {
       this.currentPresetDetailData.effects[effectId].active = isActive;
-      this.selectedEffect = this.currentPresetDetailData.effects[effectId];
       console.log("Toggling effect..", effectId, this.currentPresetDetailData);
     }
   }
@@ -269,6 +270,7 @@ class NUXMidiController {
 
     version = version.replace(/\0+$/, "").split("MG-30")[0].trim();
 
+    version = version.replace(/[^a-zA-Z0-9.\-]/g, "").trim();
     console.log(`🎸 Device version: ${version}`);
     return { version: version || "Unknown" };
   }
@@ -311,7 +313,11 @@ class NUXMidiController {
       const secondChar = String.fromCharCode(nameBytes[i + 2] / 2);
       name += `${char}${secondChar}`;
     }
-    return name.trim();
+    name = name.replace(/\0+$/, "").trim();
+    name = name.replace(/[^a-zA-Z0-9\s\-]/g, "");
+
+    console.log(`🎸 Preset name: "${name}"`);
+    return name;
   }
 
   // Extract various effect data

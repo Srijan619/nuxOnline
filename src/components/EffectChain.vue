@@ -1,13 +1,9 @@
 <template>
   <div class="effect-chain-wrapper">
     <div class="effect-chain">
-      <div
-        v-for="(effect, index) in effectList"
-        :key="effect.id"
-        class="effect-box"
-        :class="[effect.active ? 'active' : 'inactive', effect.category]"
-        @click="toggleEffect(effect)"
-      >
+      <div v-for="(effect, index) in effectList" :key="effect.id" class="effect-box"
+        :class="[effect.active ? 'active' : 'inactive', effect.category]" @click="toggleEffect(effect)"
+        @mouseover="startHoverTimer(effect)" @mouseleave="clearHoverTimer(effect)">
         <div class="box-glow"></div>
         <div class="box-content">
           <h3>{{ effect.title }}</h3>
@@ -19,10 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { EffectOption } from "../types/index.ts";
+import { computed, ref } from "vue";
+import type { EffectOption, Effect } from "../types/index.ts";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import EffectListDropdown from "../components/EffectListDropdown.vue";
 
 const props = defineProps<{
   effects: Record<string, EffectOption>;
@@ -48,8 +43,38 @@ const effectList = computed(() => {
     .map((key) => props.effects[key])
     .filter((effect): effect is EffectOption => effect !== undefined);
 });
+const hoveredEffect = ref<EffectOption | null>(null);
 
-const toggleEffect = (effect: any) => {
+// Hover timer map
+const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+const startHoverTimer = (effect: EffectOption) => {
+  if (!effect.id) return;
+  if (hoverTimers.value.has(effect.id)) {
+    clearTimeout(hoverTimers.value.get(effect.id)!);
+  }
+
+  // Set a new timer to trigger after 2 seconds
+  hoverTimers.value.set(
+    effect.id,
+    setTimeout(() => {
+      hoveredEffect.value = effect; // Update the hovered effect after 2 seconds
+      showEffectOptions(effect); // Show effect options when hover time completes
+    }, 500),
+  );
+};
+
+const clearHoverTimer = () => {
+  hoveredEffect.value = null;
+
+  hoverTimers.value.forEach((timer) => clearTimeout(timer));
+  hoverTimers.value.clear();
+};
+const showEffectOptions = (effect: EffectOption) => {
+  nuxMidiController.value?.selectEffect(effect);
+};
+
+const toggleEffect = (effect: EffectOption) => {
   nuxMidiController.value?.toggleEffect(effect);
 };
 </script>
@@ -109,42 +134,67 @@ const toggleEffect = (effect: any) => {
 .effect-box:hover {
   transform: scale(1.03);
   box-shadow: 0 0 15px var(--retro-glow);
+  border-color: var(--hover-border-color, #ff6347);
+}
+
+.effect-box:hover .box-glow {
+  opacity: 0.4;
+}
+
+.effect-box:hover .box-content h3 {
+  color: var(--hover-text-color, #ff6347);
+  text-shadow: 0 0 8px var(--retro-glow);
+}
+
+.effect-box:hover .connector {
+  background: var(--hover-connector-color, #ff6347);
 }
 
 /* Category-specific colors for vertical tag and connector */
 .wah {
   --effect-color: var(--wah-color);
 }
+
 .comp {
   --effect-color: var(--comp-color);
 }
+
 .efx {
   --effect-color: var(--efx-color);
 }
+
 .amp {
   --effect-color: var(--amp-color);
 }
+
 .eq {
   --effect-color: var(--eq-color);
 }
+
 .gate {
   --effect-color: var(--gate-color);
 }
+
 .mod {
   --effect-color: var(--mod-color);
 }
+
 .delay {
   --effect-color: var(--delay-color);
 }
+
 .reverb {
   --effect-color: var(--reverb-color);
 }
+
 .ir {
   --effect-color: var(--ir-color);
 }
+
 .sr {
   --effect-color: var(--sr-color);
 }
+
 .vol {
   --effect-color: var(--vol-color);
 }
@@ -169,11 +219,9 @@ const toggleEffect = (effect: any) => {
   width: 12rem;
   height: 12rem;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle closest-side at center,
-    var(--effect-color),
-    transparent
-  );
+  background: radial-gradient(circle closest-side at center,
+      var(--effect-color),
+      transparent);
   opacity: 0;
   transition: opacity 300ms ease-in-out;
   z-index: 0;
@@ -195,8 +243,10 @@ const toggleEffect = (effect: any) => {
   margin: 1rem;
   font-size: 1.1rem;
   font-weight: bold;
-  color: var(--retro-text-primary); /* Simple, consistent text color */
-  text-shadow: 0 0 4px var(--retro-glow); /* Retro glow */
+  color: var(--retro-text-primary);
+  /* Simple, consistent text color */
+  text-shadow: 0 0 4px var(--retro-glow);
+  /* Retro glow */
 }
 
 .connector {
@@ -206,12 +256,19 @@ const toggleEffect = (effect: any) => {
   transform: translateY(-50%);
   width: 1.5rem;
   height: 0.15rem;
-  background: var(--effect-color); /* Full category color */
+  background: var(--effect-color);
+  /* Full category color */
   transition: opacity 0.3s ease-in-out;
   z-index: 1;
 }
+
 .effect-box.inactive .connector {
   background: var(--retro-text-secondary);
+}
+
+.effect-box:hover .connector {
+  opacity: 1;
+  background: var(--hover-connector-color, #ff6347);
 }
 
 /* Responsive adjustments */
