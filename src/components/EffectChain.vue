@@ -2,9 +2,8 @@
   <div class="effect-chain-wrapper">
     <div class="effect-chain">
       <div v-for="(effect, index) in effectList" :key="effect.id" class="effect-box"
-        :class="[effect.active ? 'active' : 'inactive', effect.category]" @click="toggleEffect(effect)"
-        @mouseover="startHoverTimer(effect)" @mouseleave="clearHoverTimer(effect)">
-        <div class="box-glow"></div>
+        :class="[effect.active ? 'active' : 'inactive', effect.category]" @click="toggleEffect(effect, index)"
+        @mouseover="startHoverTimer(effect)" @mouseleave="clearHoverTimer">
         <div class="box-content">
           <h3>{{ effect.title }}</h3>
         </div>
@@ -45,6 +44,7 @@ const effectList = computed(() => {
 });
 const hoveredEffect = ref<EffectOption | null>(null);
 
+console.log("Effects", effectList);
 // Hover timer map
 const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
@@ -54,12 +54,11 @@ const startHoverTimer = (effect: EffectOption) => {
     clearTimeout(hoverTimers.value.get(effect.id)!);
   }
 
-  // Set a new timer to trigger after 2 seconds
   hoverTimers.value.set(
     effect.id,
     setTimeout(() => {
-      hoveredEffect.value = effect; // Update the hovered effect after 2 seconds
-      showEffectOptions(effect); // Show effect options when hover time completes
+      hoveredEffect.value = effect;
+      showEffectOptions(effect);
     }, 500),
   );
 };
@@ -74,8 +73,8 @@ const showEffectOptions = (effect: EffectOption) => {
   nuxMidiController.value?.selectEffect(effect);
 };
 
-const toggleEffect = (effect: EffectOption) => {
-  nuxMidiController.value?.toggleEffect(effect);
+const toggleEffect = (effect: EffectOption, index: number) => {
+  nuxMidiController.value?.toggleEffect(effect, index);
 };
 </script>
 
@@ -212,24 +211,6 @@ const toggleEffect = (effect: EffectOption) => {
 
 .effect-box:hover.active:after {
   transform: translateX(0.2rem);
-}
-
-.box-glow {
-  position: absolute;
-  width: 12rem;
-  height: 12rem;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle closest-side at center,
-      var(--effect-color),
-      transparent);
-  opacity: 0;
-  transition: opacity 300ms ease-in-out;
-  z-index: 0;
-  filter: blur(25px);
-}
-
-.effect-box:hover .box-glow {
-  opacity: 0.3;
 }
 
 .box-content {

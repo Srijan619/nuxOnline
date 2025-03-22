@@ -25,10 +25,18 @@ watch(
     }
   },
 );
+
+const effectCategoryColor = computed(() => {
+  const category = selectedEffect.value?.category;
+  if (category) {
+    return `var(--${category}-color)`;
+  }
+  return "var(--undefined-color)";
+});
 </script>
 
 <template>
-  <div class="notification">
+  <div class="notification" :style="{ '--dynamic-effect-selected-color': effectCategoryColor }">
     <div class="music-notes">♪ ♫</div>
     <div class="notiglow"></div>
     <div class="notiborderglow"></div>
@@ -78,8 +86,7 @@ watch(
   width: 0.35rem;
   inset: 0.65rem auto 0.65rem 0.5rem;
   border-radius: 0.125rem;
-  /* TODO: This would actual come from active effect that is being toggled or edited..?  */
-  background: var(--wah-color);
+  background: var(--dynamic-effect-selected-color);
   transition:
     transform 400ms ease-in-out,
     opacity 400ms ease-in-out;
@@ -105,7 +112,6 @@ watch(
 
 .notification:hover .notititle {
   transform: translateX(0.3rem);
-  color: var(--wah-color);
 }
 
 .notibody {
@@ -128,11 +134,9 @@ watch(
   width: 20rem;
   height: 20rem;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle closest-side at center,
-    var(--retro-glow),
-    transparent
-  );
+  background: radial-gradient(circle closest-side at center,
+      var(--retro-glow),
+      transparent);
   opacity: 0;
   transition:
     opacity 400ms ease-in-out,
@@ -150,7 +154,8 @@ watch(
 }
 
 .notification:hover .notiglow {
-  opacity: 0.3; /* More pronounced glow */
+  opacity: 0.3;
+  /* More pronounced glow */
   transform: translate(-50%, -50%) scale(1.1);
 }
 
@@ -170,10 +175,12 @@ watch(
 }
 
 @keyframes floatNotes {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }

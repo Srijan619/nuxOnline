@@ -29,22 +29,19 @@
   --retro-text-secondary: #7a8780; /* Muted green-gray */
   --retro-border: #2e3733; /* Border color */
 
-  /* Neon Accent Colors */
-  --wah-color: #ff007f; /* Neon pink */
-  --comp-color: #00ffff; /* Cyan */
-  --efx-color: #ff00ff; /* Magenta */
-  --amp-color: #ffff00; /* Neon yellow */
-  --eq-color: #00ff00; /* Lime green */
-  --gate-color: #ff8000; /* Neon orange */
-  --mod-color: #8000ff; /* Electric purple */
-  --delay-color: #00b7eb; /* Bright teal */
-  --reverb-color: #ff4040; /* Retro red */
-  --ir-color: #40ff40; /* Vivid green */
-  --sr-color: #ffaa00; /* Amber */
-  --vol-color: #e6e6e6; /* Bright off-white */
-
-  /* Effects */
-  --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
+  --wah-color: #c28ab9;
+  --comp-color: #c3c967;
+  --efx-color: #9f4b3e;
+  --amp-color: #c81c28;
+  --eq-color: #b3b3b3;
+  --gate-color: #98b95f;
+  --mod-color: #3b4c98;
+  --delay-color: #6d9c8a;
+  --reverb-color: #7d3471;
+  --ir-color: #80ff80;
+  --sr-color: #61a839;
+  --vol-color: #ffff55;
+  --undefined-color: "grey" /* Effects */ --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
   --retro-shadow: rgba(255, 255, 255, 0.2); /* Retro shadow */
 
   --hover-border-color: #ff6347; /* Border color on hover */

@@ -201,7 +201,7 @@ class NUXMidiController {
     this.selectedEffect = this.currentPresetDetailData.effects[effect.category];
   }
 
-  public toggleEffect(effect: EffectOption) {
+  public toggleEffect(effect: EffectOption, index: number) {
     if (!effect || !effect.id) return;
     this.checkDevice(); // Ensure the device is connected
 
@@ -222,7 +222,11 @@ class NUXMidiController {
 
     // Send MIDI message
     try {
-      const message = [0xb0, 0x00, parseInt(byteToSend, 16)];
+      const message = [
+        0xb0,
+        parseInt(hexIndex(index), 16),
+        parseInt(byteToSend, 16) - 1, //HACK: way of toggling on and off as all bytes are one down
+      ];
 
       this.midiOutput!.send(message);
       console.log(`MIDI message sent: ${message}`);
@@ -362,20 +366,51 @@ class NUXMidiController {
     };
 
     //For example in some case: 8th byte is wahstatus, wah object doesn't itself have on/off (or only says wah type)
+    // v5 and v4 have different start index for effects
+    const getAdjustedIndex = (index: number) => {
+      if (this.deviceVersion.value.startsWith("v5")) {
+        return index;
+      } else if (this.deviceVersion.value.startsWith("v4")) {
+        return index - 1;
+      } else {
+        return index;
+      }
+    };
 
+    // Now, using the adjusted indices
     const effects: Effect = {
-      wah: getEffectOption("wah", hexValue[9], response[8]),
-      comp: getEffectOption("comp", hexValue[10]),
-      efx: getEffectOption("efx", hexValue[12], response[11]),
-      amp: getEffectOption("amp", hexValue[13]),
-      eq: getEffectOption("eq", hexValue[15], response[14]),
-      gate: getEffectOption("gate", hexValue[16]),
-      mod: getEffectOption("mod", hexValue[18], response[17]),
-      delay: getEffectOption("delay", hexValue[19]),
-      reverb: getEffectOption("reverb", hexValue[21], response[20]),
-      ir: getEffectOption("ir", hexValue[22]),
-      sr: getEffectOption("sr", hexValue[23]),
-      vol: getEffectOption("vol", hexValue[25]),
+      wah: getEffectOption(
+        "wah",
+        hexValue[getAdjustedIndex(9)],
+        response[getAdjustedIndex(8)],
+      ),
+      comp: getEffectOption("comp", hexValue[getAdjustedIndex(10)]),
+      efx: getEffectOption(
+        "efx",
+        hexValue[getAdjustedIndex(12)],
+        response[getAdjustedIndex(11)],
+      ),
+      amp: getEffectOption("amp", hexValue[getAdjustedIndex(13)]),
+      eq: getEffectOption(
+        "eq",
+        hexValue[getAdjustedIndex(15)],
+        response[getAdjustedIndex(14)],
+      ),
+      gate: getEffectOption("gate", hexValue[getAdjustedIndex(16)]),
+      mod: getEffectOption(
+        "mod",
+        hexValue[getAdjustedIndex(18)],
+        response[getAdjustedIndex(17)],
+      ),
+      delay: getEffectOption("delay", hexValue[getAdjustedIndex(19)]),
+      reverb: getEffectOption(
+        "reverb",
+        hexValue[getAdjustedIndex(21)],
+        response[getAdjustedIndex(20)],
+      ),
+      ir: getEffectOption("ir", hexValue[getAdjustedIndex(22)]),
+      sr: getEffectOption("sr", hexValue[getAdjustedIndex(23)]),
+      vol: getEffectOption("vol", hexValue[getAdjustedIndex(25)]),
     };
 
     return effects;
