@@ -77,9 +77,4 @@ const updateValue = (controlPane: number, value: number) => {
   flex-direction: column;
   gap: 0.5rem;
 }
-
-.knob-container {
-  display: flex;
-  flex-direction: row;
-}
 </style>

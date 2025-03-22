@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const knobs = ref<any[]>([]);
-
+const sliderFillColor = ref();
 // Starting control numbers from your effects mapping
 watch(
   () => nuxMidiController.value?.selectedEffect,
@@ -19,6 +19,7 @@ watch(
       const selectedEffect = effectCategory?.options.find(
         (opt: any) => opt.id === newVal.id,
       );
+      sliderFillColor.value = `var(--${newVal.category}-color)`;
       knobs.value = selectedEffect?.knobs || [];
     }
   },
@@ -28,15 +29,16 @@ watch(
 <template>
   <div class="knob-container">
     <KnobControl v-for="(knob, index) in knobs" :key="knob.id" :title="knob.title" :size="100" :min="knob.range[0]"
-      :max="knob.range[1]" @update:value="(value) => updateValue(knob?.ctrl, value)" />
+      :max="knob.range[1]" @update:value="(value) => updateValue(knob?.ctrl, value)"
+      :sliderFillColor="sliderFillColor" />
   </div>
 </template>
 
 <style scoped>
 .knob-container {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  /* Optional: adds spacing between knobs */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  width: 100%;
 }
 </style>

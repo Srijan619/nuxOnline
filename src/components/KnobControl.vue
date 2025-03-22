@@ -3,7 +3,7 @@
     @wheel="onWheel">
     <svg class="slider-track" :width="size" :height="size">
       <circle class="track-bg" :cx="radius" :cy="radius" :r="trackRadius" />
-      <circle class="track-fill" :cx="radius" :cy="radius" :r="trackRadius" :style="fillStyle" />
+      <circle class="track-fill" :cx="radius" :cy="radius" :r="trackRadius" :style="[fillStyle, trackFillStyle]" />
     </svg>
     <div class="slider-title" :style="titleStyle">
       <span>{{ title }}</span>
@@ -28,6 +28,7 @@ const props = defineProps<{
   size?: number;
   startAngle?: number;
   title?: string;
+  sliderFillColor?: string;
 }>();
 
 const emit = defineEmits<{
@@ -46,6 +47,8 @@ const trackRadius = computed(
 const minValue = props.min || 0;
 const maxValue = props.max || 100;
 const title = props.title || "";
+const sliderFillColor = props.sliderFillColor || "var(--retro-border-color)";
+
 const startAngle = props.startAngle || 200; // Default: bottom left (225°)
 
 const sliderStyle = computed(() => ({
@@ -92,6 +95,10 @@ const knobStyle = computed(() => {
 
 const labelStyle = computed(() => ({
   fontSize: `${size * 0.14}px`,
+}));
+
+const trackFillStyle = computed(() => ({
+  stroke: sliderFillColor,
 }));
 
 const startDrag = (e) => {
@@ -179,7 +186,6 @@ defineExpose({ value });
 
 .track-fill {
   fill: none;
-  stroke: var(--amp-accent);
   stroke-width: 8;
   stroke-linecap: round;
   transform: rotate(-90deg);

@@ -1,9 +1,11 @@
 <template>
   <div class="effect-chain-wrapper">
     <div class="effect-chain">
-      <div v-for="(effect, index) in effectList" :key="effect.id" class="effect-box"
-        :class="[effect.active ? 'active' : 'inactive', effect.category]" @click="toggleEffect(effect, index)"
-        @mouseover="startHoverTimer(effect)" @mouseleave="clearHoverTimer">
+      <div v-for="(effect, index) in effectList" :key="effect.id" class="effect-box" :class="[
+        effect.active ? 'active' : 'inactive',
+        effect.category,
+        hoveredEffect?.id === effect.id ? 'effectHovered' : '',
+      ]" @click="toggleEffect(effect, index)" @mouseover="startHoverTimer(effect)" @mouseleave="clearHoverTimer">
         <div class="box-content">
           <h3>{{ effect.title }}</h3>
         </div>
@@ -64,8 +66,6 @@ const startHoverTimer = (effect: EffectOption) => {
 };
 
 const clearHoverTimer = () => {
-  hoveredEffect.value = null;
-
   hoverTimers.value.forEach((timer) => clearTimeout(timer));
   hoverTimers.value.clear();
 };
@@ -108,6 +108,10 @@ const toggleEffect = (effect: EffectOption, index: number) => {
   isolation: isolate;
   flex-shrink: 0;
   overflow: visible;
+}
+
+.effect-box.effectHovered {
+  border: 2px solid var(--hover-glow-color);
 }
 
 .effect-box:before {

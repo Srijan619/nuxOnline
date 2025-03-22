@@ -28,7 +28,7 @@
   --retro-text-primary: #d9d9d9; /* Off-white for text */
   --retro-text-secondary: #7a8780; /* Muted green-gray */
   --retro-border: #2e3733; /* Border color */
-  --retro-glow: #ffaa00;
+  --retro-glow: #ff69b4;
 
   --wah-color: #c28ab9;
   --comp-color: #c3c967;
@@ -45,10 +45,10 @@
   --undefined-color: "grey" /* Effects */ --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
   --retro-shadow: rgba(255, 255, 255, 0.2); /* Retro shadow */
 
-  --hover-border-color: #ff6347; /* Border color on hover */
-  --hover-text-color: #ffffff; /* Text color on hover */
-  --hover-connector-color: #ff6347; /* Connector color on hover */
-  --hover-glow-color: rgba(255, 99, 71, 0.5); /* Glow color on hover */
+  --hover-border-color: #ff6347;
+  --hover-text-color: #ffffff;
+  --hover-connector-color: #ff6347;
+  --hover-glow-color: rgba(255, 99, 71, 0.5);
 }
 
 a {
