@@ -39,25 +39,14 @@ watch(
 </script>
 
 <template>
-  <div
-    class="preset-change"
-    :style="{
-      '--amp-active': nuxMidiController ? 'var(--amp-on)' : 'var(--amp-off)',
-    }"
-  >
-    <button
-      class="preset-btn prev"
-      @click="changePreset('down')"
-      :disabled="presetNumber <= MIN_PRESET"
-    >
+  <div class="preset-change" :style="{
+    '--amp-active': nuxMidiController ? 'var(--amp-on)' : 'var(--amp-off)',
+  }">
+    <button class="preset-btn prev" @click="changePreset('down')" :disabled="presetNumber <= MIN_PRESET">
       〈
     </button>
     <slot></slot>
-    <button
-      class="preset-btn next"
-      @click="changePreset('up')"
-      :disabled="presetNumber >= MAX_PRESET"
-    >
+    <button class="preset-btn next" @click="changePreset('up')" :disabled="presetNumber >= MAX_PRESET">
       〉
     </button>
   </div>
@@ -89,22 +78,18 @@ watch(
   background: var(--amp-inner);
   /* Weathered metal texture with scratches */
   background-image:
-    linear-gradient(
-      45deg,
+    linear-gradient(45deg,
       rgba(0, 0, 0, 0.1) 25%,
       transparent 25%,
       transparent 75%,
       rgba(0, 0, 0, 0.1) 75%,
-      rgba(0, 0, 0, 0.1)
-    ),
-    linear-gradient(
-      45deg,
+      rgba(0, 0, 0, 0.1)),
+    linear-gradient(45deg,
       rgba(255, 255, 255, 0.05) 25%,
       transparent 25%,
       transparent 75%,
       rgba(255, 255, 255, 0.05) 75%,
-      rgba(255, 255, 255, 0.05)
-    );
+      rgba(255, 255, 255, 0.05));
   background-size: 8px 8px;
   z-index: 1;
 }
@@ -139,7 +124,6 @@ watch(
   background: var(--amp-accent);
   color: var(--retro-text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 0 8px var(--retro-glow);
 }
 
 .preset-btn:disabled {

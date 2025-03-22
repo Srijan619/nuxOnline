@@ -206,8 +206,8 @@ class NUXMidiController {
     this.selectedEffect = this.currentPresetDetailData.effects[effect.category];
   }
 
-  public selectEffectOption(effect: EffectOption, index: number) {
-    console.log("Select effect type..", effect);
+  public selectEffectOption(effect: EffectOption, index: number | undefined) {
+    if (!index) return;
     this.toggleEffect(effect, index, 0);
   }
 
@@ -231,16 +231,19 @@ class NUXMidiController {
       return;
     }
 
+    let intByteToSend = parseInt(byteToSend, 16);
+
+    intByteToSend =
+      effect.category != "comp" && !effect.active
+        ? intByteToSend / 2
+        : intByteToSend; //HACK: way of toggling on and off as all bytes are one down
+
     // Optimistically update local state
     this.updateEffectState(effect, effectId, !effect.active);
 
     // Send MIDI message
     try {
-      const message = [
-        0xb0,
-        parseInt(hexIndex(index), 16),
-        parseInt(byteToSend, 16) - hackIndexDeduction, //HACK: way of toggling on and off as all bytes are one down
-      ];
+      const message = [0xb0, parseInt(hexIndex(index), 16), intByteToSend];
 
       this.midiOutput!.send(message);
       console.log(`MIDI message sent: ${message}`);

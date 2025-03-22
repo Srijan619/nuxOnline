@@ -107,7 +107,6 @@ const effectCategoryColor = computed(() => {
     transform 400ms ease-in-out,
     color 400ms ease-in-out;
   z-index: 5;
-  text-shadow: 0 0 4px var(--retro-glow);
 }
 
 .notification:hover .notititle {
@@ -134,9 +133,7 @@ const effectCategoryColor = computed(() => {
   width: 20rem;
   height: 20rem;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle closest-side at center,
-      var(--retro-glow),
-      transparent);
+
   opacity: 0;
   transition:
     opacity 400ms ease-in-out,

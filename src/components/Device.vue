@@ -34,9 +34,6 @@ const deviceName = computed(() => {
   align-items: center;
   gap: 4px;
   color: var(--retro-text-primary);
-  text-shadow:
-    0 0 3px var(--retro-glow),
-    0 1px 1px rgba(0, 0, 0, 0.5);
   z-index: 2;
   position: relative;
 }

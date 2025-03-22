@@ -29,7 +29,7 @@ const selectOption = (option: EffectOption) => {
 .dropdown {
   z-index: 10;
   border-radius: 0.25rem;
-  max-height: 3.9vh;
+  max-height: 10vh;
   overflow: scroll;
   width: fit-content;
   scrollbar-width: none;
@@ -51,6 +51,6 @@ const selectOption = (option: EffectOption) => {
 }
 
 .dropdown li:hover {
-  background: var(--retro-glow);
+  color: var(--retro-glow);
 }
 </style>

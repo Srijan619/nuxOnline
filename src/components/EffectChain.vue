@@ -132,7 +132,6 @@ const toggleEffect = (effect: EffectOption, index: number) => {
 
 .effect-box:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 15px var(--retro-glow);
   border-color: var(--hover-border-color, #ff6347);
 }
 
@@ -142,7 +141,6 @@ const toggleEffect = (effect: EffectOption, index: number) => {
 
 .effect-box:hover .box-content h3 {
   color: var(--hover-text-color, #ff6347);
-  text-shadow: 0 0 8px var(--retro-glow);
 }
 
 .effect-box:hover .connector {
@@ -225,9 +223,6 @@ const toggleEffect = (effect: EffectOption, index: number) => {
   font-size: 1.1rem;
   font-weight: bold;
   color: var(--retro-text-primary);
-  /* Simple, consistent text color */
-  text-shadow: 0 0 4px var(--retro-glow);
-  /* Retro glow */
 }
 
 .connector {
