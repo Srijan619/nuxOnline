@@ -207,7 +207,7 @@ class NUXMidiController {
   }
 
   public selectEffectOption(effect: EffectOption, index: number | undefined) {
-    if (!index) return;
+    if (index == null) return;
     this.toggleEffect(effect, index, 0);
   }
 

@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import EffectGroup from "./EffectGroup.vue";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 import PresetDetail from "./PresetDetail.vue";
 import Device from "./Device.vue";
-
-import { PresetMockResponse } from "../mocks/mockNuxResponse.ts";
+import KnobControl from "./KnobControl.vue";
 
 const selectedPreset = ref("No preset selected");
 
@@ -32,18 +30,33 @@ watch(
     }
   },
 );
+
+const sliderValue = ref(0);
+
+const updateValue = (controlPane: number, value: number) => {
+  if (!nuxMidiController.value) return;
+  if (!value) return;
+
+  sliderValue.value = value;
+
+  nuxMidiController.value.midiOutput.send([176, controlPane, value]);
+};
 </script>
 
 <template>
   <div class="main-container" v-if="selectedPreset">
     <div class="preset-card">
       <PresetDetail :selectedPreset="selectedPreset" />
-      <PresetChange><Device /></PresetChange>
+      <PresetChange>
+        <Device />
+      </PresetChange>
     </div>
-    <EffectChain
-      v-if="selectedPreset.effects"
-      :effects="selectedPreset.effects"
-    />
+    <EffectChain v-if="selectedPreset.effects" :effects="selectedPreset.effects" />
+    <div class="knob-container">
+      <KnobControl :size="100" @update:value="(value) => updateValue(18, value)" />
+      <KnobControl :size="100" @update:value="(value) => updateValue(19, value)" />
+      <KnobControl :size="100" @update:value="(value) => updateValue(20, value)" />
+    </div>
   </div>
 </template>
 
@@ -67,5 +80,10 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.knob-container {
+  display: flex;
+  flex-direction: row;
 }
 </style>
