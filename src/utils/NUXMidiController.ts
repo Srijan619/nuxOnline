@@ -31,6 +31,7 @@ const SysExResponsePattern = {
   CURRENT_PRESET_BASIC: [0xf0, 0x43, 0x58, 0x70, 0x15, 0x02],
   CURRENT_PRESET_DETAIL: [0xf0, 0x43, 0x58, 0x70, 0x0b, 0x02],
   PRESET_CHANGED: [0xc0],
+  EFFECT_CHANGED: [0xb0],
 };
 
 class NUXMidiController {
@@ -70,7 +71,7 @@ class NUXMidiController {
     // Listen for control changes (e.g., knobs, sliders)
 
     input.addListener("controlchange", "all", (e) => {
-      console.log("Control Change: Controller", e);
+      // console.log("Control Change: Controller", e);
     });
     // Listen for all MIDI messages (generic)
     input.addListener("midimessage", "all", (e) => {
@@ -159,6 +160,10 @@ class NUXMidiController {
             this.getCurrentPresetBasicData();
             this.getDetailPresetData(nextPresetNumber);
             break;
+
+          case "EFFECT_CHANGED":
+            console.log("Effect changed...", data);
+            break;
         }
       }
     }
@@ -201,7 +206,16 @@ class NUXMidiController {
     this.selectedEffect = this.currentPresetDetailData.effects[effect.category];
   }
 
-  public toggleEffect(effect: EffectOption, index: number) {
+  public selectEffectOption(effect: EffectOption, index: number) {
+    console.log("Select effect type..", effect);
+    this.toggleEffect(effect, index, 0);
+  }
+
+  public toggleEffect(
+    effect: EffectOption,
+    index: number,
+    hackIndexDeduction: number = 1,
+  ) {
     if (!effect || !effect.id) return;
     this.checkDevice(); // Ensure the device is connected
 
@@ -218,14 +232,14 @@ class NUXMidiController {
     }
 
     // Optimistically update local state
-    this.updateEffectState(effectId, !effect.active);
+    this.updateEffectState(effect, effectId, !effect.active);
 
     // Send MIDI message
     try {
       const message = [
         0xb0,
         parseInt(hexIndex(index), 16),
-        parseInt(byteToSend, 16) - 1, //HACK: way of toggling on and off as all bytes are one down
+        parseInt(byteToSend, 16) - hackIndexDeduction, //HACK: way of toggling on and off as all bytes are one down
       ];
 
       this.midiOutput!.send(message);
@@ -233,18 +247,31 @@ class NUXMidiController {
     } catch (error) {
       console.error("Error sending MIDI message", error);
       // Optionally, revert the local state change if the message failed
-      this.updateEffectState(effectId, effect.active);
+      this.updateEffectState(effect, effectId, effect.active);
     }
   }
 
   // Method to update the local state (or store) of the effect
-  private updateEffectState(effectId: string, isActive: boolean) {
+
+  private updateEffectState(
+    effect: EffectOption,
+    effectId: string,
+    isActive: boolean,
+  ) {
     if (
       this.currentPresetDetailData.effects &&
       this.currentPresetDetailData.effects[effectId]
     ) {
-      this.currentPresetDetailData.effects[effectId].active = isActive;
-      console.log("Toggling effect..", effectId, this.currentPresetDetailData);
+      const effectDetail = this.currentPresetDetailData.effects[effectId];
+
+      for (const key in effect) {
+        if (effect.hasOwnProperty(key)) {
+          effectDetail[key] = effect[key];
+        }
+      }
+
+      effectDetail.active = isActive;
+      effectDetail.id = effect.id;
     }
   }
 
@@ -328,8 +355,10 @@ class NUXMidiController {
   private extractEffects(response: Uint8Array): Effect {
     const hexValue = this.unitHexToBytes(response);
 
+    console.log("Effects hex", hexValue);
     const getEffectOption = (
       category: keyof typeof effectsMapping.effects,
+      categoryIndex: number, //defines order
       byteValue: string,
       onOffByte?: number,
     ): EffectOption => {
@@ -347,6 +376,7 @@ class NUXMidiController {
           offByte: "",
           category: "Unknown category",
           active: false,
+          index: undefined,
         };
       }
 
@@ -362,6 +392,7 @@ class NUXMidiController {
         offByte: effect.offByte,
         category: category,
         active: effectActiveStatus,
+        index: categoryIndex,
       };
     };
 
@@ -381,36 +412,41 @@ class NUXMidiController {
     const effects: Effect = {
       wah: getEffectOption(
         "wah",
+        0,
         hexValue[getAdjustedIndex(9)],
         response[getAdjustedIndex(8)],
       ),
-      comp: getEffectOption("comp", hexValue[getAdjustedIndex(10)]),
+      comp: getEffectOption("comp", 1, hexValue[getAdjustedIndex(10)]),
       efx: getEffectOption(
         "efx",
+        2,
         hexValue[getAdjustedIndex(12)],
         response[getAdjustedIndex(11)],
       ),
-      amp: getEffectOption("amp", hexValue[getAdjustedIndex(13)]),
+      amp: getEffectOption("amp", 3, hexValue[getAdjustedIndex(13)]),
       eq: getEffectOption(
         "eq",
+        4,
         hexValue[getAdjustedIndex(15)],
         response[getAdjustedIndex(14)],
       ),
-      gate: getEffectOption("gate", hexValue[getAdjustedIndex(16)]),
+      gate: getEffectOption("gate", 5, hexValue[getAdjustedIndex(16)]),
       mod: getEffectOption(
         "mod",
+        6,
         hexValue[getAdjustedIndex(18)],
         response[getAdjustedIndex(17)],
       ),
-      delay: getEffectOption("delay", hexValue[getAdjustedIndex(19)]),
+      delay: getEffectOption("delay", 7, hexValue[getAdjustedIndex(19)]),
       reverb: getEffectOption(
         "reverb",
+        8,
         hexValue[getAdjustedIndex(21)],
         response[getAdjustedIndex(20)],
       ),
-      ir: getEffectOption("ir", hexValue[getAdjustedIndex(22)]),
-      sr: getEffectOption("sr", hexValue[getAdjustedIndex(23)]),
-      vol: getEffectOption("vol", hexValue[getAdjustedIndex(25)]),
+      ir: getEffectOption("ir", 9, hexValue[getAdjustedIndex(22)]),
+      sr: getEffectOption("sr", 10, hexValue[getAdjustedIndex(23)]),
+      vol: getEffectOption("vol", 11, hexValue[getAdjustedIndex(25)]),
     };
 
     return effects;

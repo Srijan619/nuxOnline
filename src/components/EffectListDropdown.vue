@@ -1,11 +1,7 @@
 <template>
   <div class="dropdown">
     <ul>
-      <li
-        v-for="option in options"
-        :key="option.id"
-        @click="selectOption(option)"
-      >
+      <li v-for="option in effectOptions" :key="option.id" @click="selectOption(option)">
         {{ option.title }}
       </li>
     </ul>
@@ -13,16 +9,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import type { EffectOption } from "../types/index.ts";
+import type { EffectOption, Effect } from "../types/index.ts";
+import { nuxMidiController } from "../utils/NUXMidiController.ts";
 
-const props = defineProps<{ options: EffectOption[] }>();
-const emit = defineEmits(["select"]);
-
-const dropdownRef = ref<HTMLElement | null>(null);
+const props = defineProps<{
+  effectOptions: EffectOption[];
+  selectedEffect: EffectOption;
+}>();
 
 const selectOption = (option: EffectOption) => {
-  emit("select", option);
+  nuxMidiController.value?.selectEffectOption(
+    { ...option, category: props.selectedEffect?.category },
+    props.selectedEffect?.index,
+  );
 };
 </script>
 
@@ -38,16 +37,19 @@ const selectOption = (option: EffectOption) => {
   inset: 0.125rem;
   text-align: right;
 }
+
 .dropdown ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 .dropdown li {
   padding: 0.1rem;
   cursor: pointer;
   transition: background 0.3s;
 }
+
 .dropdown li:hover {
   background: var(--retro-glow);
 }

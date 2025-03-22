@@ -19,7 +19,7 @@ enum SysExResponse {
   DEVICE_VERSION = "F0 43 58 10 76 34 2E 30 2E 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 4D 47 2D 33 30 00 00 00 F7",
 }
 
-class NUXMidiController {
+class NUXMockMidiController {
   constructor() { }
 
   private preparePresetData(index: number, type: "basic" | "detail") {
@@ -181,5 +181,5 @@ class NUXMidiController {
   }
 }
 
-const nuxMidiController = new NUXMidiController();
+const nuxMidiController = new NUXMockMidiController();
 export { nuxMidiController, SysExRequest };

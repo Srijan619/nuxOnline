@@ -5,6 +5,7 @@ export interface EffectOption {
   offByte: string;
   category: string;
   active: boolean;
+  index: number | undefined; //defines order
 }
 
 interface Effect {
