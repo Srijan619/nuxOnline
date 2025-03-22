@@ -10,7 +10,7 @@
     </div>
     <div class="slider-knob" :style="knobStyle">
       <div class="knob-inner"></div>
-      <div class="knob-indicator"></div>
+      <div class="knob-indicator" :style="knobIndicatorStyle"></div>
     </div>
     <div class="slider-labels" :style="labelStyle">
       <span>{{ value }}</span>
@@ -73,7 +73,7 @@ const fillStyle = computed(() => {
 
 const titleStyle = computed(() => ({
   position: "absolute",
-  top: `${radius.value - trackRadius.value - knobRadius.value - size * 0.1}px`,
+  top: `${radius.value - trackRadius.value - knobRadius.value - size * 0.2}px`,
   left: "50%",
   transform: "translateX(-50%)",
   fontSize: `${size * 0.12}px`,
@@ -99,6 +99,10 @@ const labelStyle = computed(() => ({
 
 const trackFillStyle = computed(() => ({
   stroke: sliderFillColor,
+}));
+
+const knobIndicatorStyle = computed(() => ({
+  background: sliderFillColor,
 }));
 
 const startDrag = (e) => {
@@ -161,15 +165,8 @@ defineExpose({ value });
 <style scoped>
 .round-slider {
   position: relative;
-  background: var(--amp-bg);
-  border-radius: 50%;
-  border: 4px solid var(--amp-border);
-  box-shadow:
-    inset 0 0 10px var(--retro-shadow),
-    0 0 5px var(--retro-glow);
   cursor: pointer;
   user-select: none;
-  margin: 1rem;
 }
 
 .slider-track {

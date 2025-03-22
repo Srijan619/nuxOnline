@@ -37,6 +37,7 @@ export default {
             ctrl: 20,
           },
         ],
+        dominantColor: "#558B2F",
       },
       { id: "BLUES_DRV", title: "Blues Drive", onByte: "0C", offByte: "4C" },
       {

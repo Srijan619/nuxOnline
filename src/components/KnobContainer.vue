@@ -19,7 +19,8 @@ watch(
       const selectedEffect = effectCategory?.options.find(
         (opt: any) => opt.id === newVal.id,
       );
-      sliderFillColor.value = `var(--${newVal.category}-color)`;
+      sliderFillColor.value =
+        selectedEffect?.dominantColor || `var(--${newVal.category}-color)`; // Either effect pedals dominant color or main category color
       knobs.value = selectedEffect?.knobs || [];
     }
   },
