@@ -1,9 +1,21 @@
 <template>
-  <div class="round-slider" ref="slider" :style="sliderStyle" @mousedown="startDrag" @touchstart="startDrag"
-    @wheel="onWheel">
+  <div
+    class="round-slider"
+    ref="slider"
+    :style="sliderStyle"
+    @mousedown="startDrag"
+    @touchstart="startDrag"
+    @wheel="onWheel"
+  >
     <svg class="slider-track" :width="size" :height="size">
       <circle class="track-bg" :cx="radius" :cy="radius" :r="trackRadius" />
-      <circle class="track-fill" :cx="radius" :cy="radius" :r="trackRadius" :style="[fillStyle, trackFillStyle]" />
+      <circle
+        class="track-fill"
+        :cx="radius"
+        :cy="radius"
+        :r="trackRadius"
+        :style="[fillStyle, trackFillStyle]"
+      />
     </svg>
     <div class="slider-title" :style="titleStyle">
       <span>{{ title }}</span>
@@ -205,9 +217,11 @@ defineExpose({ value });
 .knob-inner {
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 30%,
-      var(--amp-inner) 0%,
-      var(--amp-off) 70%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--amp-inner) 0%,
+    var(--amp-off) 70%
+  );
   border-radius: 50%;
   border: 2px solid var(--amp-border);
   box-shadow:
@@ -229,7 +243,6 @@ defineExpose({ value });
 .slider-title {
   color: var(--retro-text-primary);
   font-weight: bold;
-  text-shadow: 0 0 2px var(--retro-glow);
   pointer-events: none;
 }
 
