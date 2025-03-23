@@ -21,7 +21,31 @@ export default {
     sr: {
       byte: 23,
       category: "📡 S/R",
-      options: [{ id: "S_R", title: "S/R", onByte: "00", offByte: "01" }],
+      startOffByte: "41",
+      startOnByte: "01",
+      options: [
+        {
+          id: "S_R",
+          title: "S/R",
+          onByte: "00",
+          offByte: "01",
+          knobs: [
+            {
+              id: "send",
+              title: "SEND",
+              range: [0, 100],
+              ctrl: 72,
+            },
+            {
+              id: "return",
+              title: "RETURN",
+              range: [0, 100],
+              ctrl: 73,
+            },
+          ],
+          dominantColor: "#DCEDC8",
+        },
+      ],
     },
     vol: {
       byte: 25,

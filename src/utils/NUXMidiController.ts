@@ -231,9 +231,7 @@ class NUXMidiController {
       effect.category,
       effect.id,
     );
-    const byteToSend = effect.active
-      ? startOffByte || effect.offByte
-      : startOnByte || effect.onByte;
+    const byteToSend = effect.active ? startOffByte : startOnByte;
 
     if (!byteToSend) {
       console.error("Invalid byte value:", effect);

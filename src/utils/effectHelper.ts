@@ -45,6 +45,15 @@ const getEffectStartOnOffByte = (category: string, id: string) => {
   const effectIndex = effectCategory.options.findIndex(
     (opt: any) => opt.id === id,
   );
+  const matchedEffect = effectCategory?.options.find(
+    (opt: any) => opt.id === id,
+  );
+
+  if (!effectCategory?.startOnByte || !effectCategory?.startOffByte)
+    return {
+      startOnByte: matchedEffect?.onByte,
+      startOffByte: matchedEffect?.offByte,
+    };
 
   const startOnByte = calculateByte(effectCategory?.startOnByte, effectIndex);
   const startOffByte = calculateByte(effectCategory?.startOffByte, effectIndex);

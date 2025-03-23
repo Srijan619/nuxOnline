@@ -2,6 +2,8 @@ export default {
   reverb: {
     byte: 19,
     category: "🎶 Reverb",
+    startOffByte: "41",
+    startOnByte: "01",
     options: [
       {
         id: "ROOM_REVERB",
