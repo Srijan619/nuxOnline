@@ -1,26 +1,25 @@
 import effectsMapping from "../effects";
-import type { KnobEntry, KnobsConfig } from "../types";
+import type { EffectOption, KnobEntry, KnobsConfig } from "../types";
 
-const getEffectByIdAndCategory = (category: string, id: string | undefined) => {
-  if (!category || !id) return;
+const getMainEffectGroup = (effectOption: EffectOption) => {
   const typedEffectsMapping = effectsMapping as Record<string, any>;
 
-  const effectCategory = typedEffectsMapping.effects[category];
+  const effectCategory = typedEffectsMapping.effects[effectOption?.category];
   const matchedEffect = effectCategory?.options.find(
-    (opt: any) => opt.id === id,
+    (opt: any) => opt.id === effectOption?.id,
   );
   return matchedEffect;
 };
 
-const getMatchingEffectColor = (category: string, id: string) => {
+const getMatchingEffectColor = (effectOption: EffectOption) => {
   return (
-    getEffectByIdAndCategory(category, id)?.dominantColor ||
-    `var(--${category}-color)`
+    getMainEffectGroup(effectOption)?.dominantColor ||
+    `var(--${effectOption?.category}-color)`
   );
 };
 
-const getEffectKnobs = (category: string, id: string) => {
-  return getEffectByIdAndCategory(category, id)?.knobs || [];
+const getEffectKnobs = (effectOption: EffectOption) => {
+  return getMainEffectGroup(effectOption)?.knobs || [];
 };
 
 const populateKnobs = (
@@ -89,7 +88,6 @@ const calculateByte = (byte: string, index: number) => {
 export {
   getMatchingEffectColor,
   getEffectKnobs,
-  getEffectByIdAndCategory,
   populateKnobs,
   getEffectStartOnOffByte,
   getEffectByControlKnob,

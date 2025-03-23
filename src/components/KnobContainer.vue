@@ -15,11 +15,8 @@ watch(
   () => nuxMidiController.value?.selectedEffect,
   (newVal) => {
     if (newVal) {
-      sliderFillColor.value = getMatchingEffectColor(
-        newVal.category,
-        newVal.id,
-      );
-      knobs.value = getEffectKnobs(newVal.category, newVal.id);
+      sliderFillColor.value = getMatchingEffectColor(newVal);
+      knobs.value = getEffectKnobs(newVal);
     }
   },
 );
@@ -28,11 +25,8 @@ watch(
   () => nuxMidiController.value?.selectedEffectOption,
   (newVal) => {
     if (newVal) {
-      sliderFillColor.value = getMatchingEffectColor(
-        newVal.category,
-        newVal.id,
-      );
-      knobs.value = getEffectKnobs(newVal.category, newVal.id);
+      sliderFillColor.value = getMatchingEffectColor(newVal);
+      knobs.value = getEffectKnobs(newVal);
     }
   },
 );
@@ -54,6 +48,7 @@ watch(
         :size="100"
         :min="knob.range[0]"
         :max="knob.range[1]"
+        :initialValue="knob?.currentValue"
         @update:value="(value) => updateValue(knob?.ctrl, value)"
         :sliderFillColor="sliderFillColor"
       />

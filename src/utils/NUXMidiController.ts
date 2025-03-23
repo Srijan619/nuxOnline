@@ -4,6 +4,7 @@ import type {
   DeviceVersion,
   Effect,
   EffectOption,
+  Knob,
 } from "../types";
 import effectsMapping from "../effects";
 
@@ -15,6 +16,7 @@ import {
   getEffectByControlKnob,
   getEffectStartOnOffByte,
 } from "./effectHelper";
+import { getUpdatedAmpKnobControlsWithValues } from "./controlMapper";
 
 const hexIndex = (index: number) => {
   return index.toString(16).padStart(2, "0").toUpperCase();
@@ -82,6 +84,7 @@ class NUXMidiController {
     // Listen for all MIDI messages (generic)
     input.addListener("midimessage", "all", (e) => {
       console.log("Raw MIDI message:", e);
+      console.log("AMP ", e.data.slice(49, 61));
       this.handleSysExResponse(e);
     });
   }
@@ -431,7 +434,7 @@ class NUXMidiController {
     };
 
     // Now, using the adjusted indices
-    const effects: Effect = {
+    let effects: Effect = {
       wah: getEffectOption(
         "wah",
         0,
@@ -471,6 +474,14 @@ class NUXMidiController {
       vol: getEffectOption("vol", 11, hexValue[getAdjustedIndex(25)]),
     };
 
+    effects = {
+      ...effects,
+      amp: {
+        ...effects.amp,
+        knobs: [...getUpdatedAmpKnobControlsWithValues(effects.amp, response)],
+      },
+    };
+    console.log("Happy happy", effects);
     return effects;
   }
 }
