@@ -95,6 +95,19 @@ const getAndUpdateEffectByControlKnob = (
   return effects;
 };
 
+const determineActiveEffectBasedOnCurrentKnob = (ctrl: number) => {
+  const typedEffectsMapping = effectsMapping as Record<string, any>;
+
+  for (const [_, effectValue] of Object.entries(typedEffectsMapping.effects)) {
+    const matchedOption = effectValue?.options?.find((opt: EffectOption) =>
+      opt?.knobs?.some((knob: Knob) => knob.ctrl === ctrl),
+    );
+    if (matchedOption) {
+      return effectValue;
+    }
+  }
+};
+
 const calculateByte = (byte: string, index: number) => {
   const byteValue = parseInt(byte, 16);
   const adjustedByte = byteValue + index;
@@ -108,4 +121,5 @@ export {
   populateKnobs,
   getEffectStartOnOffByte,
   getAndUpdateEffectByControlKnob,
+  determineActiveEffectBasedOnCurrentKnob,
 };

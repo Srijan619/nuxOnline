@@ -13,6 +13,7 @@ import type { MessageEvent } from "webmidi";
 
 import { ref } from "vue";
 import {
+  determineActiveEffectBasedOnCurrentKnob,
   getAndUpdateEffectByControlKnob,
   getEffectStartOnOffByte,
 } from "./effectHelper";
@@ -302,6 +303,10 @@ class NUXMidiController {
       ctrl,
       value,
     );
+
+    if (!Object.keys(this.selectedEffect).length)
+      this.selectedEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
+
     this.currentPresetDetailData.value = {
       ...this.currentPresetDetailData.value,
       effects: {

@@ -36,7 +36,9 @@ watch(
   (newVal) => {
     if (newVal) {
       console.log("I need to update", newVal);
-      const category = nuxMidiController.value?.selectedEffect.category;
+      const category = nuxMidiController.value?.selectedEffect?.category;
+      if (!category) return;
+      sliderFillColor.value = getMatchingEffectColor(newVal.effects[category]);
       knobs.value = newVal.effects[category]?.knobs;
     }
   },
