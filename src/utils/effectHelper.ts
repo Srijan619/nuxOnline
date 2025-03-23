@@ -1,9 +1,10 @@
 import effectsMapping from "../effects";
-
-const typedEffectsMapping = effectsMapping as Record<string, any>;
+import type { KnobEntry, KnobsConfig } from "../types";
 
 const getEffectByIdAndCategory = (category: string, id: string | undefined) => {
   if (!category || !id) return;
+  const typedEffectsMapping = effectsMapping as Record<string, any>;
+
   const effectCategory = typedEffectsMapping.effects[category];
   const matchedEffect = effectCategory?.options.find(
     (opt: any) => opt.id === id,
@@ -22,4 +23,23 @@ const getEffectKnobs = (category: string, id: string) => {
   return getEffectByIdAndCategory(category, id)?.knobs || [];
 };
 
-export { getMatchingEffectColor, getEffectKnobs, getEffectByIdAndCategory };
+const populateKnobs = (
+  knobData: KnobEntry[],
+  startCtrl: number,
+): KnobsConfig => {
+  return {
+    knobs: knobData?.map(([id, title, range], index) => ({
+      id,
+      title,
+      range: range || [0, 100],
+      ctrl: startCtrl + index,
+    })),
+  };
+};
+
+export {
+  getMatchingEffectColor,
+  getEffectKnobs,
+  getEffectByIdAndCategory,
+  populateKnobs,
+};

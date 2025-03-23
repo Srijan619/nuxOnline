@@ -236,9 +236,9 @@ class NUXMidiController {
     let intByteToSend = parseInt(byteToSend, 16);
 
     intByteToSend =
-      effect.category != "comp" && !effect.active
+      effect.category === "wah" && !effect.active
         ? intByteToSend / 2
-        : intByteToSend; //HACK: way of toggling on and off as all bytes are one down
+        : intByteToSend;
 
     // Optimistically update local state
     this.updateEffectState(effect, effectId, !effect.active);

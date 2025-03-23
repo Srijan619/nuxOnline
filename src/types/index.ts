@@ -47,4 +47,26 @@ interface DeviceVersion {
 
 type SysExResponseData = DeviceVersion | Preset | Partial<Preset> | string;
 
-export type { Effect, Scene, Preset, SysExResponseData, DeviceVersion };
+type KnobEntry = [string, string, [number, number]?];
+
+interface Knob {
+  id: string;
+  title: string;
+  range: [number, number];
+  ctrl: number;
+}
+
+interface KnobsConfig {
+  knobs: Knob[];
+}
+
+export type {
+  Effect,
+  Scene,
+  Preset,
+  SysExResponseData,
+  DeviceVersion,
+  KnobEntry,
+  Knob,
+  KnobsConfig,
+};

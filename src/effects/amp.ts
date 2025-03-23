@@ -1,31 +1,8 @@
-type KnobEntry = [string, string, [number, number]?];
+import type { KnobEntry } from "../types";
+import { populateKnobs } from "../utils/effectHelper";
 
-// Type for the output knob object
-interface Knob {
-  id: string;
-  title: string;
-  range: [number, number];
-  ctrl: number;
-}
-
-// Type for the full output
-interface KnobsConfig {
-  knobs: Knob[];
-}
-
-const populateKnobs = (
-  customKnobs: KnobEntry[] = PRIMARY_VARIANT,
-): KnobsConfig => {
-  const knobData = customKnobs;
-
-  return {
-    knobs: knobData.map(([id, title, range], index) => ({
-      id,
-      title,
-      range: range || [0, 100],
-      ctrl: 24 + index,
-    })),
-  };
+const populateAmpKnobs = (knobData: KnobEntry[] = PRIMARY_VARIANT) => {
+  return populateKnobs(knobData, 24);
 };
 
 const PRIMARY_VARIANT: KnobEntry[] = [
@@ -145,7 +122,7 @@ export default {
         onByte: "01",
         offByte: "65",
         dominantColor: "#90A4AE",
-        ...populateKnobs(PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS),
+        ...populateAmpKnobs(PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS),
       },
       {
         id: "DELUXE_RVB",
@@ -153,7 +130,7 @@ export default {
         onByte: "02",
         offByte: "42",
         dominantColor: "#004D40",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "BASSMATE",
@@ -161,7 +138,7 @@ export default {
         onByte: "03",
         offByte: "43",
         dominantColor: "#FF9800",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "TWEEDY",
@@ -169,7 +146,7 @@ export default {
         onByte: "04",
         offByte: "44",
         dominantColor: "#FFC107",
-        ...populateKnobs(TWEEDY_VARIANT),
+        ...populateAmpKnobs(TWEEDY_VARIANT),
       },
       {
         id: "TWIN_RVB",
@@ -177,7 +154,7 @@ export default {
         onByte: "05",
         offByte: "45",
         dominantColor: "#66BB6A",
-        ...populateKnobs(PRIMARY_BRIGHT_VARIANT),
+        ...populateAmpKnobs(PRIMARY_BRIGHT_VARIANT),
       },
       {
         id: "HIWIRE",
@@ -185,7 +162,7 @@ export default {
         onByte: "06",
         offByte: "46",
         dominantColor: "#BDBDBD",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "CALI_CRUNCH",
@@ -193,7 +170,7 @@ export default {
         onByte: "07",
         offByte: "47",
         dominantColor: "#FFECB3",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "CLASS_A15",
@@ -201,7 +178,7 @@ export default {
         onByte: "08",
         offByte: "48",
         dominantColor: "#BCAAA4",
-        ...populateKnobs(SECOND_VARIANT_WITHOUT_MIDDLE),
+        ...populateAmpKnobs(SECOND_VARIANT_WITHOUT_MIDDLE),
       },
       {
         id: "CLASS_A30",
@@ -209,7 +186,7 @@ export default {
         onByte: "09",
         offByte: "49",
         dominantColor: "#E91E63",
-        ...populateKnobs(SECOND_VARIANT_WITHOUT_MIDDLE),
+        ...populateAmpKnobs(SECOND_VARIANT_WITHOUT_MIDDLE),
       },
       {
         id: "PLEXI_100",
@@ -217,7 +194,7 @@ export default {
         onByte: "0A",
         offByte: "4A",
         dominantColor: "#FFA726",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "PLEXI_45",
@@ -225,7 +202,7 @@ export default {
         onByte: "0B",
         offByte: "4B",
         dominantColor: "#FFCA28",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "BRIT_800",
@@ -233,7 +210,7 @@ export default {
         onByte: "0C",
         offByte: "4C",
         dominantColor: "#FFCC80",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "1987_X_50",
@@ -241,7 +218,7 @@ export default {
         onByte: "0D",
         offByte: "4D",
         dominantColor: "#FFE0B2",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "SLO_100",
@@ -249,7 +226,7 @@ export default {
         onByte: "0E",
         offByte: "4E",
         dominantColor: "#B2DFDB",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "FIREMAN_HBE",
@@ -257,7 +234,7 @@ export default {
         onByte: "0F",
         offByte: "4F",
         dominantColor: "#9E9D24",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "DUAL_RECT",
@@ -265,7 +242,7 @@ export default {
         onByte: "10",
         offByte: "50",
         dominantColor: "#000000",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "DIE_VH4",
@@ -273,7 +250,7 @@ export default {
         onByte: "11",
         offByte: "51",
         dominantColor: "#F5F5F5",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "VIBRO_KING",
@@ -281,7 +258,7 @@ export default {
         onByte: "12",
         offByte: "52",
         dominantColor: "#C6BE7E",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "BUDDA",
@@ -289,7 +266,7 @@ export default {
         onByte: "13",
         offByte: "53",
         dominantColor: "#CE93D8",
-        ...populateKnobs(SECOND_VARIANT),
+        ...populateAmpKnobs(SECOND_VARIANT),
       },
       {
         id: "MR_Z_38",
@@ -297,7 +274,7 @@ export default {
         onByte: "14",
         offByte: "54",
         dominantColor: "#E57373",
-        ...populateKnobs(SECOND_VARIANT),
+        ...populateAmpKnobs(SECOND_VARIANT),
       },
       {
         id: "SUPER_RVB",
@@ -305,7 +282,7 @@ export default {
         onByte: "15",
         offByte: "55",
         dominantColor: "#004D40",
-        ...populateKnobs(PRIMARY_BRIGHT_VARIANT),
+        ...populateAmpKnobs(PRIMARY_BRIGHT_VARIANT),
       },
       {
         id: "BRIT_BLUES",
@@ -313,7 +290,7 @@ export default {
         onByte: "16",
         offByte: "56",
         dominantColor: "#FFE082",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "MATCH",
@@ -321,7 +298,7 @@ export default {
         onByte: "17",
         offByte: "57",
         dominantColor: "#000000",
-        ...populateKnobs(SECOND_VARIANT_WITHOUT_MIDDLE),
+        ...populateAmpKnobs(SECOND_VARIANT_WITHOUT_MIDDLE),
       },
       {
         id: "BRIT_2000",
@@ -329,7 +306,7 @@ export default {
         onByte: "18",
         offByte: "58",
         dominantColor: "#FFE060",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "UBER",
@@ -337,7 +314,7 @@ export default {
         onByte: "19",
         offByte: "59",
         dominantColor: "#455A64",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "AGL",
@@ -345,7 +322,7 @@ export default {
         onByte: "1A",
         offByte: "5A",
         dominantColor: "#BDBDBD",
-        ...populateKnobs(AGL_VARIANT),
+        ...populateAmpKnobs(AGL_VARIANT),
       },
       {
         id: "BASSGUY",
@@ -353,7 +330,7 @@ export default {
         onByte: "1B",
         offByte: "5B",
         dominantColor: "#CFD8DC",
-        ...populateKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
+        ...populateAmpKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
       },
       {
         id: "MLD",
@@ -361,7 +338,7 @@ export default {
         onByte: "1C",
         offByte: "5C",
         dominantColor: "#1565C0",
-        ...populateKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
+        ...populateAmpKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
       },
       {
         id: "OPTIMA_AIR",
@@ -369,7 +346,7 @@ export default {
         onByte: "1D",
         offByte: "5D",
         dominantColor: "#FFB830",
-        ...populateKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
+        ...populateAmpKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
       },
       {
         id: "STAGEMAN",
@@ -377,7 +354,7 @@ export default {
         onByte: "1E",
         offByte: "5E",
         dominantColor: "#FFF59D",
-        ...populateKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
+        ...populateAmpKnobs(PRIMARY_VARIANT_WITHOUT_BIAS),
       },
       {
         id: "DGLASS",
@@ -385,7 +362,7 @@ export default {
         onByte: "1F",
         offByte: "5F",
         dominantColor: "#FFF59D",
-        ...populateKnobs(DGLASS_VARIANT),
+        ...populateAmpKnobs(DGLASS_VARIANT),
       },
       {
         id: "STARLIFT",
@@ -393,7 +370,7 @@ export default {
         onByte: "20",
         offByte: "60",
         dominantColor: "#42A5F5",
-        ...populateKnobs(STARLIFT_VARIANT),
+        ...populateAmpKnobs(STARLIFT_VARIANT),
       },
       {
         id: "VIVO",
@@ -401,7 +378,7 @@ export default {
         onByte: "21",
         offByte: "61",
         dominantColor: "#EEEEEE",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
       {
         id: "F_PRINCETON",
@@ -409,7 +386,7 @@ export default {
         onByte: "22",
         offByte: "62",
         dominantColor: "#00796B",
-        ...populateKnobs(PRINCETON_VARIANT),
+        ...populateAmpKnobs(PRINCETON_VARIANT),
       },
       {
         id: "LONESTAR",
@@ -417,7 +394,7 @@ export default {
         onByte: "23",
         offByte: "63",
         dominantColor: "#FFE082",
-        ...populateKnobs(),
+        ...populateAmpKnobs(),
       },
     ],
   },
