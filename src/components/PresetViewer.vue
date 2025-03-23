@@ -35,7 +35,7 @@ const sliderValue = ref(0);
 
 const updateValue = (controlPane: number, value: number) => {
   if (!nuxMidiController.value) return;
-  if (!value) return;
+  if (value == null) return;
 
   sliderValue.value = value;
 

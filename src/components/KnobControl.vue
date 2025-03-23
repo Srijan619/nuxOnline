@@ -37,6 +37,7 @@ const emit = defineEmits<{
 
 const value = ref(props.initialValue || 50);
 const slider = ref(null);
+const isDragging = ref(false);
 
 const size = props.size || 220;
 const radius = computed(() => size / 2);
@@ -107,6 +108,7 @@ const knobIndicatorStyle = computed(() => ({
 
 const startDrag = (e) => {
   e.preventDefault();
+  isDragging.value = true;
   updateFromEvent(e);
   document.addEventListener("mousemove", onDrag);
   document.addEventListener("touchmove", onDrag);
@@ -115,10 +117,14 @@ const startDrag = (e) => {
 };
 
 const onDrag = (e) => {
-  updateFromEvent(e);
+  if (isDragging.value) {
+    // Only update if dragging
+    updateFromEvent(e);
+  }
 };
-
 const updateFromEvent = (e) => {
+  if (!isDragging.value) return;
+  if (!slider.value) return;
   const rect = slider.value.getBoundingClientRect();
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -137,6 +143,7 @@ const updateValue = (angle) => {
 };
 
 const stopDrag = () => {
+  isDragging.value = false;
   document.removeEventListener("mousemove", onDrag);
   document.removeEventListener("touchmove", onDrag);
   document.removeEventListener("mouseup", stopDrag);
