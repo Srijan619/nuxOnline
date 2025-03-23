@@ -32,8 +32,8 @@ export default {
         offByte: "45",
         knobs: [
           {
-            id: "onOff",
-            title: "On/Off",
+            id: "up-down",
+            title: "",
             range: [0, 1],
             ctrl: 12,
           },

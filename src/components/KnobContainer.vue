@@ -44,7 +44,9 @@ watch(
       <TwoWaySwitch
         v-if="knob.range[0] === 0 && knob.range[1] === 1"
         v-model="knob.value"
+        :id="knob.id"
         :title="knob.title"
+        :activeColor="sliderFillColor"
         @update:modelValue="(value) => updateValue(knob?.ctrl, value ? 1 : 0)"
       />
       <KnobControl
@@ -66,5 +68,6 @@ watch(
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
   width: 100%;
+  margin-left: 1rem;
 }
 </style>

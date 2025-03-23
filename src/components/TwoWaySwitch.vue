@@ -7,11 +7,10 @@
           <span class="body"></span>
           <span class="frame"></span>
           <span class="lever"></span>
-          <span class="label-off">{{ offText }}</span>
-          <span class="label-on">{{ onText }}</span>
-          <span class="terminal-left"></span>
-          <span class="terminal-right"></span>
-          <span class="screw"></span>
+          <span class="label label-off">{{ offText }}</span>
+          <span class="label label-on">{{ onText }}</span>
+          <span class="terminal terminal-left"></span>
+          <span class="terminal terminal-right"></span>
         </span>
       </label>
       <span class="title" v-if="title">{{ title }}</span>
@@ -20,18 +19,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 const props = defineProps<{
   modelValue: boolean;
   title?: string;
-  onText?: string; // Custom text for ON label
-  offText?: string; // Custom text for OFF label
+  id: string;
+  onText?: string;
+  offText?: string;
+  onColor?: string;
+  offColor?: string;
+  activeColor?: string;
 }>();
 
-// Default values for onText and offText
-const onText = props.onText || "ON";
-const offText = props.offText || "OFF";
+const onText = props.onText || props.id.split("-")[0] || "ON";
+const offText = props.offText || props.id.split("-")[1] || "OFF";
+const onColor = props.onColor;
+const offColor = props.offColor;
+const activeColor = props.activeColor;
 
 const emit = defineEmits(["update:modelValue"]);
 const localValue = ref(false);
@@ -44,6 +49,14 @@ watch(
   },
   { immediate: true },
 );
+
+const onLabelColor = computed(() => {
+  return localValue.value ? activeColor : onColor;
+});
+
+const offLabelColor = computed(() => {
+  return !localValue.value ? activeColor : offColor;
+});
 
 const emitUpdate = () => {
   emit("update:modelValue", localValue.value);
@@ -93,10 +106,12 @@ const emitUpdate = () => {
   left: -2px;
   width: 64px;
   height: 44px;
-  background: linear-gradient(to bottom, #d3d3d3, #a9a9a9);
+  background-image: url("clean-textile.png");
+  background-size: 4px 4px;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  z-index: 1;
+  background-repeat: repeat;
+  background-color: #242424;
+  z-index: 20;
 }
 
 .lever {
@@ -120,51 +135,34 @@ input:checked + .slider .lever {
   transform: rotate(30deg);
 }
 
-.label-off {
+.label {
   position: absolute;
-  top: 30px;
-  left: -40px;
-  width: 30px;
+  left: -60px;
+  width: 40px;
   height: 20px;
-  background-color: #333;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: Arial, sans-serif;
   font-weight: bold;
-  font-size: 12px;
   border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   z-index: 2;
-  transform: rotateX(
-    -20deg
-  ); /* Counteract the parent tilt for user perspective */
+  padding: 0.5rem;
+  transform: rotateX(-20deg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.label-off {
+  top: 30px;
+  background-color: v-bind(offLabelColor);
 }
 
 .label-on {
-  position: absolute;
   top: -5px;
-  left: -40px;
-  width: 30px;
-  height: 20px;
-  background-color: #ff0000;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  border-radius: 3px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-  transform: rotateX(
-    -20deg
-  ); /* Counteract the parent tilt for user perspective */
+  background-color: v-bind(onLabelColor);
 }
-
-.terminal-left {
+.terminal {
   position: absolute;
   bottom: -5px;
   left: 5px;
@@ -172,44 +170,16 @@ input:checked + .slider .lever {
   height: 15px;
   background-color: #b87333;
   border-radius: 2px;
+}
+
+.terminal-left {
   transform: rotate(-10deg);
 }
-
 .terminal-right {
-  position: absolute;
-  bottom: -5px;
-  right: 5px;
-  width: 10px;
-  height: 15px;
-  background-color: #b87333;
-  border-radius: 2px;
   transform: rotate(10deg);
-}
-
-.screw {
-  position: absolute;
-  bottom: 0;
-  left: 3px;
-  width: 14px;
-  height: 14px;
-  background: linear-gradient(to bottom, #c0c0c0, #a9a9a9);
-  border-radius: 50%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.screw::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 2px;
-  background-color: #666;
 }
 
 .title {
   z-index: 10;
-  color: black;
 }
 </style>
