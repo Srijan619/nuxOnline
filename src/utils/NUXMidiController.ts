@@ -11,7 +11,10 @@ import { WebMidi, Output, Input } from "webmidi";
 import type { MessageEvent } from "webmidi";
 
 import { ref } from "vue";
-import { getEffectStartOnOffByte } from "./effectHelper";
+import {
+  getEffectByControlKnob,
+  getEffectStartOnOffByte,
+} from "./effectHelper";
 
 const hexIndex = (index: number) => {
   return index.toString(16).padStart(2, "0").toUpperCase();
@@ -120,7 +123,6 @@ class NUXMidiController {
     }
   }
   private handleSysExResponse(event: MessageEvent) {
-    console.log("Sysex response..", event.data);
     const data = event.data;
 
     // Dynamically check for the correct response type based on the SysExResponsePattern
@@ -160,12 +162,18 @@ class NUXMidiController {
               this.currentPresetBasicData.value.presetNumber + 1;
             console.log("Fetching next preset:", nextPresetNumber);
 
-            this.getCurrentPresetBasicData();
-            this.getDetailPresetData(nextPresetNumber);
+            // this.getCurrentPresetBasicData();
+            // this.getDetailPresetData(nextPresetNumber);
             break;
 
           case "EFFECT_CHANGED":
             console.log("Effect changed...", data);
+            // second byte determines effect type and control knob that is being changed...
+            const knob = data[1];
+            console.log(
+              "Got control based effect...",
+              getEffectByControlKnob(knob),
+            );
             break;
         }
       }
@@ -389,6 +397,7 @@ class NUXMidiController {
           category: "Unknown category",
           active: false,
           index: undefined,
+          knobs: [],
         };
       }
 
@@ -405,6 +414,7 @@ class NUXMidiController {
         category: category,
         active: effectActiveStatus,
         index: categoryIndex,
+        knobs: [],
       };
     };
 

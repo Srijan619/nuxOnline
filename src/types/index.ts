@@ -6,6 +6,7 @@ export interface EffectOption {
   category: string;
   active: boolean;
   index: number | undefined; //defines order
+  knobs: Knob[];
 }
 
 interface Effect {
@@ -54,6 +55,7 @@ interface Knob {
   title: string;
   range: [number, number];
   ctrl: number;
+  currentValue?: number;
 }
 
 interface KnobsConfig {

@@ -64,6 +64,21 @@ const getEffectStartOnOffByte = (category: string, id: string) => {
   };
 };
 
+const getEffectByControlKnob = (ctrl: number) => {
+  const typedEffectsMapping = effectsMapping as Record<string, any>;
+
+  for (const [effectKey, effectValue] of Object.entries(
+    typedEffectsMapping.effects,
+  )) {
+    const matchedOption = effectValue?.options?.find((option: any) => {
+      return option?.knobs?.find((knob: any) => knob.ctrl === ctrl);
+    });
+
+    if (matchedOption) {
+      return { ...matchedOption, category: effectKey };
+    }
+  }
+};
 const calculateByte = (byte: string, index: number) => {
   const byteValue = parseInt(byte, 16);
   const adjustedByte = byteValue + index;
@@ -77,4 +92,5 @@ export {
   getEffectByIdAndCategory,
   populateKnobs,
   getEffectStartOnOffByte,
+  getEffectByControlKnob,
 };
