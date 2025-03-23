@@ -3,13 +3,86 @@ export default {
     knobControlStart: [14, 15, 16],
     category: "🎛️ Compressor",
     options: [
-      { id: "ROSE_COMP", title: "Rose Comp", onByte: "01", offByte: "41" },
-      { id: "K_COMP", title: "K Comp", onByte: "02", offByte: "42" },
+      {
+        id: "ROSE_COMP",
+        title: "Rose Comp",
+        onByte: "01",
+        offByte: "41",
+        knobs: [
+          {
+            id: "sustain",
+            title: "SUSTAIN",
+            range: [0, 100],
+            ctrl: 14,
+          },
+          {
+            id: "level",
+            title: "LEVEL",
+            range: [0, 100],
+            ctrl: 15,
+          },
+        ],
+        dominantColor: "#9E9E9E",
+      },
+      {
+        id: "K_COMP",
+        title: "K Comp",
+        onByte: "02",
+        offByte: "42",
+        knobs: [
+          {
+            id: "sustain",
+            title: "SUSTAIN",
+            range: [0, 100],
+            ctrl: 14,
+          },
+          {
+            id: "level",
+            title: "LEVEL",
+            range: [0, 100],
+            ctrl: 15,
+          },
+          {
+            id: "clipping",
+            title: "CLIPPING",
+            range: [0, 100],
+            ctrl: 16,
+          },
+        ],
+        dominantColor: "#E6E6E7",
+      },
       {
         id: "STUDIO_COMP",
         title: "Studio Comp",
         onByte: "03",
         offByte: "43",
+        knobs: [
+          {
+            id: "thr",
+            title: "THRESHOLD",
+            range: [0, 100],
+            ctrl: 14,
+          },
+          {
+            id: "ratio",
+            title: "RATIO",
+            range: [0, 100],
+            ctrl: 15,
+          },
+          {
+            id: "gain",
+            title: "GAIN",
+            range: [0, 100],
+            ctrl: 16,
+          },
+          {
+            id: "release",
+            title: "RELEASE",
+            range: [0, 100],
+            ctrl: 17,
+          },
+        ],
+        dominantColor: "#8699FE",
       },
       {
         id: "DISTORTION_PLUS",
