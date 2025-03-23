@@ -50,7 +50,8 @@ const effectCategoryColor = computed(() => {
         </div>
       </div>
       <div class="effectOptionsScroller">
-        <EffectListDropdown :effectOptions="getAllEffectsForCategory" :selectedEffect="selectedEffect" />
+        <EffectListDropdown v-if="selectedEffect" :effectOptions="getAllEffectsForCategory"
+          :selectedEffect="selectedEffect" />
       </div>
     </div>
   </div>

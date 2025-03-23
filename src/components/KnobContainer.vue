@@ -2,9 +2,9 @@
 import { watch, ref } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController";
 import KnobControl from "./KnobControl.vue";
-import effectsMapping from "../effects";
+import { getEffectKnobs, getMatchingEffectColor } from "../utils/effectHelper";
 
-const props = defineProps<{
+defineProps<{
   updateValue: (controlPane: number, value: number) => void;
 }>();
 
@@ -15,13 +15,11 @@ watch(
   () => nuxMidiController.value?.selectedEffect,
   (newVal) => {
     if (newVal) {
-      const effectCategory = effectsMapping.effects[newVal.category];
-      const selectedEffect = effectCategory?.options.find(
-        (opt: any) => opt.id === newVal.id,
+      sliderFillColor.value = getMatchingEffectColor(
+        newVal.category,
+        newVal.id,
       );
-      sliderFillColor.value =
-        selectedEffect?.dominantColor || `var(--${newVal.category}-color)`; // Either effect pedals dominant color or main category color
-      knobs.value = selectedEffect?.knobs || [];
+      knobs.value = getEffectKnobs(newVal.category, newVal.id);
     }
   },
 );

@@ -30,6 +30,14 @@ export default {
         title: "Octave Shift",
         onByte: "0A",
         offByte: "45",
+        knobs: [
+          {
+            id: "onOff",
+            title: "On/Off",
+            range: [0, 1],
+            ctrl: 12,
+          },
+        ],
       },
     ],
   },

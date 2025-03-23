@@ -1,7 +1,12 @@
 <template>
   <div class="dropdown">
     <ul>
-      <li v-for="option in effectOptions" :key="option.id" @click="selectOption(option)">
+      <li v-for="option in effectOptions" :key="option.id" @click="selectOption(option)" :style="{
+        backgroundColor:
+          option.id === props.selectedEffect.id
+            ? getMatchingEffectColor(selectedEffect.category, option)
+            : 'transparent',
+      }">
         {{ option.title }}
       </li>
     </ul>
@@ -9,13 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import type { EffectOption, Effect } from "../types/index.ts";
+import type { EffectOption } from "../types/index.ts";
+import { getMatchingEffectColor } from "../utils/effectHelper.ts";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
 
 const props = defineProps<{
   effectOptions: EffectOption[];
   selectedEffect: EffectOption;
 }>();
+
+console.log("Effect options...", props);
 
 const selectOption = (option: EffectOption) => {
   nuxMidiController.value?.selectEffectOption(
@@ -29,7 +37,7 @@ const selectOption = (option: EffectOption) => {
 .dropdown {
   z-index: 10;
   border-radius: 0.25rem;
-  max-height: 10vh;
+  max-height: 5vh;
   overflow: scroll;
   width: fit-content;
   scrollbar-width: none;
