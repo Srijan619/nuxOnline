@@ -45,7 +45,7 @@ const PRIMARY_BRIGHT_VARIANT: KnobEntry[] = [
   ["bass", "BASS"],
   ["middle", "MIDDLE"],
   ["treble", "TREBLE"],
-  ["bright", "BRIGHT", [0, 1]],
+  ["bright", "", [0, 1]],
   ["bias", "BIAS LEVEL"],
   ["level", "LEVEL"],
 ];
@@ -55,7 +55,7 @@ const PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS: KnobEntry[] = [
   ["bass", "BASS"],
   ["middle", "MIDDLE"],
   ["treble", "TREBLE"],
-  ["bright", "BRIGHT", [0, 1]],
+  ["bright", "", [0, 1]],
   ["level", "LEVEL"],
 ];
 const AGL_VARIANT: KnobEntry[] = [

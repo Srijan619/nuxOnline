@@ -42,8 +42,7 @@ watch(
   <div class="knob-container">
     <template v-for="knob in knobs" :key="`${knob.id}-${sliderFillColor}`">
       <TwoWaySwitch
-        v-if="knob.range[0] === 0 && knob.range[1] === 1"
-        v-model="knob.value"
+        v-if="knob && knob.range[0] === 0 && knob.range[1] === 1"
         :id="knob.id"
         :title="knob.title"
         :activeColor="sliderFillColor"

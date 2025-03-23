@@ -19,10 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps<{
-  modelValue: boolean;
   title?: string;
   id: string;
   onText?: string;
@@ -38,17 +37,8 @@ const onColor = props.onColor;
 const offColor = props.offColor;
 const activeColor = props.activeColor;
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:value"]);
 const localValue = ref(false);
-
-// Sync with parent value
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    localValue.value = newVal;
-  },
-  { immediate: true },
-);
 
 const onLabelColor = computed(() => {
   return localValue.value ? activeColor : onColor;
@@ -59,7 +49,7 @@ const offLabelColor = computed(() => {
 });
 
 const emitUpdate = () => {
-  emit("update:modelValue", localValue.value);
+  emit("update:value", localValue.value);
 };
 </script>
 
