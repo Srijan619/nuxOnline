@@ -1,5 +1,4 @@
 import effectsMapping from "../effects";
-import type { EffectOption } from "../types";
 
 const typedEffectsMapping = effectsMapping as Record<string, any>;
 
@@ -12,15 +11,15 @@ const getEffectByIdAndCategory = (category: string, id: string | undefined) => {
   return matchedEffect;
 };
 
-const getMatchingEffectColor = (category: string, option: EffectOption) => {
+const getMatchingEffectColor = (category: string, id: string) => {
   return (
-    getEffectByIdAndCategory(category, option?.id)?.dominantColor ||
+    getEffectByIdAndCategory(category, id)?.dominantColor ||
     `var(--${category}-color)`
   );
 };
 
-const getEffectKnobs = (category: string, option: EffectOption) => {
-  return getEffectByIdAndCategory(category, option?.id)?.knobs || [];
+const getEffectKnobs = (category: string, id: string) => {
+  return getEffectByIdAndCategory(category, id)?.knobs || [];
 };
 
 export { getMatchingEffectColor, getEffectKnobs, getEffectByIdAndCategory };
