@@ -46,7 +46,7 @@ watch(
         :id="knob.id"
         :title="knob.title"
         :activeColor="sliderFillColor"
-        @update:modelValue="(value) => updateValue(knob?.ctrl, value ? 1 : 0)"
+        @update:value="(value) => updateValue(knob?.ctrl, value ? 1 : 0)"
       />
       <KnobControl
         v-else
