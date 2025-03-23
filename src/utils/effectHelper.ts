@@ -1,5 +1,11 @@
 import effectsMapping from "../effects";
-import type { EffectOption, KnobEntry, KnobsConfig } from "../types";
+import type {
+  Effect,
+  EffectOption,
+  Knob,
+  KnobEntry,
+  KnobsConfig,
+} from "../types";
 
 const getMainEffectGroup = (effectOption: EffectOption) => {
   const typedEffectsMapping = effectsMapping as Record<string, any>;
@@ -63,21 +69,32 @@ const getEffectStartOnOffByte = (category: string, id: string) => {
   };
 };
 
-const getEffectByControlKnob = (ctrl: number) => {
-  const typedEffectsMapping = effectsMapping as Record<string, any>;
-
-  for (const [effectKey, effectValue] of Object.entries(
-    typedEffectsMapping.effects,
-  )) {
-    const matchedOption = effectValue?.options?.find((option: any) => {
-      return option?.knobs?.find((knob: any) => knob.ctrl === ctrl);
+const getAndUpdateEffectByControlKnob = (
+  effects: Effect,
+  ctrl: number,
+  value: number,
+) => {
+  for (const [_, effectValue] of Object.entries(effects)) {
+    const matchedKnob = effectValue?.knobs?.find((knob: Knob) => {
+      return knob.ctrl === ctrl;
     });
 
-    if (matchedOption) {
-      return { ...matchedOption, category: effectKey };
+    // Do nothing if no range is provided as it might be risky
+    if (matchedKnob && matchedKnob.range) {
+      const [minValue, maxValue] = matchedKnob.range;
+      // Cap the value within the defined range
+      if (value < minValue) {
+        matchedKnob.currentValue = minValue;
+      } else if (value > maxValue) {
+        matchedKnob.currentValue = maxValue;
+      } else {
+        matchedKnob.currentValue = value;
+      }
     }
   }
+  return effects;
 };
+
 const calculateByte = (byte: string, index: number) => {
   const byteValue = parseInt(byte, 16);
   const adjustedByte = byteValue + index;
@@ -90,5 +107,5 @@ export {
   getEffectKnobs,
   populateKnobs,
   getEffectStartOnOffByte,
-  getEffectByControlKnob,
+  getAndUpdateEffectByControlKnob,
 };

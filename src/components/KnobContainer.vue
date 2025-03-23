@@ -30,11 +30,25 @@ watch(
     }
   },
 );
+
+watch(
+  () => nuxMidiController.value?.currentPresetDetailData,
+  (newVal) => {
+    if (newVal) {
+      console.log("I need to update", newVal);
+      const category = nuxMidiController.value?.selectedEffect.category;
+      knobs.value = newVal.effects[category]?.knobs;
+    }
+  },
+);
 </script>
 
 <template>
   <div class="knob-container">
-    <template v-for="knob in knobs" :key="`${knob.id}-${sliderFillColor}`">
+    <template
+      v-for="knob in knobs"
+      :key="`${knob.id}-${sliderFillColor}-${knob.currentValue}-`"
+    >
       <TwoWaySwitch
         v-if="knob && knob.range[0] === 0 && knob.range[1] === 1"
         :id="knob.id"

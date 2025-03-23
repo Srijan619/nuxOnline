@@ -13,7 +13,7 @@ import type { MessageEvent } from "webmidi";
 
 import { ref } from "vue";
 import {
-  getEffectByControlKnob,
+  getAndUpdateEffectByControlKnob,
   getEffectStartOnOffByte,
 } from "./effectHelper";
 import { getUpdatedAmpKnobControlsWithValues } from "./controlMapper";
@@ -172,11 +172,7 @@ class NUXMidiController {
           case "EFFECT_CHANGED":
             console.log("Effect changed...", data);
             // second byte determines effect type and control knob that is being changed...
-            const knob = data[1];
-            console.log(
-              "Got control based effect...",
-              getEffectByControlKnob(knob),
-            );
+            this.updateKnobValue(data[1], data[2]);
             break;
         }
       }
@@ -296,6 +292,23 @@ class NUXMidiController {
       effectDetail.id = effect.id;
       this.selectedEffectOption = effect;
     }
+  }
+
+  // Update knob value
+
+  private updateKnobValue(ctrl: number, value: number) {
+    const effects = getAndUpdateEffectByControlKnob(
+      this.currentPresetDetailData.value.effects,
+      ctrl,
+      value,
+    );
+    this.currentPresetDetailData.value = {
+      ...this.currentPresetDetailData.value,
+      effects: {
+        ...this.currentPresetDetailData.value.effects,
+        ...effects,
+      },
+    };
   }
 
   // private sendResponse(extractedData: SysExResponseData) {
