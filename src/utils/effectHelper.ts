@@ -37,9 +37,35 @@ const populateKnobs = (
   };
 };
 
+const getEffectStartOnOffByte = (category: string, id: string) => {
+  if (!category || !id) return;
+  const typedEffectsMapping = effectsMapping as Record<string, any>;
+
+  const effectCategory = typedEffectsMapping.effects[category];
+  const effectIndex = effectCategory.options.findIndex(
+    (opt: any) => opt.id === id,
+  );
+
+  const startOnByte = calculateByte(effectCategory?.startOnByte, effectIndex);
+  const startOffByte = calculateByte(effectCategory?.startOffByte, effectIndex);
+
+  return {
+    startOnByte,
+    startOffByte,
+  };
+};
+
+const calculateByte = (byte: string, index: number) => {
+  const byteValue = parseInt(byte, 16);
+  const adjustedByte = byteValue + index;
+
+  return adjustedByte.toString(16).padStart(2, "0").toUpperCase();
+};
+
 export {
   getMatchingEffectColor,
   getEffectKnobs,
   getEffectByIdAndCategory,
   populateKnobs,
+  getEffectStartOnOffByte,
 };

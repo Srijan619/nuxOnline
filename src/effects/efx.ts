@@ -1,7 +1,8 @@
 export default {
   efx: {
-    knobControlStart: [18, 19, 20],
     category: "🎛️ EFX",
+    startOffByte: "41",
+    startOnByte: "01",
     options: [
       {
         id: "DISTORTION_PLUS",
@@ -16,7 +17,7 @@ export default {
         id: "T_SCREAM",
         title: "T Scream",
         onByte: "0A",
-        offByte: "4A",
+        offByte: "45",
         knobs: [
           {
             id: "drive",
@@ -43,7 +44,7 @@ export default {
         id: "BLUES_DRV",
         title: "Blues Drive",
         onByte: "0C",
-        offByte: "4C",
+        offByte: "46",
 
         knobs: [
           {

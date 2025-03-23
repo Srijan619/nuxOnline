@@ -11,6 +11,7 @@ import { WebMidi, Output, Input } from "webmidi";
 import type { MessageEvent } from "webmidi";
 
 import { ref } from "vue";
+import { getEffectStartOnOffByte } from "./effectHelper";
 
 const hexIndex = (index: number) => {
   return index.toString(16).padStart(2, "0").toUpperCase();
@@ -226,7 +227,13 @@ class NUXMidiController {
 
     if (!effectId) return;
 
-    const byteToSend = effect.active ? effect.offByte : effect.onByte;
+    const { startOnByte, startOffByte } = getEffectStartOnOffByte(
+      effect.category,
+      effect.id,
+    );
+    const byteToSend = effect.active
+      ? startOffByte || effect.offByte
+      : startOnByte || effect.onByte;
 
     if (!byteToSend) {
       console.error("Invalid byte value:", effect);
@@ -235,8 +242,9 @@ class NUXMidiController {
 
     let intByteToSend = parseInt(byteToSend, 16);
 
+    const exclusive = ["wah"];
     intByteToSend =
-      effect.category === "wah" && !effect.active
+      exclusive.includes(effect.category) && !effect.active
         ? intByteToSend / 2
         : intByteToSend;
 
