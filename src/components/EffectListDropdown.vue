@@ -1,13 +1,19 @@
 <template>
   <div class="dropdown">
     <ul>
-      <li v-for="option in effectOptions" :key="option.id" @click="selectOption(option)" ref="listItems"
-        :data-option-id="option.id" :style="{
+      <li
+        v-for="option in effectOptions"
+        :key="option.id"
+        @click="selectOption(option)"
+        ref="listItems"
+        :data-option-id="option.id"
+        :style="{
           color:
             option.id === props.selectedEffect.id
               ? getMatchingEffectColor(selectedEffect.category, option)
               : '',
-        }">
+        }"
+      >
         {{ option.title }}
       </li>
     </ul>

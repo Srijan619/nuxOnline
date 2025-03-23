@@ -49,7 +49,15 @@ const PRIMARY_BRIGHT_VARIANT: KnobEntry[] = [
   ["bias", "BIAS LEVEL"],
   ["level", "LEVEL"],
 ];
-
+const PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS: KnobEntry[] = [
+  ["gain", "GAIN"],
+  ["master", "MASTER"],
+  ["bass", "BASS"],
+  ["middle", "MIDDLE"],
+  ["treble", "TREBLE"],
+  ["bright", "BRIGHT", [0, 1]],
+  ["level", "LEVEL"],
+];
 const AGL_VARIANT: KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
@@ -137,7 +145,7 @@ export default {
         onByte: "01",
         offByte: "65",
         dominantColor: "#90A4AE",
-        ...populateKnobs(PRIMARY_BRIGHT_VARIANT),
+        ...populateKnobs(PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS),
       },
       {
         id: "DELUXE_RVB",

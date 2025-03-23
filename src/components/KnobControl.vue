@@ -60,7 +60,7 @@ const trackRadius = computed(
 const minValue = props.min || 0;
 const maxValue = props.max || 100;
 const title = props.title || "";
-const sliderFillColor = props.sliderFillColor || "var(--retro-border-color)";
+const sliderFillColor = props.sliderFillColor;
 
 const startAngle = props.startAngle || 200; // Default: bottom left (225°)
 

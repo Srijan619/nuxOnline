@@ -10,9 +10,21 @@ defineProps<{
 
 const knobs = ref<any[]>([]);
 const sliderFillColor = ref();
-// Starting control numbers from your effects mapping
 watch(
   () => nuxMidiController.value?.selectedEffect,
+  (newVal) => {
+    if (newVal) {
+      sliderFillColor.value = getMatchingEffectColor(
+        newVal.category,
+        newVal.id,
+      );
+      knobs.value = getEffectKnobs(newVal.category, newVal.id);
+    }
+  },
+);
+
+watch(
+  () => nuxMidiController.value?.selectedEffectOption,
   (newVal) => {
     if (newVal) {
       sliderFillColor.value = getMatchingEffectColor(
@@ -27,9 +39,16 @@ watch(
 
 <template>
   <div class="knob-container">
-    <KnobControl v-for="(knob, index) in knobs" :key="knob.id" :title="knob.title" :size="100" :min="knob.range[0]"
-      :max="knob.range[1]" @update:value="(value) => updateValue(knob?.ctrl, value)"
-      :sliderFillColor="sliderFillColor" />
+    <KnobControl
+      v-for="knob in knobs"
+      :key="`${knob.id}-${sliderFillColor}`"
+      :title="knob.title"
+      :size="100"
+      :min="knob.range[0]"
+      :max="knob.range[1]"
+      @update:value="(value) => updateValue(knob?.ctrl, value)"
+      :sliderFillColor="sliderFillColor"
+    />
   </div>
 </template>
 

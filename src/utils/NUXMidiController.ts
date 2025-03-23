@@ -43,6 +43,7 @@ class NUXMidiController {
   private midiOutput: Output | null = null;
   private midiInput: Input | null = null;
   private selectedEffect = {};
+  private selectedEffectOption = {};
 
   private constructor(output: Output, input: Input) {
     this.midiOutput = output;
@@ -276,6 +277,7 @@ class NUXMidiController {
 
       effectDetail.active = isActive;
       effectDetail.id = effect.id;
+      this.selectedEffectOption = effect;
     }
   }
 
