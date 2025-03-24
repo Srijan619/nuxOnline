@@ -113,7 +113,6 @@ const TWEEDY_VARIANT: KnobEntry[] = [
 
 export default {
   amp: {
-    knobControlStart: [24, 25, 26, 27, 28, 29, 30, 31],
     category: "amp",
     options: [
       {

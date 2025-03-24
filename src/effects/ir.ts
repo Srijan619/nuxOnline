@@ -1,7 +1,7 @@
 export default {
   ir: {
     byte: 22,
-    category: "🎛️ IR",
+    category: "ir",
     options: [
       { id: "JZ120", title: "JZ120", onByte: "01", offByte: "41" },
       { id: "DR112", title: "DR112", onByte: "02", offByte: "42" },

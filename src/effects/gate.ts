@@ -1,7 +1,6 @@
 export default {
   gate: {
-    knobControlStart: [44, 45],
-    category: "🚪 Gate",
+    category: "gate",
     options: [
       {
         id: "DEFAULT_GATE",

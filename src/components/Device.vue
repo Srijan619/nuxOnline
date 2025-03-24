@@ -37,6 +37,9 @@ const deviceName = computed(() => {
   z-index: 2;
   position: relative;
 }
+.device-info > * {
+  font-family: "Pixelify Sans", sans-serif;
+}
 
 .device-name {
   font-size: 1rem;

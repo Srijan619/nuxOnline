@@ -1,6 +1,6 @@
 export default {
   efx: {
-    category: "🎛️ EFX",
+    category: "efx",
     startOffByte: "41",
     startOnByte: "01",
     options: [

@@ -48,7 +48,7 @@ const updateValue = (controlPane: number, value: number) => {
   <div class="main-container" v-if="selectedPreset">
     <div class="preset-card">
       <PresetDetail :selectedPreset="selectedPreset" />
-      <Save />
+      <!-- <Save /> -->
       <PresetChange>
         <Device />
       </PresetChange>

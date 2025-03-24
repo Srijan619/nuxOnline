@@ -36,7 +36,10 @@ const effectCategoryColor = computed(() => {
 </script>
 
 <template>
-  <div class="notification" :style="{ '--dynamic-effect-selected-color': effectCategoryColor }">
+  <div
+    class="notification"
+    :style="{ '--dynamic-effect-selected-color': effectCategoryColor }"
+  >
     <div class="music-notes">♪ ♫</div>
     <div class="notiglow"></div>
     <div class="notiborderglow"></div>
@@ -50,8 +53,11 @@ const effectCategoryColor = computed(() => {
         </div>
       </div>
       <div class="effectOptionsScroller">
-        <EffectListDropdown v-if="selectedEffect" :effectOptions="getAllEffectsForCategory"
-          :selectedEffect="selectedEffect" />
+        <EffectListDropdown
+          v-if="selectedEffect"
+          :effectOptions="getAllEffectsForCategory"
+          :selectedEffect="selectedEffect"
+        />
       </div>
     </div>
   </div>
@@ -173,7 +179,6 @@ const effectCategoryColor = computed(() => {
 }
 
 @keyframes floatNotes {
-
   0%,
   100% {
     transform: translateY(0);
@@ -187,5 +192,7 @@ const effectCategoryColor = computed(() => {
 .effectOptionsScroller {
   right: 1rem;
   position: absolute;
+  bottom: 0rem;
+  font-size: 0.8rem;
 }
 </style>

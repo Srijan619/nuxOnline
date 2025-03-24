@@ -68,7 +68,7 @@ const PHI_VARIANT: KnobEntry[] = [
 export default {
   delay: {
     byte: 18,
-    category: "🎵 Delay",
+    category: "delay",
     options: [
       {
         id: "ANALOG_DELAY",

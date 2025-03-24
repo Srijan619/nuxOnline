@@ -171,8 +171,8 @@ class NUXMidiController {
               this.currentPresetBasicData.value.presetNumber + 1;
             console.log("Fetching next preset:", nextPresetNumber);
 
-            // this.getCurrentPresetBasicData();
-            // this.getDetailPresetData(nextPresetNumber);
+            this.getCurrentPresetBasicData();
+            this.getDetailPresetData(nextPresetNumber);
             break;
 
           case "EFFECT_CHANGED":
@@ -321,8 +321,8 @@ class NUXMidiController {
       value,
     );
 
-    if (!this.selectedEffect || !Object.keys(this.selectedEffect).length)
-      this.selectedEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
+    // Always update as user might be jumping from one effect type knob to another from  Nux device
+    this.selectedEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
 
     this.currentPresetDetailData.value = {
       ...this.currentPresetDetailData.value,
@@ -394,15 +394,43 @@ class NUXMidiController {
   }
 
   // Extract preset name from byte data (166-189)
-  private extractPresetName(nameBytes: Uint8Array): string {
+
+  private extractPresetName(nameBytes: Uint8Array) {
     let name = "";
-    for (let i = 0; i < nameBytes.length; i += 3) {
-      const char = String.fromCharCode(nameBytes[i]);
-      // const code = nameBytes[i + 1];
-      const secondChar = String.fromCharCode(nameBytes[i + 2] / 2);
-      name += `${char}${secondChar}`;
+    let counter = 0;
+
+    while (counter < nameBytes.length) {
+      // If the first byte is zero, break the loop (equivalent to Dart check)
+      if (nameBytes[counter] === 0) {
+        break;
+      }
+
+      // Add the first character
+      const char = String.fromCharCode(nameBytes[counter]);
+      name += char;
+
+      // Calculate the second character from the third byte
+      let secondChar = nameBytes[counter + 2] / 2;
+
+      // Apply the rule for second character based on the second byte
+      if (nameBytes[counter + 1] === 1) {
+        secondChar += 0x40;
+      }
+
+      // If the second character is non-zero, add it to the name
+      if (secondChar !== 0) {
+        name += String.fromCharCode(secondChar);
+      } else {
+        break;
+      }
+
+      // Move to the next 3-byte segment
+      counter += 3;
     }
+
+    // Trim any trailing null characters (byte value 0)
     name = name.replace(/\0+$/, "").trim();
+    // Remove any non-alphanumeric characters (except space and dash)
     name = name.replace(/[^a-zA-Z0-9\s\-]/g, "");
 
     console.log(`🎸 Preset name: "${name}"`);

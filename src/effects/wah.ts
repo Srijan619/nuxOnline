@@ -1,6 +1,6 @@
 export default {
   wah: {
-    category: "🎚️ Wah",
+    category: "wah",
     options: [
       { id: "CLYDE", title: "Clyde Wah", onByte: "02", offByte: "41" },
       { id: "CRY_BB", title: "Cry Baby", onByte: "04", offByte: "42" },

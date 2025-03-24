@@ -1,7 +1,7 @@
 export default {
   eq: {
     byte: 14,
-    category: "🎛️ EQ",
+    category: "eq",
     options: [
       { id: "6_BAND_EQ", title: "6-Band EQ", onByte: "02", offByte: "42" },
       { id: "ALIGN_EQ", title: "Align EQ", onByte: "04", offByte: "44" },

@@ -1,7 +1,7 @@
 export default {
   reverb: {
     byte: 19,
-    category: "🎶 Reverb",
+    category: "reverb",
     startOffByte: "41",
     startOnByte: "01",
     options: [

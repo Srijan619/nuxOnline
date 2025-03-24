@@ -1,7 +1,6 @@
 export default {
   comp: {
-    knobControlStart: [14, 15, 16],
-    category: "🎛️ Compressor",
+    category: "comp",
     options: [
       {
         id: "ROSE_COMP",

@@ -1,7 +1,7 @@
 export default {
   mod: {
     byte: 18,
-    category: "🌊 Modulation",
+    category: "mod",
     options: [
       { id: "CE_1", title: "CE-1", onByte: "02", offByte: "" },
       { id: "CE_2", title: "CE-2", onByte: "04", offByte: "" },
