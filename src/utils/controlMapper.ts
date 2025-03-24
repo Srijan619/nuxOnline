@@ -1,3 +1,4 @@
+import amp from "../effects/amp";
 import type { EffectOption, Knob } from "../types";
 import { getEffectKnobs } from "./effectHelper";
 
@@ -55,20 +56,37 @@ const ampControlRanges: ControlRange[] = [
   { startByte: 60 },
 ];
 
-const translateAmpControlValues = (input: Uint8Array) => {
-  return translateControlValues(input, ampControlRanges);
-};
+const efxControlRanges: ControlRange[] = [
+  { startByte: 40 },
+  { startByte: 41, endByte: 42, isDoubleByte: true },
+  { startByte: 43 },
+  { startByte: 44, endByte: 45, isDoubleByte: true },
+  { startByte: 46 },
+];
 
-const getUpdatedAmpKnobControlsWithValues = (
+const getUpdatedKnobControlsWithValues = (
   effectOption: EffectOption,
   input: Uint8Array,
 ) => {
-  const ampControlValues = translateAmpControlValues(input);
+  let controlRanges;
+  switch (effectOption.category) {
+    case "amp":
+      controlRanges = ampControlRanges;
+      break;
+    case "efx":
+      controlRanges = efxControlRanges;
+      break;
+    default:
+      break;
+  }
+  if (!controlRanges) return {};
+
+  const controlValues = translateControlValues(input, controlRanges);
   const knobs = getEffectKnobs(effectOption);
   knobs?.forEach((knob: Knob, index: number) => {
-    knob.currentValue = ampControlValues[index] || 0;
+    knob.currentValue = controlValues[index] || 0;
   });
   return knobs;
 };
 
-export { getUpdatedAmpKnobControlsWithValues };
+export { getUpdatedKnobControlsWithValues };

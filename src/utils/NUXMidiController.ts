@@ -17,7 +17,7 @@ import {
   getAndUpdateEffectByControlKnob,
   getEffectStartOnOffByte,
 } from "./effectHelper";
-import { getUpdatedAmpKnobControlsWithValues } from "./controlMapper";
+import { getUpdatedKnobControlsWithValues } from "./controlMapper";
 
 const hexIndex = (index: number) => {
   return index.toString(16).padStart(2, "0").toUpperCase();
@@ -513,7 +513,11 @@ class NUXMidiController {
       ...effects,
       amp: {
         ...effects.amp,
-        knobs: [...getUpdatedAmpKnobControlsWithValues(effects.amp, response)],
+        knobs: [...getUpdatedKnobControlsWithValues(effects.amp, response)],
+      },
+      efx: {
+        ...effects.efx,
+        knobs: [...getUpdatedKnobControlsWithValues(effects.efx, response)],
       },
     };
     console.log("Happy happy", effects);
