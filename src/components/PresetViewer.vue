@@ -6,6 +6,7 @@ import PresetChange from "./PresetChange.vue";
 import PresetDetail from "./PresetDetail.vue";
 import Device from "./Device.vue";
 import KnobContainer from "./KnobContainer.vue";
+import Save from "./Save.vue";
 
 const selectedPreset = ref("No preset selected");
 
@@ -47,11 +48,15 @@ const updateValue = (controlPane: number, value: number) => {
   <div class="main-container" v-if="selectedPreset">
     <div class="preset-card">
       <PresetDetail :selectedPreset="selectedPreset" />
+      <Save />
       <PresetChange>
         <Device />
       </PresetChange>
     </div>
-    <EffectChain v-if="selectedPreset.effects" :effects="selectedPreset.effects" />
+    <EffectChain
+      v-if="selectedPreset.effects"
+      :effects="selectedPreset.effects"
+    />
     <KnobContainer :updateValue="updateValue" />
   </div>
 </template>

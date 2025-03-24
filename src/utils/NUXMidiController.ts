@@ -27,6 +27,10 @@ const CURRENT_PRESET_DATA_COMMAND = (index: number) => {
   return `58 70 0B 00 ${hexIndex(index)} 00 00 00 00 00 00 00`;
 };
 
+const SAVE_CURRENT_PRESET_DATA_COMMAND = (index: number) => {
+  return `58 70 7E 02 00 00 ${hexIndex(index)} 00 00 00 00 00`;
+};
+
 //TODO: Commands needs to be hooked in to mock implementation somewhere
 enum SysExRequest {
   DEVICE_VERSION = "58 00",
@@ -209,8 +213,17 @@ class NUXMidiController {
   public changePreset(index: number) {
     this.checkDevice();
     const message = [0xc0, parseInt(hexIndex(index), 16)];
-
     this.midiOutput!.send(message);
+  }
+
+  public saveCurrentPreset() {
+    this.checkDevice();
+    const message = this.hexToBytes(
+      SAVE_CURRENT_PRESET_DATA_COMMAND(
+        this.currentPresetBasicData?.presetNumber,
+      ),
+    );
+    this.midiOutput!.sendSysex(67, Array.from(message));
   }
 
   public selectEffect(effect: EffectOption) {
