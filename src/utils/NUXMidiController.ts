@@ -28,6 +28,7 @@ const CURRENT_PRESET_DATA_COMMAND = (index: number) => {
 };
 
 const SAVE_CURRENT_PRESET_DATA_COMMAND = (index: number) => {
+  // TODO: Save is abit tricky...we need to form whole 218 bytes with correct effect states and etc ...then send that to device
   return `58 70 7E 02 00 00 ${hexIndex(index)} 00 00 00 00 00`;
 };
 
@@ -217,7 +218,10 @@ class NUXMidiController {
   }
 
   public saveCurrentPreset() {
+    console.log("Support coming soon");
+    return;
     this.checkDevice();
+
     const message = this.hexToBytes(
       SAVE_CURRENT_PRESET_DATA_COMMAND(
         this.currentPresetBasicData?.presetNumber,
@@ -317,7 +321,7 @@ class NUXMidiController {
       value,
     );
 
-    if (!this.selectedEffect && !Object.keys(this.selectedEffect).length)
+    if (!this.selectedEffect || !Object.keys(this.selectedEffect).length)
       this.selectedEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
 
     this.currentPresetDetailData.value = {
