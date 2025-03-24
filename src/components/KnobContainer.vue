@@ -56,6 +56,7 @@ watch(
         :id="knob.id"
         :title="knob.title"
         :activeColor="sliderFillColor"
+        :initialValue="knob.currentValue === 1"
         @update:value="(value) => updateValue(knob?.ctrl, value ? 1 : 0)"
       />
       <KnobControl

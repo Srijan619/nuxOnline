@@ -29,6 +29,7 @@ const props = defineProps<{
   onColor?: string;
   offColor?: string;
   activeColor?: string;
+  initialValue: boolean;
 }>();
 
 const onText = props.onText || props.id.split("-")[0] || "ON";
@@ -36,9 +37,10 @@ const offText = props.offText || props.id.split("-")[1] || "OFF";
 const onColor = props.onColor;
 const offColor = props.offColor;
 const activeColor = props.activeColor;
+const initialValue = props.initialValue || false;
 
 const emit = defineEmits(["update:value"]);
-const localValue = ref(false);
+const localValue = ref(initialValue);
 
 const onLabelColor = computed(() => {
   return localValue.value ? activeColor : onColor;

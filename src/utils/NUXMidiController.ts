@@ -304,7 +304,7 @@ class NUXMidiController {
       value,
     );
 
-    if (!Object.keys(this.selectedEffect).length)
+    if (!this.selectedEffect && !Object.keys(this.selectedEffect).length)
       this.selectedEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
 
     this.currentPresetDetailData.value = {
