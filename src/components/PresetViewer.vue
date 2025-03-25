@@ -7,8 +7,10 @@ import PresetDetail from "./PresetDetail.vue";
 import Device from "./Device.vue";
 import KnobContainer from "./KnobContainer.vue";
 import Save from "./Save.vue";
+import EffectsGrid from "./EffectsGrid.vue";
+import type { Preset } from "../types/index.ts";
 
-const selectedPreset = ref("No preset selected");
+const selectedPreset = ref(<Preset>{});
 
 //TODO: Only for testing use mock
 //selectedPreset.value = PresetMockResponse;
@@ -27,7 +29,6 @@ watch(
   (newVal) => {
     if (newVal) {
       selectedPreset.value = { ...selectedPreset.value, ...newVal };
-      console.log("Selected preset", selectedPreset.value);
     }
   },
 );
@@ -56,6 +57,11 @@ const updateValue = (controlPane: number, value: number) => {
     <EffectChain
       v-if="selectedPreset.effects"
       :effects="selectedPreset.effects"
+    />
+    <EffectsGrid
+      v-if="selectedEffect"
+      :effectOptions="getAllEffectsForCategory"
+      :selectedEffect="selectedEffect"
     />
     <KnobContainer :updateValue="updateValue" />
   </div>

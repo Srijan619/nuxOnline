@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import effectsMapping from "../effects";
 
 import Preset from "../types/index.ts";
 import EffectListDropdown from "../components/EffectListDropdown.vue";
@@ -11,11 +10,6 @@ const props = defineProps<{
 }>();
 
 const selectedEffect = ref<EffectOption | null>(null);
-
-const getAllEffectsForCategory = computed(() => {
-  if (!selectedEffect.value) return [];
-  return effectsMapping.effects[selectedEffect.value.category]?.options || [];
-});
 
 watch(
   () => nuxMidiController.value?.selectedEffect,
@@ -56,7 +50,6 @@ const effectCategoryColor = computed(() => {
         <EffectListDropdown
           v-if="selectedEffect"
           :effectOptions="getAllEffectsForCategory"
-          :selectedEffect="selectedEffect"
         />
       </div>
     </div>

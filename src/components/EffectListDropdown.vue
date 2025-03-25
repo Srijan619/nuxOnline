@@ -9,8 +9,8 @@
         :data-option-id="option.id"
         :style="{
           color:
-            option.id === props.selectedEffect.id
-              ? getMatchingEffectColor(selectedEffect.category, option)
+            option.id === selectedEffect.id
+              ? getMatchingEffectColor(selectedEffect)
               : '',
         }"
       >
@@ -21,45 +21,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick } from "vue";
+import { ref, watch, nextTick, computed } from "vue";
 import type { EffectOption } from "../types/index.ts";
 import { getMatchingEffectColor } from "../utils/effectHelper.ts";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
-
-const props = defineProps<{
-  effectOptions: EffectOption[];
-  selectedEffect: EffectOption;
-}>();
+import effectsMapping from "../effects";
 
 const listItems = ref<HTMLElement[]>([]);
+const selectedEffect = ref({});
 
-console.log("Effect options...", props);
+const effectOptions = computed(() => {
+  if (!selectedEffect.value) return [];
+  return effectsMapping?.effects[selectedEffect.value.category]?.options || [];
+});
 
 const selectOption = (option: EffectOption) => {
   nuxMidiController.value?.selectEffectOption(
-    { ...option, category: props.selectedEffect?.category },
-    props.selectedEffect?.index,
+    { ...option, category: selectedEffect?.category },
+    selectedEffect?.index,
   );
 };
 
-// Watch for changes in selectedEffect and scroll into view
 watch(
-  () => props.selectedEffect,
-  async () => {
-    await nextTick(); // Wait for DOM update
-    const selectedElement = listItems.value.find(
-      (el) => el.dataset.optionId === props.selectedEffect.id,
-    );
-    if (selectedElement) {
-      selectedElement.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "nearest",
-      });
+  () => nuxMidiController.value?.selectedEffect,
+  async (newVal) => {
+    if (newVal) {
+      selectedEffect.value = newVal;
+      await nextTick(); // Wait for DOM update
+      scrollToSelectedEffect();
     }
   },
-  { immediate: true },
 );
+
+const scrollToSelectedEffect = () => {
+  const selectedElement = listItems.value.find(
+    (el) => el.dataset.optionId === selectedEffect.value.id,
+  );
+  if (selectedElement) {
+    selectedElement.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
+  }
+};
 </script>
 
 <style scoped>
