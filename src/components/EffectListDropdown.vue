@@ -66,13 +66,14 @@ watch(
 .dropdown {
   z-index: 10;
   border-radius: 0.25rem;
-  max-height: 6vh;
+  max-height: 4vh;
   overflow: scroll;
   width: fit-content;
   scrollbar-width: none;
   content: "";
   inset: 0.125rem;
   text-align: right;
+  margin-bottom: 0.5rem;
 }
 
 .dropdown ul {

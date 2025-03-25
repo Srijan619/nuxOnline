@@ -190,7 +190,7 @@ const effectCategoryColor = computed(() => {
 }
 
 .effectOptionsScroller {
-  right: 1rem;
+  right: 0.5rem;
   position: absolute;
   bottom: 0rem;
   font-size: 0.8rem;
