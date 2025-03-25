@@ -63,7 +63,7 @@ watch(
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: v-bind(gridGap);
   width: 100%;
-  padding: 0.2rem;
+  padding: 1rem;
   z-index: 10;
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;

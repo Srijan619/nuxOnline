@@ -69,7 +69,7 @@ const updateValue = (controlPane: number, value: number) => {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin: auto;
+  margin: 1rem;
 }
 
 .preset-card {

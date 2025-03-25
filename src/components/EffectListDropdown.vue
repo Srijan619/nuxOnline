@@ -47,7 +47,18 @@ watch(
   async (newVal) => {
     if (newVal) {
       selectedEffect.value = newVal;
-      await nextTick(); // Wait for DOM update
+      await nextTick();
+      scrollToSelectedEffect();
+    }
+  },
+);
+
+watch(
+  () => nuxMidiController.value?.selectedEffectOption,
+  async (newVal) => {
+    if (newVal) {
+      selectedEffect.value = newVal;
+      await nextTick();
       scrollToSelectedEffect();
     }
   },
