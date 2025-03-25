@@ -37,8 +37,8 @@ const effectOptions = computed(() => {
 
 const selectOption = (option: EffectOption) => {
   nuxMidiController.value?.selectEffectOption(
-    { ...option, category: selectedEffect?.category },
-    selectedEffect?.index,
+    { ...option, category: selectedEffect?.value.category },
+    selectedEffect?.value.index,
   );
 };
 

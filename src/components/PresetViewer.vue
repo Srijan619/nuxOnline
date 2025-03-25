@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, watch } from "vue";
 import { nuxMidiController } from "../utils/NUXMidiController.ts";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
@@ -58,12 +58,8 @@ const updateValue = (controlPane: number, value: number) => {
       v-if="selectedPreset.effects"
       :effects="selectedPreset.effects"
     />
-    <EffectsGrid
-      v-if="selectedEffect"
-      :effectOptions="getAllEffectsForCategory"
-      :selectedEffect="selectedEffect"
-    />
     <KnobContainer :updateValue="updateValue" />
+    <EffectsGrid />
   </div>
 </template>
 
