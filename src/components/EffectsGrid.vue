@@ -1,13 +1,13 @@
 <template>
   <div class="grid-container">
     <div
-      v-for="option in selectedEffectConfig?.options"
+      v-for="option in state.selectedEffectOption?.options"
       :key="option.id"
       class="grid-item"
-      :class="{ active: option.id === selectedEffectOption.id }"
+      :class="{ active: option.id === state.selectedEffectOption.id }"
       :style="{
         border:
-          option.id === selectedEffectOption.id
+          option.id === state.selectedEffectOption.id
             ? `2px solid ${option.dominantColor}`
             : 'none',
       }"
@@ -30,17 +30,19 @@ defineProps({
 });
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
+import { ref } from "vue";
 
-const { state, selectEffectOption } = useNUXMidiController();
-const { selectedEffectConfig, selectedEffectOption } = state;
+const { state, toggleEffect } = useNUXMidiController();
+
+const selectedEffectColor = ref(state.selectedEffectOption.categoryColor);
 
 const selectOption = (option: EffectConfig.EffectOption) => {
   const effectOption = {
     ...option,
-    category: selectedEffectOption?.category,
+    category: state.selectedEffectOption?.category,
   } as Nux.EffectOption; //TODO: Fix this soft casting later...
 
-  selectEffectOption(effectOption, selectedEffectOption?.index);
+  toggleEffect(effectOption, state.selectedEffectOption?.index || 0);
 };
 </script>
 
@@ -89,8 +91,8 @@ const selectOption = (option: EffectConfig.EffectOption) => {
 
 .grid-item.active {
   box-shadow:
-    0 0 2px v-bind(getMatchingEffectColor(selectedEffect)),
-    0 0 2px v-bind(getMatchingEffectColor(selectedEffect));
+    0 0 2px v-bind(selectedEffectColor),
+    0 0 2px v-bind(selectedEffectColor);
   transform: scale(1.15);
 }
 
