@@ -241,6 +241,11 @@ const updateKnobValue = (ctrl: number, value: number) => {
   }
 };
 
+// TODO: webmidi api says not to use this directly, so lets think about that later..
+const sendRawSysEx = (ctrl: number, value: number) => {
+  state?.midiOutput?.send([176, ctrl, value]);
+};
+
 export const useNUXMidiController = () => {
   return {
     state,
@@ -249,6 +254,6 @@ export const useNUXMidiController = () => {
     saveCurrentPreset,
     selectEffectOption,
     toggleEffect,
-    updateKnobValue,
+    sendRawSysEx,
   };
 };
