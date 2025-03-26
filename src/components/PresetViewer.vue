@@ -11,16 +11,6 @@ import EffectsGrid from "./EffectsGrid.vue";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state } = useNUXMidiController();
-
-// TODO: Why is this here...it should be in KnobContainer
-const updateValue = (controlPane: number, value: number) => {
-  // if (!nuxMidiController.value) return;
-  // if (value == null) return;
-  //
-  // sliderValue.value = value;
-  //
-  // nuxMidiController.value.midiOutput.send([176, controlPane, value]);
-};
 </script>
 
 <template>
@@ -33,7 +23,7 @@ const updateValue = (controlPane: number, value: number) => {
       </PresetChange>
     </div>
     <EffectChain />
-    <KnobContainer :updateValue="updateValue" />
+    <KnobContainer />
     <!-- <EffectsGrid /> -->
   </div>
 </template>

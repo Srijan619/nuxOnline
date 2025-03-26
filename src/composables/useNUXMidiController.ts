@@ -249,5 +249,6 @@ export const useNUXMidiController = () => {
     saveCurrentPreset,
     selectEffectOption,
     toggleEffect,
+    updateKnobValue,
   };
 };
