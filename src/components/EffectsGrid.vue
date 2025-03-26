@@ -1,14 +1,14 @@
 <template>
   <div class="grid-container">
     <div
-      v-for="option in effectOptions"
+      v-for="option in selectedEffectConfig?.options"
       :key="option.id"
       class="grid-item"
-      :class="{ active: option.id === selectedEffect.id }"
+      :class="{ active: option.id === selectedEffectOption.id }"
       :style="{
         border:
-          option.id === selectedEffect.id
-            ? `2px solid ${getMatchingEffectColor(selectedEffect)}`
+          option.id === selectedEffectOption.id
+            ? `2px solid ${option.dominantColor}`
             : 'none',
       }"
       @click="selectOption(option)"
@@ -19,11 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import type { EffectOption } from "../types/index.ts";
-import { getMatchingEffectColor } from "../utils/effectHelper.ts";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import effectsMapping from "../effects";
+import type { EffectConfig, Nux } from "../types/index.ts";
 
 defineProps({
   activeColor: { type: String, default: "var(--retro-glow)" },
@@ -32,29 +28,20 @@ defineProps({
   hoverColor: { type: String, default: "var(--hover-glow-color)" },
   gridGap: { type: String, default: ".5rem" },
 });
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-const selectedEffect = ref({});
+const { state, selectEffectOption } = useNUXMidiController();
+const { selectedEffectConfig, selectedEffectOption } = state;
 
-const selectOption = (option: EffectOption) => {
-  nuxMidiController.value?.selectEffectOption(
-    { ...option, category: selectedEffect?.value.category },
-    selectedEffect?.value.index,
-  );
+const selectOption = (option: EffectConfig.EffectOption) => {
+  const effectOption = {
+    ...option,
+    category: selectedEffectOption?.category,
+  } as Nux.EffectOption; //TODO: Fix this soft casting later...
+
+  selectEffectOption(effectOption, selectedEffectOption?.index);
 };
-
-const effectOptions = computed(() => {
-  if (!selectedEffect.value) return [];
-  return effectsMapping?.effects[selectedEffect.value.category]?.options || [];
-});
-
-watch(
-  () => nuxMidiController.value?.selectedEffect,
-  async (newVal) => {
-    if (newVal) {
-      selectedEffect.value = newVal;
-    }
-  },
-);
 </script>
 
 <style scoped>

@@ -1,19 +1,19 @@
-import type { Effect, EffectOption } from "../types";
-import { unitHexToBytes } from "./bytesHelper";
-import effectsMapping from "../effects";
-import { getUpdatedKnobControlsWithValues } from "./controlMapper";
+import type { Nux } from "../../types";
+import { unitHexToBytes } from "../../utils/bytesHelper";
+import EFFECT_CONFIG from "../../effects";
+import { getUpdatedKnobControlsWithValues } from "../../utils/controlMapper";
 
-function extractEffects(response: Uint8Array): Effect {
+function extractEffects(response: Uint8Array): Nux.Effect {
   const hexValue = unitHexToBytes(response);
 
   console.log("Effects hex", hexValue);
   const getEffectOption = (
-    category: keyof typeof effectsMapping.effects,
+    category: Nux.EffectCategory,
     categoryIndex: number, //defines order
     byteValue: string,
     onOffByte?: number,
-  ): EffectOption => {
-    const effectCategory = effectsMapping.effects[category];
+  ): Nux.EffectOption => {
+    const effectCategory = EFFECT_CONFIG[category];
 
     const effect = effectCategory?.options?.find(
       (data) => data.onByte === byteValue || data.offByte === byteValue,
@@ -25,7 +25,7 @@ function extractEffects(response: Uint8Array): Effect {
         title: "Unknown Effect",
         onByte: "",
         offByte: "",
-        category: "Unknown category",
+        category: "" as Nux.EffectCategory,
         active: false,
         index: undefined,
         knobs: [],

@@ -3,13 +3,12 @@
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state } = useNUXMidiController();
-const { deviceName, deviceVersion } = state;
 </script>
 
 <template>
   <div class="device-info">
-    <span class="device-name">{{ deviceName }}</span>
-    <span class="device-version">{{ deviceVersion }}</span>
+    <span class="device-name">{{ state.deviceName }}</span>
+    <span class="device-version">{{ state.deviceVersion }}</span>
   </div>
 </template>
 

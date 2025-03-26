@@ -63,7 +63,8 @@ export const useNUXMidiController = () => {
 
       setupListeners();
       getDeviceVersion();
-      getCurrentPresetBasicData();
+      // getCurrentPresetBasicData();
+      // getCurrentPresetDetailData();
     } catch (error) {
       console.error("❌ MIDI Initialization Error:", error);
     }
@@ -95,6 +96,7 @@ export const useNUXMidiController = () => {
     console.log(`✅ ${requestType} Response matched.`);
     switch (requestType) {
       case "DEVICE_VERSION":
+        if (state.deviceVersion) return;
         state.deviceVersion =
           Parser.Device.extractDeviceVersion(data)?.version || "Unknown";
         break;

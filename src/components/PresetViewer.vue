@@ -26,16 +26,18 @@ const updateValue = (controlPane: number, value: number) => {
 
 <template>
   <div class="main-container" v-if="currentPresetData">
-    <div class="preset-card">
-      <PresetDetail />
-      <!-- <Save /> -->
-      <PresetChange>
-        <Device />
-      </PresetChange>
-    </div>
-    <EffectChain />
-    <KnobContainer :updateValue="updateValue" />
-    <EffectsGrid />
+    <Device />
+
+    <!-- <div class="preset-card"> -->
+    <!--   <PresetDetail /> -->
+    <!--   <!-- <Save /> -->
+    -->
+    <!--   <PresetChange> -->
+    <!--   </PresetChange> -->
+    <!-- </div> -->
+    <!-- <EffectChain /> -->
+    <!-- <KnobContainer :updateValue="updateValue" /> -->
+    <!-- <EffectsGrid /> -->
   </div>
 </template>
 
