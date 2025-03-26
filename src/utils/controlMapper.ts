@@ -1,5 +1,4 @@
-import amp from "../effects/amp";
-import type { EffectOption, Knob } from "../types";
+import type { Nux } from "../types";
 import { getEffectKnobs } from "./effectHelper";
 
 // Type for control ranges
@@ -65,7 +64,7 @@ const efxControlRanges: ControlRange[] = [
 ];
 
 const getUpdatedKnobControlsWithValues = (
-  effectOption: EffectOption,
+  effectOption: Nux.EffectOption,
   input: Uint8Array,
 ) => {
   let controlRanges;
@@ -83,7 +82,7 @@ const getUpdatedKnobControlsWithValues = (
 
   const controlValues = translateControlValues(input, controlRanges);
   const knobs = getEffectKnobs(effectOption);
-  knobs?.forEach((knob: Knob, index: number) => {
+  knobs?.forEach((knob: Nux.Knob, index: number) => {
     knob.currentValue = controlValues[index] || 0;
   });
   return knobs;

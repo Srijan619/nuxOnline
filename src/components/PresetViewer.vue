@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
 import EffectChain from "./EffectChain.vue";
 import PresetChange from "./PresetChange.vue";
 import PresetDetail from "./PresetDetail.vue";
@@ -8,56 +6,34 @@ import Device from "./Device.vue";
 import KnobContainer from "./KnobContainer.vue";
 import Save from "./Save.vue";
 import EffectsGrid from "./EffectsGrid.vue";
-import type { Preset } from "../types/index.ts";
 
-const selectedPreset = ref(<Preset>{});
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-//TODO: Only for testing use mock
-//selectedPreset.value = PresetMockResponse;
+const { state } = useNUXMidiController();
+const { currentPresetData } = state;
 
-watch(
-  () => nuxMidiController.value?.currentPresetBasicData,
-  (newVal) => {
-    if (newVal) {
-      selectedPreset.value = newVal;
-    }
-  },
-);
-
-watch(
-  () => nuxMidiController.value?.currentPresetDetailData,
-  (newVal) => {
-    if (newVal) {
-      selectedPreset.value = { ...selectedPreset.value, ...newVal };
-    }
-  },
-);
-
-const sliderValue = ref(0);
-
+// TODO: Why is this here...it should be in KnobContainer
 const updateValue = (controlPane: number, value: number) => {
-  if (!nuxMidiController.value) return;
-  if (value == null) return;
-
-  sliderValue.value = value;
-
-  nuxMidiController.value.midiOutput.send([176, controlPane, value]);
+  // if (!nuxMidiController.value) return;
+  // if (value == null) return;
+  //
+  // sliderValue.value = value;
+  //
+  // nuxMidiController.value.midiOutput.send([176, controlPane, value]);
 };
 </script>
 
 <template>
-  <div class="main-container" v-if="selectedPreset">
+  <div class="main-container" v-if="currentPresetData">
     <div class="preset-card">
-      <PresetDetail :selectedPreset="selectedPreset" />
+      <PresetDetail />
       <!-- <Save /> -->
       <PresetChange>
         <Device />
       </PresetChange>
     </div>
-    <EffectChain
-      v-if="selectedPreset.effects"
-      :effects="selectedPreset.effects"
-    />
+    <EffectChain />
     <KnobContainer :updateValue="updateValue" />
     <EffectsGrid />
   </div>

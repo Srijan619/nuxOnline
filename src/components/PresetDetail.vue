@@ -1,38 +1,17 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
-
-import Preset from "../types/index.ts";
 import EffectListDropdown from "../components/EffectListDropdown.vue";
 
-const props = defineProps<{
-  selectedPreset: Preset;
-}>();
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-const selectedEffect = ref<EffectOption | null>(null);
-
-watch(
-  () => nuxMidiController.value?.selectedEffect,
-  (newVal) => {
-    if (newVal) {
-      selectedEffect.value = newVal;
-    }
-  },
-);
-
-const effectCategoryColor = computed(() => {
-  const category = selectedEffect.value?.category;
-  if (category) {
-    return `var(--${category}-color)`;
-  }
-  return "var(--undefined-color)";
-});
+const { state } = useNUXMidiController();
+const { selectedEffect, currentPresetData } = state;
 </script>
 
 <template>
   <div
     class="notification"
-    :style="{ '--dynamic-effect-selected-color': effectCategoryColor }"
+    :style="{ '--dynamic-effect-selected-color': selectedEffect.categoryColor }"
   >
     <div class="music-notes">♪ ♫</div>
     <div class="notiglow"></div>
@@ -40,10 +19,12 @@ const effectCategoryColor = computed(() => {
     <div class="notititle">🎸 Selected Preset</div>
     <div class="notibody">
       <div class="leftPresetDetails">
-        <div><strong>Name:</strong> {{ selectedPreset.name || "Unknown" }}</div>
-        <div><strong>Preset:</strong> {{ selectedPreset.presetNumber }}</div>
         <div>
-          <strong>Scene:</strong> {{ selectedPreset.activeSceneNumber }}
+          <strong>Name:</strong> {{ currentPresetData.name || "Unknown" }}
+        </div>
+        <div><strong>Preset:</strong> {{ currentPresetData.presetNumber }}</div>
+        <div>
+          <strong>Scene:</strong> {{ currentPresetData.activeSceneNumber }}
         </div>
       </div>
       <div class="effectOptionsScroller">

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
+
+const { state, changePreset } = useNUXMidiController();
+const { deviceVersion } = state;
 
 const presetNumber = ref(0);
 const MIN_PRESET = 0;
@@ -10,7 +14,7 @@ const emit = defineEmits<{
   (e: "change-preset", newPresetNumber: number): void;
 }>();
 
-const changePreset = (direction: "up" | "down") => {
+const changePresetLocally = (direction: "up" | "down") => {
   if (direction === "up") {
     presetNumber.value = Math.min(presetNumber.value + 1, MAX_PRESET);
   } else {
@@ -20,44 +24,22 @@ const changePreset = (direction: "up" | "down") => {
 };
 
 watch(presetNumber, (newPresetNumber) => {
-  if (nuxMidiController.value) {
-    nuxMidiController.value.changePreset(newPresetNumber);
-    nuxMidiController.value.getCurrentPresetDetailData(newPresetNumber);
-  }
+  changePreset(newPresetNumber);
 });
-
-watch(
-  () => nuxMidiController.value,
-  (newValue) => {
-    if (newValue) {
-      newValue.changePreset(presetNumber.value);
-      newValue.getCurrentPresetDetailData(presetNumber.value);
-    }
-  },
-  { immediate: true },
-);
 </script>
 
 <template>
   <div
     class="preset-change"
     :style="{
-      '--amp-active': nuxMidiController ? 'var(--amp-on)' : 'var(--amp-off)',
+      '--amp-active': deviceVersion ? 'var(--amp-on)' : 'var(--amp-off)',
     }"
   >
-    <button
-      class="preset-btn prev"
-      @click="changePreset('down')"
-      :disabled="presetNumber <= MIN_PRESET"
-    >
+    <button class="preset-btn prev" @click="changePresetLocally('down')">
       〈
     </button>
     <slot></slot>
-    <button
-      class="preset-btn next"
-      @click="changePreset('up')"
-      :disabled="presetNumber >= MAX_PRESET"
-    >
+    <button class="preset-btn next" @click="changePresetLocally('up')">
       〉
     </button>
   </div>

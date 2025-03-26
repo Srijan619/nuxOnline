@@ -1,23 +1,9 @@
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-const deviceVersion = ref("Not connected");
-
-watch(
-  () => nuxMidiController.value?.deviceVersion,
-  (newVersion) => {
-    if (newVersion) {
-      deviceVersion.value = newVersion;
-    }
-  },
-);
-
-const deviceName = computed(() => {
-  return nuxMidiController.value
-    ? nuxMidiController.value.getDeviceName()
-    : "Waiting for NUX MG-30...";
-});
+const { state } = useNUXMidiController();
+const { deviceName, deviceVersion } = state;
 </script>
 
 <template>

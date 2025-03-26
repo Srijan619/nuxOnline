@@ -1,13 +1,8 @@
+import EFFECT_CONFIG from "../effects";
 import effectsMapping from "../effects";
-import type {
-  Effect,
-  EffectOption,
-  Knob,
-  KnobEntry,
-  KnobsConfig,
-} from "../types";
+import { EffectConfig, Nux } from "../types";
 
-const getMainEffectGroup = (effectOption: EffectOption) => {
+const getMainEffectGroup = (effectOption: Nux.EffectOption) => {
   const typedEffectsMapping = effectsMapping as Record<string, any>;
 
   const effectCategory = typedEffectsMapping.effects[effectOption?.category];
@@ -17,21 +12,21 @@ const getMainEffectGroup = (effectOption: EffectOption) => {
   return matchedEffect;
 };
 
-const getMatchingEffectColor = (effectOption: EffectOption) => {
+const getMatchingEffectColor = (effectOption: Nux.EffectOption) => {
   return (
     getMainEffectGroup(effectOption)?.dominantColor ||
     `var(--${effectOption?.category}-color)`
   );
 };
 
-const getEffectKnobs = (effectOption: EffectOption) => {
+const getEffectKnobs = (effectOption: Nux.EffectOption) => {
   return getMainEffectGroup(effectOption)?.knobs || [];
 };
 
 const populateKnobs = (
-  knobData: KnobEntry[],
+  knobData: Nux.KnobEntry[],
   startCtrl: number,
-): KnobsConfig => {
+): Nux.KnobsConfig => {
   return {
     knobs: knobData?.map(([id, title, range], index) => ({
       id,
@@ -42,8 +37,11 @@ const populateKnobs = (
   };
 };
 
-const getEffectStartOnOffByte = (category: string, id: string) => {
-  if (!category || !id) return;
+const getEffectStartOnOffByte = (
+  category: string,
+  id: string,
+): { startOnByte: string; startOffByte: string } => {
+  if (!category || !id) return { startOnByte: "", startOffByte: "" };
   const typedEffectsMapping = effectsMapping as Record<string, any>;
 
   const effectCategory = typedEffectsMapping.effects[category];
@@ -70,12 +68,13 @@ const getEffectStartOnOffByte = (category: string, id: string) => {
 };
 
 const getAndUpdateEffectByControlKnob = (
-  effects: Effect,
+  effects: Nux.Effect | undefined,
   ctrl: number,
   value: number,
 ) => {
+  if (!effects) return;
   for (const [_, effectValue] of Object.entries(effects)) {
-    const matchedKnob = effectValue?.knobs?.find((knob: Knob) => {
+    const matchedKnob = effectValue?.knobs?.find((knob: Nux.Knob) => {
       return knob.ctrl === ctrl;
     });
 
@@ -95,17 +94,24 @@ const getAndUpdateEffectByControlKnob = (
   return effects;
 };
 
-const determineActiveEffectBasedOnCurrentKnob = (ctrl: number) => {
-  const typedEffectsMapping = effectsMapping as Record<string, any>;
+const determineActiveEffectBasedOnCurrentKnob = (
+  ctrl: number,
+): Nux.EffectOption | undefined => {
+  for (const effectValue of Object.values<
+    EffectConfig.EffectType[Nux.EffectCategory]
+  >(EFFECT_CONFIG)) {
+    if (!effectValue || !effectValue.options) continue;
 
-  for (const [_, effectValue] of Object.entries(typedEffectsMapping.effects)) {
-    const matchedOption = effectValue?.options?.find((opt: EffectOption) =>
-      opt?.knobs?.some((knob: Knob) => knob.ctrl === ctrl),
+    const matchedOption = effectValue.options.find(
+      (opt): opt is Nux.EffectOption =>
+        opt.knobs?.some((knob: Nux.Knob) => knob.ctrl === ctrl) ?? false,
     );
+
     if (matchedOption) {
-      return effectValue;
+      return matchedOption;
     }
   }
+  return undefined;
 };
 
 const calculateByte = (byte: string, index: number) => {

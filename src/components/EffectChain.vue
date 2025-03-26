@@ -1,11 +1,19 @@
 <template>
   <div class="effect-chain-wrapper">
     <div class="effect-chain">
-      <div v-for="(effect, index) in effectList" :key="effect.id" class="effect-box" :class="[
-        effect.active ? 'active' : 'inactive',
-        effect.category,
-        hoveredEffect?.id === effect.id ? 'effectHovered' : '',
-      ]" @click="toggleEffect(effect, index)" @mouseover="startHoverTimer(effect)" @mouseleave="clearHoverTimer">
+      <div
+        v-for="(effect, index) in effectList"
+        :key="effect.id"
+        class="effect-box"
+        :class="[
+          effect.active ? 'active' : 'inactive',
+          effect.category,
+          hoveredEffect?.id === effect.id ? 'effectHovered' : '',
+        ]"
+        @click="toggleEffectSelection(effect, index)"
+        @mouseover="startHoverTimer(effect)"
+        @mouseleave="clearHoverTimer"
+      >
         <div class="box-content">
           <h3>{{ effect.title }}</h3>
         </div>
@@ -18,12 +26,14 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import type { EffectOption, Effect } from "../types/index.ts";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
 
-const props = defineProps<{
-  effects: Record<string, EffectOption>;
-}>();
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
 
+const { state, selectEffect, toggleEffect } = useNUXMidiController();
+const { currentPresetData } = state;
+
+//TODO: Check if this garbage ordering is at all working...NUX should define the order anyway
 const orderedKeys: (keyof Effect)[] = [
   "wah",
   "comp",
@@ -41,12 +51,11 @@ const orderedKeys: (keyof Effect)[] = [
 
 const effectList = computed(() => {
   return orderedKeys
-    .map((key) => props.effects[key])
+    .map((key) => currentPresetData.effects[key])
     .filter((effect): effect is EffectOption => effect !== undefined);
 });
 const hoveredEffect = ref<EffectOption | null>(null);
 
-console.log("Effects", effectList);
 // Hover timer map
 const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
@@ -70,11 +79,11 @@ const clearHoverTimer = () => {
   hoverTimers.value.clear();
 };
 const showEffectOptions = (effect: EffectOption) => {
-  nuxMidiController.value?.selectEffect(effect);
+  selectEffect(effect);
 };
 
-const toggleEffect = (effect: EffectOption, index: number) => {
-  nuxMidiController.value?.toggleEffect(effect, index);
+const toggleEffectSelection = (effect: EffectOption, index: number) => {
+  toggleEffect(effect, index);
 };
 </script>
 
