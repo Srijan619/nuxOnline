@@ -3,11 +3,9 @@ import effectsMapping from "../effects";
 import { EffectConfig, Nux } from "../types";
 
 const getMainEffectGroup = (effectOption: Nux.EffectOption) => {
-  const typedEffectsMapping = effectsMapping as Record<string, any>;
-
-  const effectCategory = typedEffectsMapping.effects[effectOption?.category];
-  const matchedEffect = effectCategory?.options.find(
-    (opt: any) => opt.id === effectOption?.id,
+  const effectCategory = EFFECT_CONFIG[effectOption?.category];
+  const matchedEffect = effectCategory?.options?.find(
+    (opt) => opt.id === effectOption?.id,
   );
   return matchedEffect;
 };

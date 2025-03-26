@@ -5,14 +5,14 @@ import EffectListDropdown from "../components/EffectListDropdown.vue";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state } = useNUXMidiController();
-const { selectedEffectConfig, currentPresetData } = state;
 </script>
 
 <template>
   <div
     class="notification"
     :style="{
-      '--dynamic-effect-selected-color': selectedEffectConfig?.categoryColor,
+      '--dynamic-effect-selected-color':
+        state.selectedEffectConfig?.categoryColor,
     }"
   >
     <div class="music-notes">♪ ♫</div>
@@ -22,15 +22,18 @@ const { selectedEffectConfig, currentPresetData } = state;
     <div class="notibody">
       <div class="leftPresetDetails">
         <div>
-          <strong>Name:</strong> {{ currentPresetData.name || "Unknown" }}
+          <strong>Name:</strong> {{ state.currentPresetData.name || "Unknown" }}
         </div>
-        <div><strong>Preset:</strong> {{ currentPresetData.presetNumber }}</div>
         <div>
-          <strong>Scene:</strong> {{ currentPresetData.activeSceneNumber }}
+          <strong>Preset:</strong> {{ state.currentPresetData.presetNumber }}
+        </div>
+        <div>
+          <strong>Scene:</strong>
+          {{ state.currentPresetData.activeSceneNumber }}
         </div>
       </div>
       <div class="effectOptionsScroller">
-        <EffectListDropdown v-if="selectedEffectConfig" />
+        <EffectListDropdown v-if="state.selectedEffectConfig" />
       </div>
     </div>
   </div>

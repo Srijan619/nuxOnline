@@ -4,7 +4,6 @@ import { ref, watch } from "vue";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state, changePreset } = useNUXMidiController();
-const { deviceVersion } = state;
 
 const presetNumber = ref(0);
 const MIN_PRESET = 0;
@@ -32,7 +31,7 @@ watch(presetNumber, (newPresetNumber) => {
   <div
     class="preset-change"
     :style="{
-      '--amp-active': deviceVersion ? 'var(--amp-on)' : 'var(--amp-off)',
+      '--amp-active': state.deviceVersion ? 'var(--amp-on)' : 'var(--amp-off)',
     }"
   >
     <button class="preset-btn prev" @click="changePresetLocally('down')">

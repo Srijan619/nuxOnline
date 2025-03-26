@@ -34,6 +34,8 @@ export const useNUXMidiController = () => {
     index: undefined,
     knobs: [],
   });
+
+  window["nux"] = state;
   const isInitialized = ref(false);
 
   // Initialize the MIDI controller
@@ -63,8 +65,8 @@ export const useNUXMidiController = () => {
 
       setupListeners();
       getDeviceVersion();
-      // getCurrentPresetBasicData();
-      // getCurrentPresetDetailData();
+      getCurrentPresetBasicData();
+      getCurrentPresetDetailData(0);
     } catch (error) {
       console.error("❌ MIDI Initialization Error:", error);
     }

@@ -1,4 +1,6 @@
 import type { Nux } from "../../types";
+import { EffectCategory } from "../../types/types";
+
 import { unitHexToBytes } from "../../utils/bytesHelper";
 import EFFECT_CONFIG from "../../effects";
 import { getUpdatedKnobControlsWithValues } from "../../utils/controlMapper";
@@ -6,7 +8,6 @@ import { getUpdatedKnobControlsWithValues } from "../../utils/controlMapper";
 function extractEffects(response: Uint8Array): Nux.Effect {
   const hexValue = unitHexToBytes(response);
 
-  console.log("Effects hex", hexValue);
   const getEffectOption = (
     category: Nux.EffectCategory,
     categoryIndex: number, //defines order
@@ -50,50 +51,67 @@ function extractEffects(response: Uint8Array): Nux.Effect {
   };
 
   //For example in some case: 8th byte is wahstatus, wah object doesn't itself have on/off (or only says wah type)
-  // v5 and v4 have different start index for effects, this helper could help to quickly adjust the index, but could well and truly be total garbage too
+  // v5 and v4 have different start index for effectsi (v4 has everything to -1 and v5 as it is),
+  // this helper could help to quickly adjust the index, but could well and truly be total garbage too
   const getAdjustedIndex = (index: number) => {
-    return index;
+    return index - 1;
   };
 
   // Now, using the adjusted indices
-  let effects: Effect = {
+  let effects: Nux.Effect = {
     wah: getEffectOption(
-      "wah",
+      EffectCategory.Wah,
       0,
       hexValue[getAdjustedIndex(9)],
       response[getAdjustedIndex(8)],
     ),
-    comp: getEffectOption("comp", 1, hexValue[getAdjustedIndex(10)]),
+    comp: getEffectOption(
+      EffectCategory.Comp,
+      1,
+      hexValue[getAdjustedIndex(10)],
+    ),
     efx: getEffectOption(
-      "efx",
+      EffectCategory.Efx,
       2,
       hexValue[getAdjustedIndex(12)],
       response[getAdjustedIndex(11)],
     ),
-    amp: getEffectOption("amp", 3, hexValue[getAdjustedIndex(13)]),
+    amp: getEffectOption(EffectCategory.Amp, 3, hexValue[getAdjustedIndex(13)]),
     eq: getEffectOption(
-      "eq",
+      EffectCategory.Eq,
       4,
       hexValue[getAdjustedIndex(15)],
       response[getAdjustedIndex(14)],
     ),
-    gate: getEffectOption("gate", 5, hexValue[getAdjustedIndex(16)]),
+    gate: getEffectOption(
+      EffectCategory.Gate,
+      5,
+      hexValue[getAdjustedIndex(16)],
+    ),
     mod: getEffectOption(
-      "mod",
+      EffectCategory.Mod,
       6,
       hexValue[getAdjustedIndex(18)],
       response[getAdjustedIndex(17)],
     ),
-    delay: getEffectOption("delay", 7, hexValue[getAdjustedIndex(19)]),
+    delay: getEffectOption(
+      EffectCategory.Delay,
+      7,
+      hexValue[getAdjustedIndex(19)],
+    ),
     reverb: getEffectOption(
-      "reverb",
+      EffectCategory.Reverb,
       8,
       hexValue[getAdjustedIndex(21)],
       response[getAdjustedIndex(20)],
     ),
-    ir: getEffectOption("ir", 9, hexValue[getAdjustedIndex(22)]),
-    sr: getEffectOption("sr", 10, hexValue[getAdjustedIndex(23)]),
-    vol: getEffectOption("vol", 11, hexValue[getAdjustedIndex(25)]),
+    ir: getEffectOption(EffectCategory.Ir, 9, hexValue[getAdjustedIndex(22)]),
+    sr: getEffectOption(EffectCategory.Sr, 10, hexValue[getAdjustedIndex(23)]),
+    vol: getEffectOption(
+      EffectCategory.Vol,
+      11,
+      hexValue[getAdjustedIndex(25)],
+    ),
   };
 
   effects = {

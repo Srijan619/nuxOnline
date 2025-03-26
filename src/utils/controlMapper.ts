@@ -78,7 +78,7 @@ const getUpdatedKnobControlsWithValues = (
     default:
       break;
   }
-  if (!controlRanges) return {};
+  if (!controlRanges) return [];
 
   const controlValues = translateControlValues(input, controlRanges);
   const knobs = getEffectKnobs(effectOption);

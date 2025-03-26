@@ -32,13 +32,13 @@ import { EffectCategory } from "../types/types.ts";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state, selectEffect, toggleEffect } = useNUXMidiController();
-const { currentPresetData } = state;
 
 //TODO: Check if this garbage ordering is at all working...NUX should define the order anyway
 
 const effectList = computed(() => {
+  if (!state.currentPresetData?.effects) return [];
   return Object.values(EffectCategory)
-    .map((key) => currentPresetData.effects![key])
+    .map((key) => state.currentPresetData?.effects![key])
     .filter((effect): effect is Nux.EffectOption => effect !== undefined);
 });
 const hoveredEffect = ref<Nux.EffectOption | null>(null);

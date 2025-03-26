@@ -11,7 +11,6 @@ import EffectsGrid from "./EffectsGrid.vue";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state } = useNUXMidiController();
-const { currentPresetData } = state;
 
 // TODO: Why is this here...it should be in KnobContainer
 const updateValue = (controlPane: number, value: number) => {
@@ -25,17 +24,15 @@ const updateValue = (controlPane: number, value: number) => {
 </script>
 
 <template>
-  <div class="main-container" v-if="currentPresetData">
-    <Device />
-
-    <!-- <div class="preset-card"> -->
-    <!--   <PresetDetail /> -->
-    <!--   <!-- <Save /> -->
-    -->
-    <!--   <PresetChange> -->
-    <!--   </PresetChange> -->
-    <!-- </div> -->
-    <!-- <EffectChain /> -->
+  <div class="main-container" v-if="state.currentPresetData">
+    <div class="preset-card">
+      <PresetDetail />
+      <!-- <Save /> -->
+      <PresetChange>
+        <Device />
+      </PresetChange>
+    </div>
+    <EffectChain />
     <!-- <KnobContainer :updateValue="updateValue" /> -->
     <!-- <EffectsGrid /> -->
   </div>
