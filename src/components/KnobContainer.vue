@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, watch } from "vue";
 import KnobControl from "./KnobControl.vue";
 import TwoWaySwitch from "./TwoWaySwitch.vue";
 
@@ -7,8 +8,16 @@ import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state, sendRawSysEx } = useNUXMidiController();
 
+const selectedEffectColor = ref();
+
+watch(
+  () => state.selectedEffectOption.dominantColor,
+  (newValue) => {
+    selectedEffectColor.value = newValue;
+  },
+);
+
 const updateValue = (controlPane: number, value: number) => {
-  return;
   setTimeout(() => (sendRawSysEx(controlPane, value), 10));
 };
 </script>
@@ -17,13 +26,13 @@ const updateValue = (controlPane: number, value: number) => {
   <div class="knob-container">
     <template
       v-for="knob in state.selectedEffectOption.knobs"
-      :key="`${knob.id}-${knob.currentValue}`"
+      :key="`${knob.id}-${selectedEffectColor}-${knob.currentValue}`"
     >
       <TwoWaySwitch
         v-if="knob && knob.range[0] === 0 && knob.range[1] === 1"
         :id="knob.id"
         :title="knob.title"
-        :activeColor="state.selectedEffectOption.categoryColor"
+        :activeColor="selectedEffectColor"
         :initialValue="knob.currentValue === 1"
         @update:value="(value) => updateValue(knob?.ctrl, value ? 1 : 0)"
       />
@@ -35,7 +44,7 @@ const updateValue = (controlPane: number, value: number) => {
         :max="knob.range[1]"
         :initialValue="knob?.currentValue"
         @update:value="(value) => updateValue(knob?.ctrl, value)"
-        :sliderFillColor="state.selectedEffectOption?.categoryColor"
+        :sliderFillColor="selectedEffectColor"
       />
     </template>
   </div>

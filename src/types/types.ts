@@ -41,6 +41,7 @@ interface BaseEffectOption {
 interface EffectOption extends BaseEffectOption {
   category: EffectCategory;
   active: boolean;
+  dominantColor?: string;
   index: number | undefined; //defines order
 }
 

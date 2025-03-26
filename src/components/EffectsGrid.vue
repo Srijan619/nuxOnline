@@ -34,7 +34,10 @@ import { ref } from "vue";
 
 const { state, toggleEffect } = useNUXMidiController();
 
-const selectedEffectColor = ref(state.selectedEffectOption.categoryColor);
+const selectedEffectColor = ref(
+  state.selectedEffectOption.dominantColor ||
+    state.selectedEffectOption.categoryColor,
+);
 
 const selectOption = (option: EffectConfig.EffectOption) => {
   const effectOption = {

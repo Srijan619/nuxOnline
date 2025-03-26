@@ -13,6 +13,7 @@ import {
   determineActiveEffectBasedOnCurrentKnob,
   getAndUpdateEffectByControlKnob,
   getEffectStartOnOffByte,
+  getMatchingEffectColor,
 } from "../utils/effectHelper";
 
 // 📦 Types
@@ -150,13 +151,14 @@ const saveCurrentPreset = () => {
   console.log("Support coming soon");
 };
 
-// Select an effect
+// Select an effect category (it is like temp selection before selecting the effect)
 const selectEffectOption = (effect: Nux.EffectOption) => {
   if (!state.currentPresetData.effects) return;
 
   state.selectedEffectOption = {
     ...state.currentPresetData.effects[effect.category],
     categoryColor: `var(--${effect.category}-color)`,
+    dominantColor: getMatchingEffectColor(effect),
   };
 };
 
