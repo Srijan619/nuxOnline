@@ -1,5 +1,4 @@
 import EFFECT_CONFIG from "../effects";
-import effectsMapping from "../effects";
 import { EffectConfig, Nux } from "../types";
 
 const getMainEffectGroup = (effectOption: Nux.EffectOption) => {
@@ -36,24 +35,26 @@ const populateKnobs = (
 };
 
 const getEffectStartOnOffByte = (
-  category: string,
+  category: Nux.EffectCategory,
   id: string,
 ): { startOnByte: string; startOffByte: string } => {
   if (!category || !id) return { startOnByte: "", startOffByte: "" };
-  const typedEffectsMapping = effectsMapping as Record<string, any>;
 
-  const effectCategory = typedEffectsMapping.effects[category];
-  const effectIndex = effectCategory.options.findIndex(
+  const effectCategory = EFFECT_CONFIG[category];
+  const effectIndex = effectCategory?.options?.findIndex(
     (opt: any) => opt.id === id,
   );
-  const matchedEffect = effectCategory?.options.find(
+
+  if (!effectIndex) return { startOnByte: "", startOffByte: "" };
+
+  const matchedEffect = effectCategory?.options?.find(
     (opt: any) => opt.id === id,
   );
 
   if (!effectCategory?.startOnByte || !effectCategory?.startOffByte)
     return {
-      startOnByte: matchedEffect?.onByte,
-      startOffByte: matchedEffect?.offByte,
+      startOnByte: matchedEffect?.onByte || "",
+      startOffByte: matchedEffect?.offByte || "",
     };
 
   const startOnByte = calculateByte(effectCategory?.startOnByte, effectIndex);
