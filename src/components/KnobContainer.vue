@@ -6,6 +6,11 @@ import TwoWaySwitch from "./TwoWaySwitch.vue";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state, sendRawSysEx } = useNUXMidiController();
+
+const updateValue = (controlPane: number, value: number) => {
+  return;
+  setTimeout(() => (sendRawSysEx(controlPane, value), 10));
+};
 </script>
 
 <template>
@@ -20,7 +25,7 @@ const { state, sendRawSysEx } = useNUXMidiController();
         :title="knob.title"
         :activeColor="state.selectedEffectOption.categoryColor"
         :initialValue="knob.currentValue === 1"
-        @update:value="(value) => sendRawSysEx(knob?.ctrl, value ? 1 : 0)"
+        @update:value="(value) => updateValue(knob?.ctrl, value ? 1 : 0)"
       />
       <KnobControl
         v-else
@@ -29,7 +34,7 @@ const { state, sendRawSysEx } = useNUXMidiController();
         :min="knob.range[0]"
         :max="knob.range[1]"
         :initialValue="knob?.currentValue"
-        @update:value="(value) => sendRawSysEx(knob?.ctrl, value)"
+        @update:value="(value) => updateValue(knob?.ctrl, value)"
         :sliderFillColor="state.selectedEffectOption?.categoryColor"
       />
     </template>

@@ -12,7 +12,7 @@ const { state } = useNUXMidiController();
     class="notification"
     :style="{
       '--dynamic-effect-selected-color':
-        state.selectedEffectConfig?.categoryColor,
+        state.selectedEffectOption?.categoryColor,
     }"
   >
     <div class="music-notes">♪ ♫</div>

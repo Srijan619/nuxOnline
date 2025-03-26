@@ -17,6 +17,7 @@ import {
 
 // 📦 Types
 import { Nux } from "../types";
+import EFFECT_CONFIG from "../effects";
 
 const state = reactive(<Nux.NUXMidiControllerState>{
   isDeviceConnected: false,
@@ -28,7 +29,6 @@ const state = reactive(<Nux.NUXMidiControllerState>{
   midiInput: null,
   offByte: "",
   active: false,
-  index: undefined,
 });
 
 const isInitialized = ref(false);
@@ -117,7 +117,6 @@ const handleSysExResponse = (event: MessageEvent) => {
       break;
 
     case "EFFECT_CHANGED":
-      console.log("Effect changed...", data);
       updateKnobValue(data[1], data[2]);
       break;
   }
@@ -218,18 +217,28 @@ const updateEffectState = (
     id: effect.id,
   };
 
-  state.selectedEffectOption = effect;
+  const effectCategory = EFFECT_CONFIG[effect.category];
+
+  if (!effectCategory) return;
+
+  state.selectedEffectOption = {
+    ...effect,
+    options: effectCategory.options ?? [],
+  };
 };
 
 // Update knob value
 const updateKnobValue = (ctrl: number, value: number) => {
+  const activeEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
+  if (!activeEffect) return; // No action if control values can not be found...
+  console.log("Effect changed...", ctrl, value);
+
   const effects = getAndUpdateEffectByControlKnob(
     state.currentPresetData.effects,
     ctrl,
     value,
   );
-  state.selectedEffectConfig = determineActiveEffectBasedOnCurrentKnob(ctrl);
-
+  //state.selectedEffectOption = activeEffect;
   if (state.currentPresetData.effects) {
     state.currentPresetData = {
       ...state.currentPresetData,
@@ -243,6 +252,7 @@ const updateKnobValue = (ctrl: number, value: number) => {
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..
 const sendRawSysEx = (ctrl: number, value: number) => {
+  console.log("Sending raw sysex..", ctrl, value);
   state?.midiOutput?.send([176, ctrl, value]);
 };
 

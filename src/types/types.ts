@@ -21,15 +21,11 @@ interface NUXMidiControllerState {
   deviceName: string;
   deviceVersion: string;
   currentPresetData: Partial<Preset>;
-  selectedEffectConfig: EffectConfig.Effect | undefined;
   selectedEffectOption: EffectOption;
   midiOutput: Output | null;
   midiInput: Input | null;
   offByte: string;
-  category: EffectCategory;
   active: boolean;
-  index: number | undefined; // defines order
-  knobs?: Knob[];
 }
 
 interface BaseEffectOption {
