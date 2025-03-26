@@ -17,4 +17,4 @@ type EffectType = {
   [K in EffectCategory]: Effect;
 };
 
-export type { EffectType, Effect };
+export type { EffectType, Effect, EffectOption };

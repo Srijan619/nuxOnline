@@ -25,7 +25,8 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import type { EffectOption, Effect } from "../types/index.ts";
+import type { Nux } from "../types/index.ts";
+import { EffectCategory } from "../types/types.ts";
 
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
@@ -34,32 +35,18 @@ const { state, selectEffect, toggleEffect } = useNUXMidiController();
 const { currentPresetData } = state;
 
 //TODO: Check if this garbage ordering is at all working...NUX should define the order anyway
-const orderedKeys: (keyof Effect)[] = [
-  "wah",
-  "comp",
-  "efx",
-  "amp",
-  "eq",
-  "gate",
-  "mod",
-  "delay",
-  "reverb",
-  "ir",
-  "sr",
-  "vol",
-];
 
 const effectList = computed(() => {
-  return orderedKeys
-    .map((key) => currentPresetData.effects[key])
-    .filter((effect): effect is EffectOption => effect !== undefined);
+  return Object.values(EffectCategory)
+    .map((key) => currentPresetData.effects![key])
+    .filter((effect): effect is Nux.EffectOption => effect !== undefined);
 });
-const hoveredEffect = ref<EffectOption | null>(null);
+const hoveredEffect = ref<Nux.EffectOption | null>(null);
 
 // Hover timer map
 const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
-const startHoverTimer = (effect: EffectOption) => {
+const startHoverTimer = (effect: Nux.EffectOption) => {
   if (!effect.id) return;
   if (hoverTimers.value.has(effect.id)) {
     clearTimeout(hoverTimers.value.get(effect.id)!);
@@ -78,11 +65,12 @@ const clearHoverTimer = () => {
   hoverTimers.value.forEach((timer) => clearTimeout(timer));
   hoverTimers.value.clear();
 };
-const showEffectOptions = (effect: EffectOption) => {
+
+const showEffectOptions = (effect: Nux.EffectOption) => {
   selectEffect(effect);
 };
 
-const toggleEffectSelection = (effect: EffectOption, index: number) => {
+const toggleEffectSelection = (effect: Nux.EffectOption, index: number) => {
   toggleEffect(effect, index);
 };
 </script>

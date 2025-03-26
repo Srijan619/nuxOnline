@@ -2,16 +2,14 @@
   <div class="dropdown">
     <ul>
       <li
-        v-for="option in effectOptions"
+        v-for="option in selectedEffectConfig?.options"
         :key="option.id"
         @click="selectOption(option)"
         ref="listItems"
         :data-option-id="option.id"
         :style="{
           color:
-            option.id === selectedEffect.id
-              ? getMatchingEffectColor(selectedEffect)
-              : '',
+            option.id === selectedEffectOption.id ? option.dominantColor : '',
         }"
       >
         {{ option.title }}
@@ -21,43 +19,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, computed } from "vue";
-import type { EffectOption } from "../types/index.ts";
-import { getMatchingEffectColor } from "../utils/effectHelper.ts";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import effectsMapping from "../effects";
+import { ref, watch, nextTick } from "vue";
+import type { EffectConfig, Nux } from "../types/index.ts";
+
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
+
+const { state, selectEffectOption } = useNUXMidiController();
+const { selectedEffectConfig, selectedEffectOption } = state;
 
 const listItems = ref<HTMLElement[]>([]);
-const selectedEffect = ref({});
 
-const effectOptions = computed(() => {
-  if (!selectedEffect.value) return [];
-  return effectsMapping?.effects[selectedEffect.value.category]?.options || [];
-});
+const selectOption = (option: EffectConfig.EffectOption) => {
+  const effectOption = {
+    ...option,
+    category: selectedEffectOption?.category,
+  } as Nux.EffectOption; //TODO: Fix this soft casting later...
 
-const selectOption = (option: EffectOption) => {
-  nuxMidiController.value?.selectEffectOption(
-    { ...option, category: selectedEffect?.value.category },
-    selectedEffect?.value.index,
-  );
+  selectEffectOption(effectOption, selectedEffectOption?.index);
 };
 
 watch(
-  () => nuxMidiController.value?.selectedEffect,
+  () => selectedEffectOption,
   async (newVal) => {
     if (newVal) {
-      selectedEffect.value = newVal;
-      await nextTick();
-      scrollToSelectedEffect();
-    }
-  },
-);
-
-watch(
-  () => nuxMidiController.value?.selectedEffectOption,
-  async (newVal) => {
-    if (newVal) {
-      selectedEffect.value = newVal;
       await nextTick();
       scrollToSelectedEffect();
     }
@@ -66,7 +51,7 @@ watch(
 
 const scrollToSelectedEffect = () => {
   const selectedElement = listItems.value.find(
-    (el) => el.dataset.optionId === selectedEffect.value.id,
+    (el) => el.dataset.optionId === selectedEffectOption?.id,
   );
   if (selectedElement) {
     selectedElement.scrollIntoView({

@@ -1,7 +1,7 @@
 import { Output, Input } from "webmidi";
 import type { EffectConfig } from ".";
 
-enum EffectCategory {
+export enum EffectCategory {
   Wah = "wah",
   Comp = "comp",
   Efx = "efx",
@@ -89,7 +89,6 @@ interface KnobsConfig {
 
 export type {
   Effect,
-  EffectCategory,
   Scene,
   Preset,
   SysExResponseData,
