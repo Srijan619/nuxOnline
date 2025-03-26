@@ -31,7 +31,7 @@ import { EffectCategory } from "../types/types.ts";
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-const { state, selectEffect, toggleEffect } = useNUXMidiController();
+const { state, selectEffectOption, toggleEffect } = useNUXMidiController();
 
 //TODO: Check if this garbage ordering is at all working...NUX should define the order anyway
 
@@ -67,7 +67,7 @@ const clearHoverTimer = () => {
 };
 
 const showEffectOptions = (effect: Nux.EffectOption) => {
-  selectEffect(effect);
+  selectEffectOption(effect);
 };
 
 const toggleEffectSelection = (effect: Nux.EffectOption, index: number) => {

@@ -37,6 +37,8 @@ interface BaseEffectOption {
   title: string;
   onByte: string;
   offByte: string;
+  options: EffectConfig.EffectOption[];
+  categoryColor?: string;
   knobs?: Knob[]; //FIXME: This should be mandatory..as all mappings are not done yet so marked it as optional..
 }
 

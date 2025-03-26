@@ -1,15 +1,17 @@
 <template>
-  <div class="dropdown">
+  <div class="dropdown" v-if="state.selectedEffectOption.options">
     <ul>
       <li
-        v-for="option in selectedEffectConfig?.options"
+        v-for="option in state.selectedEffectOption?.options"
         :key="option.id"
         @click="selectOption(option)"
         ref="listItems"
         :data-option-id="option.id"
         :style="{
           color:
-            option.id === selectedEffectOption.id ? option.dominantColor : '',
+            option.id === state.selectedEffectOption.id
+              ? option.dominantColor
+              : '',
         }"
       >
         {{ option.title }}
@@ -25,22 +27,21 @@ import type { EffectConfig, Nux } from "../types/index.ts";
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-const { state, selectEffectOption } = useNUXMidiController();
-const { selectedEffectConfig, selectedEffectOption } = state;
+const { state, toggleEffect } = useNUXMidiController();
 
 const listItems = ref<HTMLElement[]>([]);
 
 const selectOption = (option: EffectConfig.EffectOption) => {
   const effectOption = {
     ...option,
-    category: selectedEffectOption?.category,
+    category: state.selectedEffectOption?.category,
   } as Nux.EffectOption; //TODO: Fix this soft casting later...
 
-  selectEffectOption(effectOption, selectedEffectOption?.index);
+  toggleEffect(effectOption, state.selectedEffectOption?.index || 0);
 };
 
 watch(
-  () => selectedEffectOption,
+  () => state.selectedEffectOption,
   async (newVal) => {
     if (newVal) {
       await nextTick();
@@ -51,7 +52,7 @@ watch(
 
 const scrollToSelectedEffect = () => {
   const selectedElement = listItems.value.find(
-    (el) => el.dataset.optionId === selectedEffectOption?.id,
+    (el) => el.dataset.optionId === state.selectedEffectOption?.id,
   );
   if (selectedElement) {
     selectedElement.scrollIntoView({

@@ -33,7 +33,7 @@ const { state } = useNUXMidiController();
         </div>
       </div>
       <div class="effectOptionsScroller">
-        <EffectListDropdown v-if="state.selectedEffectConfig" />
+        <EffectListDropdown />
       </div>
     </div>
   </div>

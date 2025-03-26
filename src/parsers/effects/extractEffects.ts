@@ -20,7 +20,7 @@ function extractEffects(response: Uint8Array): Nux.Effect {
       (data) => data.onByte === byteValue || data.offByte === byteValue,
     );
 
-    if (!effect) {
+    if (!effect || !effectCategory.options) {
       return {
         id: undefined,
         title: "Unknown Effect",
@@ -30,6 +30,7 @@ function extractEffects(response: Uint8Array): Nux.Effect {
         active: false,
         index: undefined,
         knobs: [],
+        options: [],
       };
     }
 
@@ -47,6 +48,7 @@ function extractEffects(response: Uint8Array): Nux.Effect {
       active: effectActiveStatus,
       index: categoryIndex,
       knobs: [],
+      options: effectCategory?.options,
     };
   };
 

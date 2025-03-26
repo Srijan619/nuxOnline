@@ -33,7 +33,7 @@ const updateValue = (controlPane: number, value: number) => {
       </PresetChange>
     </div>
     <EffectChain />
-    <!-- <KnobContainer :updateValue="updateValue" /> -->
+    <KnobContainer :updateValue="updateValue" />
     <!-- <EffectsGrid /> -->
   </div>
 </template>
