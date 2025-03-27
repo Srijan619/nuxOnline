@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import KnobControl from "./KnobControl.vue";
 import TwoWaySwitch from "./TwoWaySwitch.vue";
 
@@ -8,18 +8,30 @@ import { useNUXMidiController } from "../composables/useNUXMidiController";
 
 const { state, sendRawSysEx } = useNUXMidiController();
 
-const selectedEffectColor = ref("red");
+const selectedEffectColor = ref(state.selectedEffectOption.dominantColor);
 
 const updateValue = (controlPane: number, value: number) => {
   setTimeout(() => (sendRawSysEx(controlPane, value), 10));
 };
+
+watch(
+  () => state.selectedEffectOption.dominantColor,
+  (newValue) => {
+    if (newValue) {
+      selectedEffectColor.value = newValue;
+    }
+  },
+);
 
 const knobs = computed(() => state.selectedEffectOption?.knobs || []);
 </script>
 
 <template>
   <div class="knob-container">
-    <template v-for="knob in knobs" :key="`${knob.id}-${knob.currentValue}`">
+    <template
+      v-for="knob in knobs"
+      :key="`${knob.id}-${knob.currentValue}-${selectedEffectColor}`"
+    >
       <TwoWaySwitch
         v-if="knob && knob.range[0] === 0 && knob.range[1] === 1"
         :id="knob.id"
