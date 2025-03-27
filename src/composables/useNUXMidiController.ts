@@ -74,9 +74,9 @@ const setupListeners = () => {
   if (!state.midiInput || isListenersAttached) return;
   isListenersAttached = true;
 
-  state.midiInput.addListener("programchange", (e: MessageEvent) => {
-    console.log("programchanged..", e);
-    //handleSysExResponse(e);
+  state.midiInput.addListener("midimessage", (e: MessageEvent) => {
+    console.log("Raw midi message..", e);
+    handleSysExResponse(e);
   });
   state.midiInput.addListener("sysex", (event: MessageEvent) => {
     handleSysExResponse(event);
