@@ -3,10 +3,7 @@ import { WebMidi } from "webmidi";
 import type { MessageEvent } from "webmidi";
 
 // 🎸 NUX MG-30 SysEx Commands & Responses
-import {
-  CURRENT_PRESET_DATA_COMMAND,
-  SysExRequest,
-} from "../utils/NUXSysExCommands";
+import { PRESET_DATA_COMMAND, SysExRequest } from "../utils/NUXSysExCommands";
 import * as Parser from "../parsers";
 import { hexToBytes, hexIndex } from "../utils/bytesHelper";
 import {
@@ -28,8 +25,9 @@ const state = reactive(<Nux.NUXMidiControllerState>{
   selectedEffectOption: {} as Nux.EffectOption,
   midiOutput: null,
   midiInput: null,
-  offByte: "",
   active: false,
+  isFetchingPresets: false,
+  presets: [],
 });
 
 const isInitialized = ref(false);
@@ -62,11 +60,28 @@ const initializeController = async () => {
 
     setupListeners();
     getDeviceVersion();
-    getCurrentPresetBasicData();
-    getCurrentPresetDetailData(0);
+    getAllPresets();
+
+    window["nux"] = state;
   } catch (error) {
     console.error("❌ MIDI Initialization Error:", error);
   }
+};
+
+const getAllPresets = (i = 0) => {
+  // Start fetching presets
+  if (i === 0) state.isFetchingPresets = true;
+
+  if (i > 127) {
+    // Stop fetching when reaching preset 128 and set fetching state to false
+    state.isFetchingPresets = false;
+    getCurrentPresetBasicData();
+    getCurrentPresetDetailData(0); //FIXME: This needs to match to the one that NUX actual is showing to..
+    return;
+  }
+  getCurrentPresetDetailData(i);
+
+  setTimeout(() => getAllPresets(i + 1), 1);
 };
 
 // Set up MIDI message listeners
@@ -106,10 +121,7 @@ const handleSysExResponse = (event: MessageEvent) => {
         Parser.Presets.extractCurrentPresetBasicData(data);
       break;
     case "CURRENT_PRESET_DETAIL":
-      state.currentPresetData = {
-        ...state.currentPresetData,
-        ...Parser.Presets.extractCurrentPresetDetailData(data),
-      };
+      updatePresetData(data);
       break;
     case "PRESET_CHANGED":
       const nextPresetNumber = data[1];
@@ -139,7 +151,7 @@ const getCurrentPresetBasicData = () => {
 
 // Get current preset detail data
 const getCurrentPresetDetailData = (index: number) => {
-  const message = hexToBytes(CURRENT_PRESET_DATA_COMMAND(index));
+  const message = hexToBytes(PRESET_DATA_COMMAND(index));
   state.midiOutput?.sendSysex(0x43, Array.from(message));
 };
 
@@ -255,6 +267,27 @@ const updateKnobValue = (ctrl: number, value: number) => {
       },
     };
   }
+};
+
+const updatePresetData = (data: Uint8Array<ArrayBufferLike>) => {
+  const newPreset = {
+    ...state.currentPresetData,
+    ...Parser.Presets.extractCurrentPresetDetailData(data),
+  };
+
+  const existingIndex = state.presets.findIndex(
+    (p: Nux.Preset) => p.presetNumber === newPreset.presetNumber,
+  );
+
+  if (existingIndex !== -1) {
+    // Update existing preset
+    state.presets[existingIndex] = newPreset;
+  } else {
+    // Add new preset
+    state.presets.push(newPreset);
+  }
+
+  state.currentPresetData = newPreset;
 };
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..

@@ -13,6 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   /* Amp */
+  --amp-secondary-border: #353600;
   --amp-border: #1f1f1f;
   --amp-on: #950c0c;
   --amp-off: #1f1f1f;
@@ -95,9 +96,6 @@ button:focus-visible {
 
 #app {
   width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
 }
 
 @media (prefers-color-scheme: light) {

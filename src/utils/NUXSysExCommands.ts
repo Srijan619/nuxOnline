@@ -1,6 +1,6 @@
 import { hexIndex } from "./bytesHelper";
 
-const CURRENT_PRESET_DATA_COMMAND = (index: number) => {
+const PRESET_DATA_COMMAND = (index: number) => {
   return `58 70 0B 00 ${hexIndex(index)} 00 00 00 00 00 00 00`;
 };
 
@@ -24,7 +24,7 @@ const SysExResponsePattern = {
 };
 
 export {
-  CURRENT_PRESET_DATA_COMMAND,
+  PRESET_DATA_COMMAND,
   SAVE_CURRENT_PRESET_DATA_COMMAND,
   SysExRequest,
   SysExResponsePattern,

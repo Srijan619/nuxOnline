@@ -24,8 +24,9 @@ interface NUXMidiControllerState {
   selectedEffectOption: EffectOption;
   midiOutput: Output | null;
   midiInput: Input | null;
-  offByte: string;
   active: boolean;
+  presets: Preset[];
+  isFetchingPresets: boolean;
 }
 
 interface BaseEffectOption {

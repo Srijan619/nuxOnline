@@ -84,7 +84,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption, index: number) => {
 .effect-chain {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  margin-bottom: 1rem;
   gap: 1.5rem;
   scroll-behavior: smooth;
 }
@@ -260,7 +260,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption, index: number) => {
 
   .effect-chain {
     width: max-content;
-    padding: 0.5rem;
     gap: 1rem;
   }
 
@@ -289,7 +288,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption, index: number) => {
     flex-wrap: nowrap;
     width: max-content;
     justify-content: flex-start;
-    padding: 1rem;
     gap: 1.5rem;
   }
 }
