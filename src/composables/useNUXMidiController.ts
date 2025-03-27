@@ -223,6 +223,7 @@ const updateEffectState = (
   if (!effectCategory) return;
 
   state.selectedEffectOption = {
+    ...state.selectedEffectOption,
     ...effect,
     options: effectCategory.options ?? [],
   };

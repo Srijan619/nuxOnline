@@ -45,7 +45,8 @@ const getEffectStartOnOffByte = (
     (opt: any) => opt.id === id,
   );
 
-  if (!effectIndex) return { startOnByte: "", startOffByte: "" };
+  if (effectIndex == null || effectIndex === -1)
+    return { startOnByte: "", startOffByte: "" };
 
   const matchedEffect = effectCategory?.options?.find(
     (opt: any) => opt.id === id,
