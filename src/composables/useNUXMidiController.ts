@@ -74,9 +74,9 @@ const setupListeners = () => {
   if (!state.midiInput || isListenersAttached) return;
   isListenersAttached = true;
 
-  state.midiInput.addListener("midimessage", (e: MessageEvent) => {
-    console.log("Raw MIDI message:", e);
-    handleSysExResponse(e);
+  state.midiInput.addListener("programchange", (e: MessageEvent) => {
+    console.log("programchanged..", e);
+    //handleSysExResponse(e);
   });
   state.midiInput.addListener("sysex", (event: MessageEvent) => {
     handleSysExResponse(event);
@@ -142,8 +142,7 @@ const getCurrentPresetDetailData = (index: number) => {
 
 // Change preset
 const changePreset = (index: number) => {
-  const message = [0xc0, parseInt(hexIndex(index), 16)];
-  state.midiOutput?.send(message);
+  state.midiOutput?.sendProgramChange(index);
 };
 
 // Save the current preset
