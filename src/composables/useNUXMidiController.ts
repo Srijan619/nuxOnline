@@ -1,4 +1,4 @@
-import { reactive, onMounted, ref } from "vue";
+import { reactive, ref } from "vue";
 import { WebMidi } from "webmidi";
 import type { MessageEvent } from "webmidi";
 
@@ -75,7 +75,7 @@ const setupListeners = () => {
   isListenersAttached = true;
 
   state.midiInput.addListener("midimessage", (e: MessageEvent) => {
-    console.log("Raw midi message..", e);
+    console.log("midimessage..", e);
     handleSysExResponse(e);
   });
   state.midiInput.addListener("sysex", (event: MessageEvent) => {
@@ -118,7 +118,10 @@ const handleSysExResponse = (event: MessageEvent) => {
       break;
 
     case "EFFECT_CHANGED":
-      updateKnobValue(data[1], data[2]);
+      const ctrl = data[1];
+      const value = data[2];
+      if (ctrl === 78) return; // for some reason, some control change for effect provides this..does not match any of current effect change mapping
+      updateKnobValue(ctrl, value);
       break;
   }
 };
@@ -142,7 +145,9 @@ const getCurrentPresetDetailData = (index: number) => {
 
 // Change preset
 const changePreset = (index: number) => {
-  state.midiOutput?.sendProgramChange(index);
+  const message = [0xc0, parseInt(hexIndex(index), 16)];
+  state.midiOutput!.send(message);
+  // state.midiOutput?.sendProgramChange(index);
 };
 
 // Save the current preset
