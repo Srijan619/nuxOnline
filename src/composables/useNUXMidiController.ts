@@ -112,7 +112,7 @@ const handleSysExResponse = (event: MessageEvent) => {
       };
       break;
     case "PRESET_CHANGED":
-      const nextPresetNumber = state.currentPresetData.presetNumber || 0 + 1;
+      const nextPresetNumber = data[1];
       getCurrentPresetBasicData();
       getCurrentPresetDetailData(nextPresetNumber);
       break;
