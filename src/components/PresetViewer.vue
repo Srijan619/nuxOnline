@@ -14,12 +14,7 @@ const { state } = useNUXMidiController();
 </script>
 
 <template>
-  <div v-if="state.isFetchingPresets" class="loading-container">
-    <div class="spinner"></div>
-    <p>Loading presets...</p>
-  </div>
-
-  <div class="main-container" v-else>
+  <div class="main-container">
     <div class="preset-card">
       <PresetDetail />
       <!-- <Save /> -->
@@ -55,31 +50,5 @@ const { state } = useNUXMidiController();
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

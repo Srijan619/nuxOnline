@@ -98,6 +98,10 @@ button:focus-visible {
   width: 100%;
 }
 
+body {
+  overflow: hidden;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

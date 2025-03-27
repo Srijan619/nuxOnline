@@ -5,7 +5,10 @@
         v-for="preset in state.presets"
         :key="preset.presetNumber"
         class="preset-item"
-        :class="{ active: selectedPreset === preset }"
+        :class="{
+          active:
+            state.currentPresetData?.presetNumber === preset?.presetNumber,
+        }"
         @click="selectPreset(preset)"
         tabindex="0"
       >
@@ -18,17 +21,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 import type { Nux } from "../types";
 
-const { state } = useNUXMidiController();
-
-const selectedPreset = ref(state.presets[0]);
+const { state, changePreset } = useNUXMidiController();
 
 const selectPreset = (preset: Nux.Preset) => {
-  selectedPreset.value = preset;
+  changePreset(preset.presetNumber);
 };
 </script>
 
@@ -63,17 +64,8 @@ const selectPreset = (preset: Nux.Preset) => {
 }
 
 .preset-item.active {
-  background-color: var(--retro-glow);
-  color: var(--retro-text-primary);
-  box-shadow: 0 0 10px var(--retro-glow);
-  transform: scale(1.05);
-}
-
-.preset-item:focus {
-  outline: none;
-  background-color: var(--retro-glow);
-  color: var(--retro-text-primary);
-  box-shadow: 0 0 15px var(--retro-glow);
+  border-color: var(--hover-border-color, #ff6347);
+  transform: translateY(-2px);
 }
 
 .preset-button {
@@ -88,9 +80,13 @@ const selectPreset = (preset: Nux.Preset) => {
   cursor: pointer;
 }
 
+.preset-button:focus {
+  outline: none;
+}
+
 /* Additional Styling */
 .preset-list {
-  max-height: 90vh;
+  max-height: 99vh;
   overflow-y: auto;
 }
 </style>
