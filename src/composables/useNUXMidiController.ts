@@ -145,9 +145,9 @@ const getCurrentPresetDetailData = (index: number) => {
 
 // Change preset
 const changePreset = (index: number) => {
-  const message = [0xc0, parseInt(hexIndex(index), 16)];
-  state.midiOutput!.send(message);
-  // state.midiOutput?.sendProgramChange(index);
+  state.midiOutput?.sendProgramChange(index);
+  getCurrentPresetBasicData();
+  getCurrentPresetDetailData(index);
 };
 
 // Save the current preset

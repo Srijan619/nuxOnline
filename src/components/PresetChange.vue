@@ -15,9 +15,11 @@ const emit = defineEmits<{
 
 const changePresetLocally = (direction: "up" | "down") => {
   if (direction === "up") {
-    presetNumber.value = Math.min(presetNumber.value + 1, MAX_PRESET);
+    presetNumber.value =
+      presetNumber.value === MAX_PRESET ? MIN_PRESET : presetNumber.value + 1;
   } else {
-    presetNumber.value = Math.max(presetNumber.value - 1, MIN_PRESET);
+    presetNumber.value =
+      presetNumber.value === MIN_PRESET ? MAX_PRESET : presetNumber.value - 1;
   }
   emit("change-preset", presetNumber.value);
 };
