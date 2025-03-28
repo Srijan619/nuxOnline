@@ -1,3 +1,4 @@
+import type { Nux } from "../types";
 import { hexIndex } from "./bytesHelper";
 
 const PRESET_DATA_COMMAND = (index: number) => {
@@ -7,6 +8,17 @@ const PRESET_DATA_COMMAND = (index: number) => {
 const SAVE_CURRENT_PRESET_DATA_COMMAND = (index: number) => {
   // TODO: Save is abit tricky...we need to form whole 218 bytes with correct effect states and etc ...then send that to device
   return `58 70 7E 02 00 00 ${hexIndex(index)} 00 00 00 00 00`;
+};
+
+const CURRENT_PRESET_EFFECT_ORDER_COMMAND = (options: Nux.EffectOption[]) => {
+  let command = [240, 67, 88, 112, 126, 2, 13];
+  options.map((option) => {
+    if (!option.index) return undefined;
+    command.push(option.index);
+  });
+  command.push(0);
+  command.push(247);
+  return command;
 };
 
 //TODO: Commands needs to be hooked in to mock implementation somewhere
@@ -27,6 +39,7 @@ const SysExResponsePattern = {
 export {
   PRESET_DATA_COMMAND,
   SAVE_CURRENT_PRESET_DATA_COMMAND,
+  CURRENT_PRESET_EFFECT_ORDER_COMMAND,
   SysExRequest,
   SysExResponsePattern,
 };

@@ -1,49 +1,58 @@
 <template>
-  <div class="effect-chain-wrapper">
-    <div class="effect-chain">
-      <div
-        v-for="(effect, index) in effectList"
-        :key="effect.id"
-        class="effect-box"
-        :class="[
-          effect.active ? 'active' : 'inactive',
-          effect.category,
-          hoveredEffect?.id === effect.id ? 'effectHovered' : '',
-        ]"
-        @click="toggleEffectSelection(effect)"
-        @mouseover="startHoverTimer(effect)"
-        @mouseleave="clearHoverTimer"
-      >
-        <div class="box-content">
-          <h3>{{ effect.title }}</h3>
+  <div class="effect-chain">
+    <DragDropList v-model="effectList">
+      <template #default="{ item, index }">
+        <div
+          class="effect-box"
+          :class="[
+            item.active ? 'active' : 'inactive',
+            item.category,
+            hoveredEffect?.id === item.id ? 'effectHovered' : '',
+          ]"
+          @click="toggleEffectSelection(item)"
+          @mouseover="startHoverTimer(item)"
+          @mouseleave="clearHoverTimer"
+        >
+          <div class="box-content">
+            <h3>{{ item.title }}</h3>
+          </div>
+          <div v-if="index < effectList.length - 1" class="connector"></div>
         </div>
-        <div v-if="index < effectList?.length - 1" class="connector"></div>
-      </div>
-    </div>
+      </template>
+    </DragDropList>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import type { Nux } from "../types/index.ts";
+import DragDropList from "./reusables/DragDropList.vue";
 
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 import { getEffectIndexByCategory } from "../parsers/effects/extractEffectsOrder.ts";
 
-const { state, selectEffectOption, toggleEffect } = useNUXMidiController();
+const { state, selectEffectOption, toggleEffect, updateEffectOrder } =
+  useNUXMidiController();
 
-//TODO: Check if this garbage ordering is at all working...NUX should define the order anyway
-
-const effectList = computed(() => {
-  if (!state.currentPresetData?.effects) return [];
-  return (
-    state.currentPresetData?.effectsOrder
-      ?.map((key) => state.currentPresetData?.effects![key])
-      .filter((effect): effect is Nux.EffectOption => effect !== undefined) ||
-    []
-  );
+const effectList = computed({
+  get: () => {
+    if (!state.currentPresetData?.effects) return [];
+    return (
+      state.currentPresetData?.effectsOrder
+        ?.map((key) => state.currentPresetData?.effects![key])
+        .filter((effect): effect is Nux.EffectOption => effect !== undefined) ||
+      []
+    );
+  },
+  set: (newList: Nux.EffectOption[]) => {
+    if (!state.currentPresetData) return;
+    console.log("Request NUX to update effect order now...", newList);
+    updateEffectOrder(newList);
+    //state.currentPresetData.effectsOrder = newList.map(effect => effect.id);
+  },
 });
+
 const hoveredEffect = ref<Nux.EffectOption | null>(null);
 
 // Hover timer map

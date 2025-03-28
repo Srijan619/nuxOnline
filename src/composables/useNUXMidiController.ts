@@ -3,7 +3,11 @@ import { WebMidi } from "webmidi";
 import type { MessageEvent } from "webmidi";
 
 // 🎸 NUX MG-30 SysEx Commands & Responses
-import { PRESET_DATA_COMMAND, SysExRequest } from "../utils/NUXSysExCommands";
+import {
+  CURRENT_PRESET_EFFECT_ORDER_COMMAND,
+  PRESET_DATA_COMMAND,
+  SysExRequest,
+} from "../utils/NUXSysExCommands";
 import * as Parser from "../parsers";
 import { hexToBytes, hexIndex } from "../utils/bytesHelper";
 import {
@@ -298,6 +302,10 @@ const updatePresetData = (data: Uint8Array<ArrayBufferLike>) => {
   state.currentPresetData = newPreset;
 };
 
+const updateEffectOrder = (option: Nux.EffectOption[]) => {
+  state.midiOutput?.send(CURRENT_PRESET_EFFECT_ORDER_COMMAND(option));
+};
+
 // TODO: webmidi api says not to use this directly, so lets think about that later..
 const sendRawSysEx = (ctrl: number, value: number) => {
   console.log("Sending raw sysex..", ctrl, value);
@@ -313,5 +321,6 @@ export const useNUXMidiController = () => {
     selectEffectOption,
     toggleEffect,
     sendRawSysEx,
+    updateEffectOrder,
   };
 };
