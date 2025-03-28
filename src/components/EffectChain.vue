@@ -10,14 +10,14 @@
           effect.category,
           hoveredEffect?.id === effect.id ? 'effectHovered' : '',
         ]"
-        @click="toggleEffectSelection(effect, index)"
+        @click="toggleEffectSelection(effect)"
         @mouseover="startHoverTimer(effect)"
         @mouseleave="clearHoverTimer"
       >
         <div class="box-content">
           <h3>{{ effect.title }}</h3>
         </div>
-        <div v-if="index < effectList.length - 1" class="connector"></div>
+        <div v-if="index < effectList?.length - 1" class="connector"></div>
       </div>
     </div>
   </div>
@@ -26,10 +26,14 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import type { Nux } from "../types/index.ts";
-import { EffectCategory } from "../types/types.ts";
 
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
+import { EffectCategory } from "../types/types.ts";
+import {
+  effectsOrderMapping,
+  getEffectIndexByCategory,
+} from "../parsers/effects/extractEffectsOrder.ts";
 
 const { state, selectEffectOption, toggleEffect } = useNUXMidiController();
 
@@ -37,9 +41,12 @@ const { state, selectEffectOption, toggleEffect } = useNUXMidiController();
 
 const effectList = computed(() => {
   if (!state.currentPresetData?.effects) return [];
-  return state.currentPresetData?.effectsOrder
-    ?.map((key) => state.currentPresetData?.effects![key])
-    .filter((effect): effect is Nux.EffectOption => effect !== undefined);
+  return (
+    state.currentPresetData?.effectsOrder
+      ?.map((key) => state.currentPresetData?.effects![key])
+      .filter((effect): effect is Nux.EffectOption => effect !== undefined) ||
+    []
+  );
 });
 const hoveredEffect = ref<Nux.EffectOption | null>(null);
 
@@ -70,7 +77,10 @@ const showEffectOptions = (effect: Nux.EffectOption) => {
   selectEffectOption(effect);
 };
 
-const toggleEffectSelection = (effect: Nux.EffectOption, index: number) => {
+const toggleEffectSelection = (effect: Nux.EffectOption) => {
+  if (!effect.category) return;
+  const index = getEffectIndexByCategory(effect.category);
+  if (!index) return;
   toggleEffect(effect, index);
 };
 </script>
