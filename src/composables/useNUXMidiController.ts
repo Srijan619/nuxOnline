@@ -75,8 +75,7 @@ const getAllPresets = (i = 0) => {
   if (i > 127) {
     // Stop fetching when reaching preset 128 and set fetching state to false
     state.isFetchingPresets = false;
-    getCurrentPresetBasicData();
-    getCurrentPresetDetailData(0); //FIXME: This needs to match to the one that NUX actual is showing to..
+    getPresetData(0); //FIXME: This needs to match to the one that NUX actual is showing to..
     return;
   }
   getCurrentPresetDetailData(i);
@@ -115,7 +114,6 @@ const handleSysExResponse = (event: MessageEvent) => {
       state.deviceVersion =
         Parser.Device.extractDeviceVersion(data)?.version || "Unknown";
       break;
-
     case "CURRENT_PRESET_BASIC":
       state.currentPresetData =
         Parser.Presets.extractCurrentPresetBasicData(data);
@@ -125,15 +123,17 @@ const handleSysExResponse = (event: MessageEvent) => {
       break;
     case "PRESET_CHANGED":
       const nextPresetNumber = data[1];
-      getCurrentPresetBasicData();
-      getCurrentPresetDetailData(nextPresetNumber);
+      getPresetData(nextPresetNumber);
       break;
-
     case "EFFECT_CHANGED":
       const ctrl = data[1];
       const value = data[2];
       if (ctrl === 78) return; // for some reason, some control change for effect provides this..does not match any of current effect change mapping
       updateKnobValue(ctrl, value);
+      break;
+    case "EFFECT_ORDER_CHANGED":
+      console.log("Effect order changed..refetching preset data..");
+      //getPresetData();
       break;
   }
 };
@@ -141,6 +141,14 @@ const handleSysExResponse = (event: MessageEvent) => {
 const getDeviceVersion = () => {
   const message = hexToBytes(SysExRequest.DEVICE_VERSION);
   state.midiOutput?.sendSysex(0x43, Array.from(message));
+};
+
+const getPresetData = (
+  index: number | undefined = state.currentPresetData?.presetNumber,
+) => {
+  if (!index) return;
+  getCurrentPresetBasicData();
+  getCurrentPresetDetailData(index);
 };
 
 // Get current preset basic data
