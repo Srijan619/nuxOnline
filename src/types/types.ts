@@ -60,7 +60,7 @@ interface Preset {
   presetNumber: number;
   tempo: number;
   parallel: number;
-  effectOrder: Uint8Array;
+  effectsOrder: EffectCategory[];
   name: string;
   scene: Scene;
   activeSceneNumber?: number;

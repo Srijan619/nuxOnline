@@ -2,6 +2,7 @@
 import type { SysExResponseData, Preset } from "../../types";
 // 🛠️ Control & Data Processing Helpers
 import * as Parser from "../../parsers";
+import { extractEffectsOrder } from "../effects/extractEffectsOrder";
 
 // Extract basically only active preset number and active preset scene
 function extractCurrentPresetBasicData(response: Uint8Array): Partial<Preset> {
@@ -22,7 +23,7 @@ function extractCurrentPresetDetailData(
     presetNumber: response[6],
     tempo: response[143] * 64 + response[144],
     parallel: response[146],
-    effectOrder: response.slice(147, 165),
+    effectsOrder: extractEffectsOrder(response),
     name: Parser.Presets.extractPresetName(response.slice(165, 189)),
     scene: {
       scene1: response.slice(208, 211),

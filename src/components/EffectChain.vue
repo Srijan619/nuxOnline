@@ -37,8 +37,8 @@ const { state, selectEffectOption, toggleEffect } = useNUXMidiController();
 
 const effectList = computed(() => {
   if (!state.currentPresetData?.effects) return [];
-  return Object.values(EffectCategory)
-    .map((key) => state.currentPresetData?.effects![key])
+  return state.currentPresetData?.effectsOrder
+    ?.map((key) => state.currentPresetData?.effects![key])
     .filter((effect): effect is Nux.EffectOption => effect !== undefined);
 });
 const hoveredEffect = ref<Nux.EffectOption | null>(null);

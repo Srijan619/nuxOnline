@@ -16,7 +16,6 @@ import {
 // 📦 Types
 import { Nux } from "../types";
 import EFFECT_CONFIG from "../effects";
-import { getEffectOrder } from "../parsers/effects/extractEffectsOrder";
 
 const state = reactive(<Nux.NUXMidiControllerState>{
   isDeviceConnected: false,
@@ -122,7 +121,6 @@ const handleSysExResponse = (event: MessageEvent) => {
         Parser.Presets.extractCurrentPresetBasicData(data);
       break;
     case "CURRENT_PRESET_DETAIL":
-      console.log("Effect oder...", getEffectOrder(data));
       updatePresetData(data);
       break;
     case "PRESET_CHANGED":

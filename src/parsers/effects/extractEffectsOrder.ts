@@ -14,7 +14,7 @@ const effectsOrderMapping: Record<number, Nux.EffectCategory | string> = {
   10: Nux.EffectCategory.Sr,
   11: Nux.EffectCategory.Vol,
 };
-const getEffectOrder = (data: Uint8Array) => {
+const extractEffectsOrder = (data: Uint8Array) => {
   const slicedData = data.slice(147, 165);
   const effectsOrder = [];
 
@@ -40,4 +40,4 @@ const getEffectOrder = (data: Uint8Array) => {
   return effectsOrder;
 };
 
-export { getEffectOrder };
+export { extractEffectsOrder };
