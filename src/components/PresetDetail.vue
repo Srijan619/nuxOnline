@@ -25,7 +25,8 @@ const { state } = useNUXMidiController();
           <strong>Name:</strong> {{ state.currentPresetData.name || "Unknown" }}
         </div>
         <div>
-          <strong>Preset:</strong> {{ state.currentPresetData.presetNumber }}
+          <strong>Preset:</strong>
+          {{ state.currentPresetData.formattedPresetNumber }}
         </div>
         <div>
           <strong>Scene:</strong>

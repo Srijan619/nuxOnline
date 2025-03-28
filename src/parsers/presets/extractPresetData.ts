@@ -1,15 +1,19 @@
 // 📦 Types
-import type { SysExResponseData, Preset } from "../../types";
+import type { Nux } from "../../types";
 // 🛠️ Control & Data Processing Helpers
 import * as Parser from "../../parsers";
 import { extractEffectsOrder } from "../effects/extractEffectsOrder";
+import { formatPresetNumber } from "../../utils/presetNumberHelper";
 
 // Extract basically only active preset number and active preset scene
-function extractCurrentPresetBasicData(response: Uint8Array): Partial<Preset> {
+function extractCurrentPresetBasicData(
+  response: Uint8Array,
+): Partial<Nux.Preset> {
   const presetNumber = response[6];
   const presetScene = response[9];
   const preset = {
     presetNumber: presetNumber,
+    formattedPresetNumber: formatPresetNumber(presetNumber),
     activeSceneNumber: presetScene,
   };
 
@@ -18,9 +22,10 @@ function extractCurrentPresetBasicData(response: Uint8Array): Partial<Preset> {
 
 function extractCurrentPresetDetailData(
   response: Uint8Array,
-): SysExResponseData {
-  const data: SysExResponseData = {
+): Nux.SysExResponseData {
+  const data: Nux.SysExResponseData = {
     presetNumber: response[6],
+    formattedPresetNumber: formatPresetNumber(response[6]),
     tempo: response[143] * 64 + response[144],
     parallel: response[146],
     effectsOrder: extractEffectsOrder(response),

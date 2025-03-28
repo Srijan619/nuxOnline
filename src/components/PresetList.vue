@@ -5,16 +5,19 @@
         v-for="(preset, index) in state.presets"
         :key="preset.presetNumber"
         class="preset-item"
-        :class="{
-          active:
-            state.currentPresetData?.presetNumber === preset?.presetNumber,
-        }"
         @click="selectPreset(preset)"
         tabindex="0"
         ref="presetItems"
       >
-        <button class="preset-button">
-          {{ preset.name }}
+        <button
+          class="preset-button"
+          :class="{
+            active:
+              state.currentPresetData?.presetNumber === preset?.presetNumber,
+          }"
+        >
+          <span class="preset-number">{{ preset.formattedPresetNumber }}</span>
+          <span class="preset-name">{{ preset.name }}</span>
         </button>
       </li>
     </ul>
@@ -87,22 +90,11 @@ watch(
   color: var(--retro-text-primary);
 }
 
-.preset-item:hover {
-  color: var(--hover-border-color, #ff6347);
-  transform: translateY(-2px);
-}
-
-.preset-item.active {
-  color: var(--hover-border-color, #ff6347);
-  transform: translateY(-2px);
-}
-
 .preset-button {
   background: none;
   border: none;
   color: inherit;
   font-size: 1rem;
-  font-family: inherit;
   padding: 0;
   width: 100%;
   text-align: left;
@@ -111,5 +103,20 @@ watch(
 
 .preset-button:focus {
   outline: none;
+}
+
+.preset-button > *:hover,
+.preset-button.active > * {
+  color: var(--hover-border-color, #ff6347);
+}
+
+.preset-number {
+  color: #888;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  font-size: small;
+}
+.preset-name {
+  color: var(--retro-text-primary);
 }
 </style>

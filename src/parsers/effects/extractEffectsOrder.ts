@@ -1,6 +1,6 @@
 import { Nux } from "../../types";
 
-const effectsOrderMapping: Record<number, Nux.EffectCategory | string> = {
+const effectsOrderMapping: Record<number, Nux.EffectCategory> = {
   0: Nux.EffectCategory.Wah,
   1: Nux.EffectCategory.Comp,
   2: Nux.EffectCategory.Efx,
@@ -28,7 +28,7 @@ const getEffectIndexByCategory = (
 
 const extractEffectsOrder = (data: Uint8Array) => {
   const slicedData = data.slice(147, 165);
-  const effectsOrder: (Nux.EffectCategory | string)[] = [];
+  const effectsOrder: Nux.EffectCategory[] = [];
 
   for (let i = 0; i < slicedData.length; ) {
     if (i % 3 === 0) {

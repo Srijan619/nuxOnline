@@ -58,6 +58,7 @@ interface Scene {
 
 interface Preset {
   presetNumber: number;
+  formattedPresetNumber: string;
   tempo: number;
   parallel: number;
   effectsOrder: EffectCategory[];

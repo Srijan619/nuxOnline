@@ -26,7 +26,6 @@ onMounted(() => {
 
 <style scoped>
 .main-nux-container {
-  margin: 1rem;
   display: grid;
   grid-template-columns: 0.1fr 1fr;
   gap: 1rem;
