@@ -29,11 +29,7 @@ import type { Nux } from "../types/index.ts";
 
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
-import { EffectCategory } from "../types/types.ts";
-import {
-  effectsOrderMapping,
-  getEffectIndexByCategory,
-} from "../parsers/effects/extractEffectsOrder.ts";
+import { getEffectIndexByCategory } from "../parsers/effects/extractEffectsOrder.ts";
 
 const { state, selectEffectOption, toggleEffect } = useNUXMidiController();
 
