@@ -296,5 +296,14 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
     justify-content: flex-start;
     gap: 1.5rem;
   }
+
+  .effect-box {
+    width: 6rem;
+    height: 3rem;
+  }
+
+  .box-content h3 {
+    font-size: 0.8rem;
+  }
 }
 </style>
