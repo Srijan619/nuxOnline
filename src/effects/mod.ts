@@ -71,7 +71,7 @@ const PHASE_100_VARIANT: Nux.KnobEntry[] = [
 
 const HARMONIST_VARIANT: Nux.KnobEntry[] = [
   ["key", "KEY", [0, 11]], //TODO: this should be displayed with different component...
-  ["minor-major", "MIN/MAJ", [0, 1]],
+  ["minor-major", "", [0, 1]],
   ["harmony", "HARMO", [0, 9]], //TODO: same here..
   ["blend", "BLEND"],
 ];
