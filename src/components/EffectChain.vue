@@ -1,5 +1,5 @@
 <template>
-  <div class="effect-chain">
+  <div class="effect-chain-wrapper">
     <DragDropList v-model="effectList">
       <template #default="{ item, index }">
         <div
@@ -94,16 +94,12 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 .effect-chain-wrapper {
   width: 100%;
   scrollbar-width: none;
-}
-
-.effect-chain {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
   gap: 1.5rem;
   scroll-behavior: smooth;
 }
-
 .effect-box {
   position: relative;
   border-radius: 0.25rem;
@@ -271,11 +267,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
     height: 8px;
   }
 
-  .effect-chain {
-    width: max-content;
-    gap: 1rem;
-  }
-
   .effect-box {
     width: 6rem;
     height: 3rem;
@@ -295,13 +286,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   .effect-chain-wrapper {
     overflow-x: auto;
     max-width: 100%;
-  }
-
-  .effect-chain {
-    flex-wrap: nowrap;
-    width: max-content;
-    justify-content: flex-start;
-    gap: 1.5rem;
   }
 
   .effect-box {
