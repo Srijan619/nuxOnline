@@ -137,6 +137,8 @@ const handleSysExResponse = (event: MessageEvent) => {
       break;
     case "EFFECT_ORDER_CHANGED":
       console.log("Effect order changed..refetching preset data..");
+      //We need to do ourselves optimistic update as NUX does not actually save when effect order is changed, so getting latest data does not help
+      updateLocalEffectsAfterEffectOrderChanged();
       //getPresetData();
       break;
   }
@@ -304,6 +306,17 @@ const updatePresetData = (data: Uint8Array<ArrayBufferLike>) => {
 
 const updateEffectOrder = (option: Nux.EffectOption[]) => {
   state.midiOutput?.send(CURRENT_PRESET_EFFECT_ORDER_COMMAND(option));
+  updateLocalEffectsAfterEffectOrderChanged(option);
+};
+
+const updateLocalEffectsAfterEffectOrderChanged = (
+  option: Nux.EffectOption[],
+) => {
+  state.currentPresetData.effectsOrder = [];
+  option.forEach((option) => {
+    if (!state.currentPresetData.effectsOrder) return;
+    state.currentPresetData.effectsOrder.push(option.category);
+  });
 };
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..
