@@ -20,6 +20,7 @@ import {
 // 📦 Types
 import { Nux } from "../types";
 import EFFECT_CONFIG from "../effects";
+import { extractEffectsOrder } from "../parsers/effects/extractEffectsOrder";
 
 const state = reactive(<Nux.NUXMidiControllerState>{
   isDeviceConnected: false,
@@ -139,9 +140,12 @@ const handleSysExResponse = (event: MessageEvent) => {
       console.log(
         "Effect order changed signal received..refetching preset data..",
       );
+      requestUpdatedEffectsOrder();
       //We need to do ourselves optimistic update as NUX does not actually save when effect order is changed, so getting latest data does not help
       //getPresetData();
       break;
+    case "PRESET_DETAIL_AFTER_EFFECT_ORDER_CHANGE":
+      state.currentPresetData.effectsOrder = extractEffectsOrder(data);
   }
 };
 // Get the device version
@@ -318,6 +322,11 @@ const updateLocalEffectsAfterEffectOrderChanged = (
     if (!state.currentPresetData.effectsOrder) return;
     state.currentPresetData.effectsOrder.push(option.category);
   });
+};
+
+const requestUpdatedEffectsOrder = () => {
+  const message = hexToBytes(SysExRequest.REQUEST_UPDATED_EFFECT_ORDER_COMMAND);
+  state.midiOutput?.sendSysex(0x43, Array.from(message));
 };
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..

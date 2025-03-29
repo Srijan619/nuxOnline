@@ -29,7 +29,6 @@ const getEffectIndexByCategory = (
 const extractEffectsOrder = (data: Uint8Array) => {
   const slicedData = data.slice(147, 165);
   const effectsOrder: Nux.EffectCategory[] = [];
-
   console.log("Effect order..", slicedData);
   for (let i = 0; i < slicedData.length; ) {
     if (i % 3 === 0) {
