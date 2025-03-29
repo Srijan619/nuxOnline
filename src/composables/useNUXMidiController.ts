@@ -144,7 +144,7 @@ const handleSysExResponse = (event: MessageEvent) => {
       //We need to do ourselves optimistic update as NUX does not actually save when effect order is changed, so getting latest data does not help
       //getPresetData();
       break;
-    case "PRESET_DETAIL_AFTER_EFFECT_ORDER_CHANGE":
+    case "UPDATED_EFFECTS_ORDER":
       state.currentPresetData.effectsOrder = extractEffectsOrder(data);
   }
 };
