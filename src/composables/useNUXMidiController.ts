@@ -136,9 +136,10 @@ const handleSysExResponse = (event: MessageEvent) => {
       updateKnobValue(ctrl, value);
       break;
     case "EFFECT_ORDER_CHANGED":
-      console.log("Effect order changed..refetching preset data..");
+      console.log(
+        "Effect order changed signal received..refetching preset data..",
+      );
       //We need to do ourselves optimistic update as NUX does not actually save when effect order is changed, so getting latest data does not help
-      updateLocalEffectsAfterEffectOrderChanged();
       //getPresetData();
       break;
   }
@@ -305,8 +306,8 @@ const updatePresetData = (data: Uint8Array<ArrayBufferLike>) => {
 };
 
 const updateEffectOrder = (option: Nux.EffectOption[]) => {
-  state.midiOutput?.send(CURRENT_PRESET_EFFECT_ORDER_COMMAND(option));
   updateLocalEffectsAfterEffectOrderChanged(option);
+  state.midiOutput?.send(CURRENT_PRESET_EFFECT_ORDER_COMMAND(option));
 };
 
 const updateLocalEffectsAfterEffectOrderChanged = (
