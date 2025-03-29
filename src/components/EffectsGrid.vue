@@ -57,7 +57,7 @@ const selectOption = (option: EffectConfig.EffectOption) => {
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
   margin: 1rem;
-  max-height: 400px;
+  max-height: 10rem;
   overflow: scroll;
   scrollbar-width: none;
 }
