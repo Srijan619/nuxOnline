@@ -106,8 +106,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 
 .effect-box {
   position: relative;
-  width: 10rem;
-  height: 6rem;
   border-radius: 0.25rem;
   border: 2px solid var(--retro-border);
   display: flex;
@@ -307,7 +305,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   }
 
   .effect-box {
-    width: 8rem;
+    width: 10rem;
     height: 5rem;
   }
 
