@@ -181,6 +181,7 @@ const changePreset = (index: number) => {
   state.midiOutput?.sendProgramChange(index);
   getCurrentPresetBasicData();
   getCurrentPresetDetailData(index);
+  state.selectedEffectOption = {} as Nux.EffectOption;
 };
 
 // Save the current preset

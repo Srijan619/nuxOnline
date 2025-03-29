@@ -23,8 +23,8 @@ const { state } = useNUXMidiController();
       </PresetChange>
     </div>
     <EffectChain />
-    <!-- <KnobContainer /> -->
-    <!-- <EffectsGrid /> -->
+    <KnobContainer />
+    <EffectsGrid />
   </div>
 </template>
 
