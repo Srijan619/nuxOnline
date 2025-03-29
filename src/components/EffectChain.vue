@@ -99,6 +99,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   margin-bottom: 1rem;
   gap: 1.5rem;
   scroll-behavior: smooth;
+  padding: 1rem;
 }
 .effect-box {
   position: relative;
