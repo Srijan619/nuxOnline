@@ -13,7 +13,10 @@ onMounted(() => {
 
 <template>
   <div id="nux-container">
-    <div v-if="state.isFetchingPresets" class="loading-container">
+    <div v-if="!state.isDeviceConnected">
+      <p>Device is not connected</p>
+    </div>
+    <div v-else-if="state.isFetchingPresets" class="loading-container">
       <div class="spinner"></div>
       <p>Loading presets...</p>
     </div>
@@ -25,6 +28,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+#nux-container {
+  display: flex;
+  justify-content: center;
+}
 .main-nux-container {
   display: grid;
   grid-template-columns: 0.1fr 1fr;
