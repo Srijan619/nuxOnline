@@ -1,0 +1,65 @@
+
+<svg
+  width="120"
+  height="250"
+  viewBox="0 0 120 250"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Pedal Body -->
+  <rect x="15" y="40" width="90" height="170" rx="12" fill="#303030" stroke="#111111" stroke-width="4"/>
+
+  <!-- Rocker Mechanism -->
+  <path
+    d="M 15 130 Q 60 80 105 130"
+    fill="transparent"
+    stroke="#B2B2B2"
+    stroke-width="6"
+  />
+
+  <!-- Rocker Foot Control (highlighted) -->
+  <path
+    d="M 15 130 Q 60 100 105 130"
+    fill="transparent"
+    stroke="#555"
+    stroke-width="10"
+  />
+
+  <!-- Footswitch -->
+  <circle cx="60" cy="210" r="18" fill="#333" stroke="#444" stroke-width="2" />
+
+  <!-- Speaker-like Shape in Middle -->
+  <circle cx="60" cy="130" r="25" fill="#444" stroke="#333" stroke-width="3"/>
+  
+  <!-- Inner Circle for Speaker Look -->
+  <circle cx="60" cy="130" r="18" fill="#666" stroke="#333" stroke-width="2"/>
+
+  <!-- Inner Details (Speaker Grid-like Lines) -->
+  <circle cx="60" cy="130" r="10" fill="transparent" stroke="#999" stroke-width="1"/>
+  <circle cx="60" cy="130" r="5" fill="transparent" stroke="#aaa" stroke-width="1"/>
+
+  <!-- Labeling -->
+  <text
+    x="60"
+    y="65"
+    font-size="30"
+    fill="white"
+    font-family="Arial"
+    font-weight="bold"
+    text-anchor="middle"
+  >
+    VOL
+  </text>
+
+  <!-- Knob (optional control knob to mimic physical controls) -->
+  <circle cx="60" cy="170" r="6" fill="#777" stroke="#999" stroke-width="2"/>
+
+  <!-- Shadows to create 3D depth -->
+  <path
+    d="M 15 130 Q 60 120 105 130"
+    fill="transparent"
+    stroke="black"
+    stroke-width="1"
+    stroke-opacity="0.2"
+  />
+</svg>
+

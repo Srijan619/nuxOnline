@@ -13,14 +13,9 @@
           @mouseover="startHoverTimer(item)"
           @mouseleave="clearHoverTimer"
         >
-          <svg class="effect-background" width="100%" height="100%">
-            <image
-              :xlink:href="getEffectImage(item.category)"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-            />
-          </svg>
+          <div class="box-content">
+            <h3>{{ item.title }}</h3>
+          </div>
           <div v-if="index < effectList.length - 1" class="connector"></div>
         </div>
       </template>
@@ -29,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { computed, ref, watch } from "vue";
 import type { Nux } from "../types/index.ts";
 import DragDropList from "./reusables/DragDropList.vue";
 
@@ -62,10 +57,6 @@ const hoveredEffect = ref<Nux.EffectOption | null>(null);
 
 // Hover timer map
 const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
-
-const getEffectImage = (category: string) => {
-  return `${category}.svg`;
-};
 
 const startHoverTimer = (effect: Nux.EffectOption) => {
   if (!effect.id) return;
@@ -110,7 +101,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   scroll-behavior: smooth;
   padding: 1rem;
 }
-
 .effect-box {
   position: relative;
   border-radius: 0.25rem;
@@ -120,23 +110,27 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  background: var(--retro-card-bg);
   transition: all 0.3s ease-in-out;
   isolation: isolate;
   flex-shrink: 0;
   overflow: visible;
-  width: 8rem;
-  height: 8rem;
-}
-
-.effect-background {
-  position: absolute;
-  inset: 0.125rem;
-  border-radius: 0.125rem;
-  z-index: 1;
 }
 
 .effect-box.effectHovered {
   border: 2px solid var(--hover-glow-color);
+}
+
+.effect-box:before {
+  position: absolute;
+  content: "";
+  inset: 0.125rem;
+  border-radius: 0.125rem;
+  background: var(--retro-card-inner);
+  z-index: 1;
+  /* Subtle grain texture */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQYV2NkYGD4z8DAwMgABXAGNgGwSgAAAP8HFR4J1PAAAAAElFTkSuQmCC");
+  background-size: 4px 4px;
 }
 
 .effect-box.active {
@@ -152,6 +146,14 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   border-color: var(--hover-border-color, #ff6347);
 }
 
+.effect-box:hover .box-glow {
+  opacity: 0.4;
+}
+
+.effect-box:hover .box-content h3 {
+  color: var(--hover-text-color, #ff6347);
+}
+
 .effect-box:hover .connector {
   background: var(--hover-connector-color, #ff6347);
 }
@@ -160,36 +162,47 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 .wah {
   --effect-color: var(--wah-color);
 }
+
 .comp {
   --effect-color: var(--comp-color);
 }
+
 .efx {
   --effect-color: var(--efx-color);
 }
+
 .amp {
   --effect-color: var(--amp-color);
 }
+
 .eq {
   --effect-color: var(--eq-color);
 }
+
 .gate {
   --effect-color: var(--gate-color);
 }
+
 .mod {
   --effect-color: var(--mod-color);
 }
+
 .delay {
   --effect-color: var(--delay-color);
 }
+
 .reverb {
   --effect-color: var(--reverb-color);
 }
+
 .ir {
   --effect-color: var(--ir-color);
 }
+
 .sr {
   --effect-color: var(--sr-color);
 }
+
 .vol {
   --effect-color: var(--vol-color);
 }
@@ -209,6 +222,20 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   transform: translateX(0.2rem);
 }
 
+.box-content {
+  text-align: start;
+  z-index: 3;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.box-content h3 {
+  margin: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--retro-text-primary);
+}
+
 .connector {
   position: absolute;
   top: 50%;
@@ -217,6 +244,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   width: 1.5rem;
   height: 0.15rem;
   background: var(--effect-color);
+  /* Full category color */
   transition: opacity 0.3s ease-in-out;
   z-index: 1;
 }
@@ -240,13 +268,18 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
     height: 8px;
   }
 
+  .effect-box {
+    width: 6rem;
+    height: 3rem;
+  }
+
+  .box-content h3 {
+    font-size: 0.9rem;
+  }
+
   .connector {
     right: -1rem;
     width: 1rem;
-  }
-  .effect-box {
-    width: 8rem;
-    height: 8rem;
   }
 }
 
@@ -255,9 +288,14 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
     overflow-x: auto;
     max-width: 100%;
   }
+
   .effect-box {
-    width: 6rem;
-    height: 6rem;
+    width: 10rem;
+    height: 5rem;
+  }
+
+  .box-content h3 {
+    font-size: 0.8rem;
   }
 }
 </style>

@@ -1,0 +1,31 @@
+<svg
+  width="100"
+  height="150"
+  viewBox="0 0 100 150"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Pedal Body (More Squared) -->
+  <rect x="10" y="10" width="80" height="130" rx="5" fill="#c3c967" stroke="#444" stroke-width="3"/> 
+
+  <!-- Large Knobs (For Attack, Sustain, Level) -->
+  <circle cx="25" cy="35" r="12" fill="#555" stroke="#999" stroke-width="2"/>
+  <circle cx="75" cy="35" r="12" fill="#555" stroke="#999" stroke-width="2"/>
+  
+  <!-- Knob Indicators -->
+  <line x1="25" y1="35" x2="25" y2="25" stroke="white" stroke-width="2"/>
+  <line x1="75" y1="35" x2="75" y2="25" stroke="white" stroke-width="2"/>
+
+  <!-- Small Compression Ratio Knob in Center -->
+  <circle cx="50" cy="60" r="8" fill="#777" stroke="#BBB" stroke-width="2"/>
+  <line x1="50" y1="60" x2="50" y2="54" stroke="white" stroke-width="2"/>
+
+  <!-- Footswitch (Lower Placement) -->
+  <circle cx="50" cy="100" r="15" fill="#333" stroke="#666" stroke-width="3"/>
+
+  <!-- Label -->
+  <text x="50" y="135" font-size="14" fill="white" font-family="Arial" font-weight="bold" text-anchor="middle">
+    COMP
+  </text>
+</svg>
+
+
