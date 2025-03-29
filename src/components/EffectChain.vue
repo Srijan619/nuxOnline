@@ -279,8 +279,8 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   }
 
   .effect-box {
-    width: 8rem;
-    height: 5rem;
+    width: 6rem;
+    height: 3rem;
   }
 
   .box-content h3 {
@@ -307,8 +307,8 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   }
 
   .effect-box {
-    width: 6rem;
-    height: 3rem;
+    width: 8rem;
+    height: 5rem;
   }
 
   .box-content h3 {
