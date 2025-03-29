@@ -80,7 +80,8 @@ const getAllPresets = (i = 0) => {
   if (i > 127) {
     // Stop fetching when reaching preset 128 and set fetching state to false
     state.isFetchingPresets = false;
-    getPresetData(0); //FIXME: This needs to match to the one that NUX actual is showing to..
+    //  Get current preset basic data and then after that only fet the all data..
+    getCurrentPresetBasicData(); //FIXME: This needs to match to the one that NUX actual is showing to..
     return;
   }
   getCurrentPresetDetailData(i);
@@ -122,6 +123,7 @@ const handleSysExResponse = (event: MessageEvent) => {
     case "CURRENT_PRESET_BASIC":
       state.currentPresetData =
         Parser.Presets.extractCurrentPresetBasicData(data);
+      getCurrentPresetDetailData(state.currentPresetData.presetNumber);
       break;
     case "CURRENT_PRESET_DETAIL":
       updatePresetData(data);
