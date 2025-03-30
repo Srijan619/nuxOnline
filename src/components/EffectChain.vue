@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import type { Nux } from "../types/index.ts";
 import DragDropList from "./reusables/DragDropList.vue";
 
@@ -80,6 +80,13 @@ const startHoverTimer = (effect: Nux.EffectOption) => {
     }, 500),
   );
 };
+
+watch(
+  () => state.selectedEffectOption,
+  (newVal) => {
+    hoveredEffect.value = newVal;
+  },
+);
 
 const clearHoverTimer = () => {
   hoverTimers.value.forEach((timer) => clearTimeout(timer));
