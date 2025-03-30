@@ -109,6 +109,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   gap: 1.5rem;
   scroll-behavior: smooth;
   padding: 1rem;
+  overflow-x: scroll;
 }
 
 .effect-box {
@@ -124,8 +125,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   isolation: isolate;
   flex-shrink: 0;
   overflow: visible;
-  width: 8rem;
-  height: 8rem;
 }
 
 .effect-background {
@@ -231,34 +230,27 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   background: var(--hover-connector-color, #ff6347);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .effect-chain-wrapper {
-    overflow-x: auto;
-  }
-
-  .effect-chain-wrapper::-webkit-scrollbar {
-    height: 8px;
-  }
-
-  .connector {
-    right: -1rem;
-    width: 1rem;
-  }
+@media (max-width: 1280px) {
+  /* Small effect box for laptops */
   .effect-box {
-    width: 6rem;
-    height: 6rem;
+    width: 4.5rem;
+    height: 4.5rem;
   }
 }
 
-@media (min-width: 769px) {
-  .effect-chain-wrapper {
-    overflow-x: auto;
-    max-width: 100%;
-  }
+@media (min-width: 1281px) and (max-width: 1600px) {
+  /* Medium size for MacBooks and mid-sized screens */
   .effect-box {
-    width: 7.5rem;
-    height: 7.5rem;
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+@media (min-width: 1601px) {
+  /* Larger effect box for big monitors */
+  .effect-box {
+    width: 6rem;
+    height: 6rem;
   }
 }
 </style>
