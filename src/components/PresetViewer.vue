@@ -2,7 +2,6 @@
 import EffectChain from "./EffectChain.vue";
 import KnobContainer from "./KnobContainer.vue";
 import EffectsGrid from "./EffectsGrid.vue";
-import Scene from "./Scene.vue";
 import PresetContainer from "./PresetContainer.vue";
 
 // 🎭 composables
@@ -13,7 +12,6 @@ const { state } = useNUXMidiController();
 
 <template>
   <div class="main-container">
-    <Scene />
     <PresetContainer />
     <EffectChain />
     <KnobContainer />

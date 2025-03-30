@@ -128,6 +128,9 @@ const handleSysExResponse = (event: MessageEvent) => {
     case "CURRENT_PRESET_DETAIL":
       updatePresetData(data);
       break;
+    case "SCENE_CHANGED":
+      updateScene(data);
+      break;
     case "PRESET_CHANGED":
       const nextPresetNumber = data[1];
       getPresetData(nextPresetNumber);
@@ -312,6 +315,7 @@ const updatePresetData = (data: Uint8Array<ArrayBufferLike>) => {
   state.currentPresetData = newPreset;
 };
 
+// Effects order
 const updateEffectOrder = (option: Nux.EffectOption[]) => {
   updateLocalEffectsAfterEffectOrderChanged(option);
   state.midiOutput?.send(CURRENT_PRESET_EFFECT_ORDER_COMMAND(option));
@@ -330,6 +334,12 @@ const updateLocalEffectsAfterEffectOrderChanged = (
 const requestUpdatedEffectsOrder = () => {
   const message = hexToBytes(SysExRequest.REQUEST_UPDATED_EFFECT_ORDER_COMMAND);
   state.midiOutput?.sendSysex(0x43, Array.from(message));
+};
+
+// Scenes
+
+const updateScene = (data: Uint8Array<ArrayBufferLike>) => {
+  state.currentPresetData.activeSceneNumber = data[2];
 };
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..

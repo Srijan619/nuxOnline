@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EffectListDropdown from "../components/EffectListDropdown.vue";
+import Scene from "./Scene.vue";
 
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
@@ -29,8 +30,7 @@ const { state } = useNUXMidiController();
           {{ state.currentPresetData.formattedPresetNumber }}
         </div>
         <div>
-          <strong>Scene:</strong>
-          {{ state.currentPresetData.activeSceneNumber }}
+          <Scene />
         </div>
       </div>
       <div class="effectOptionsScroller">

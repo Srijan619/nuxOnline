@@ -101,10 +101,6 @@ watch(
   cursor: pointer;
 }
 
-.preset-button:focus {
-  outline: none;
-}
-
 .preset-button > *:hover,
 .preset-button.active > * {
   color: var(--hover-border-color, #ff6347);
