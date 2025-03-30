@@ -135,11 +135,25 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 }
 
 .effect-box.effectHovered {
-  border: 2px solid var(--hover-glow-color);
+  animation: blink-border 1s infinite;
+  border: 2px solid transparent;
+  box-shadow: none !important;
+}
+
+@keyframes blink-border {
+  0% {
+    border-color: var(--hover-glow-color);
+  }
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: var(--hover-glow-color);
+  }
 }
 
 .effect-box.active {
-  border: none;
+  border: 2px solid transparent;
   box-shadow: 0 0 0.3rem var(--effect-color);
 }
 
@@ -249,8 +263,8 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 @media (min-width: 1601px) {
   /* Larger effect box for big monitors */
   .effect-box {
-    width: 6rem;
-    height: 6rem;
+    width: 5.8rem;
+    height: 5.8rem;
   }
 }
 </style>

@@ -34,9 +34,9 @@ const { state } = useNUXMidiController();
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  margin: 1rem;
   max-width: 99%;
   overflow-x: hidden;
+  padding: 1rem;
 }
 
 .preset-card {
