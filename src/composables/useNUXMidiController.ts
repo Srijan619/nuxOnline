@@ -4,6 +4,7 @@ import type { MessageEvent } from "webmidi";
 
 // 🎸 NUX MG-30 SysEx Commands & Responses
 import {
+  CHANGE_SCENE_COMMAND,
   CURRENT_PRESET_EFFECT_ORDER_COMMAND,
   PRESET_DATA_COMMAND,
   SysExRequest,
@@ -162,9 +163,8 @@ const getDeviceVersion = () => {
 const getPresetData = (
   index: number | undefined = state.currentPresetData?.presetNumber,
 ) => {
-  if (!index) return;
+  if (index === undefined) return;
   getCurrentPresetBasicData();
-  getCurrentPresetDetailData(index);
 };
 
 // Get current preset basic data
@@ -342,6 +342,11 @@ const updateScene = (data: Uint8Array<ArrayBufferLike>) => {
   state.currentPresetData.activeSceneNumber = data[2];
 };
 
+const changeScene = (sceneNumber: number) => {
+  state.currentPresetData.activeSceneNumber = sceneNumber;
+  state?.midiOutput?.send(CHANGE_SCENE_COMMAND(sceneNumber));
+};
+
 // TODO: webmidi api says not to use this directly, so lets think about that later..
 const sendRawSysEx = (ctrl: number, value: number) => {
   console.log("Sending raw sysex..", ctrl, value);
@@ -358,5 +363,6 @@ export const useNUXMidiController = () => {
     toggleEffect,
     sendRawSysEx,
     updateEffectOrder,
+    changeScene,
   };
 };

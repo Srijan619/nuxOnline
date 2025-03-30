@@ -19,8 +19,11 @@ const CURRENT_PRESET_EFFECT_ORDER_COMMAND = (options: Nux.EffectOption[]) => {
   });
   command.push(0);
   command.push(247);
-  console.log("Sending current preset effect order command", command);
   return command;
+};
+
+const CHANGE_SCENE_COMMAND = (sceneNumber: number) => {
+  return [176, 79, sceneNumber];
 };
 
 //TODO: Commands needs to be hooked in to mock implementation somewhere
@@ -45,6 +48,7 @@ export {
   PRESET_DATA_COMMAND,
   SAVE_CURRENT_PRESET_DATA_COMMAND,
   CURRENT_PRESET_EFFECT_ORDER_COMMAND,
+  CHANGE_SCENE_COMMAND,
   SysExRequest,
   SysExResponsePattern,
 };

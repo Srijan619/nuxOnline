@@ -2,7 +2,7 @@
 import { ref, watch } from "vue";
 import { useNUXMidiController } from "../composables/useNUXMidiController";
 
-const { state } = useNUXMidiController();
+const { state, changeScene } = useNUXMidiController();
 
 const activeSceneNumber = ref(state.currentPresetData?.activeSceneNumber || 0);
 
@@ -17,6 +17,7 @@ watch(
 
 const setScene = (scene: number) => {
   activeSceneNumber.value = scene;
+  changeScene(scene);
 };
 </script>
 
