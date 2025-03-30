@@ -166,10 +166,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   border-color: var(--hover-border-color, #ff6347);
 }
 
-.effect-box:hover .connector {
-  background: var(--hover-connector-color, #ff6347);
-}
-
 /* Category-specific colors for vertical tag and connector */
 .wah {
   --effect-color: var(--wah-color);
@@ -241,7 +237,6 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 
 .effect-box:hover .connector {
   opacity: 1;
-  background: var(--hover-connector-color, #ff6347);
 }
 
 @media (max-width: 1280px) {

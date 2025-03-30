@@ -11,7 +11,7 @@ const SAVE_CURRENT_PRESET_DATA_COMMAND = (index: number) => {
 };
 
 const CURRENT_PRESET_EFFECT_ORDER_COMMAND = (options: Nux.EffectOption[]) => {
-  let command = [240, 67, 88, 112, 126, 2, 13];
+  let command = [240, 67, 88, 112, 13, 1];
   options.forEach((option) => {
     if (option.index !== undefined && option.index !== null) {
       command.push(option.index);
