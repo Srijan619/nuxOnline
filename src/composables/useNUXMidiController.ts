@@ -21,7 +21,11 @@ import {
 // 📦 Types
 import { Nux } from "../types";
 import EFFECT_CONFIG from "../effects";
-import { extractEffectsOrder } from "../parsers/effects/extractEffectsOrder";
+import {
+  effectsOrderMapping,
+  extractEffectsOrder,
+} from "../parsers/effects/extractEffectsOrder";
+import { EffectCategory } from "../types/types";
 
 const state = reactive(<Nux.NUXMidiControllerState>{
   isDeviceConnected: false,
@@ -137,10 +141,7 @@ const handleSysExResponse = (event: MessageEvent) => {
       getPresetData(nextPresetNumber);
       break;
     case "EFFECT_CHANGED":
-      const ctrl = data[1];
-      const value = data[2];
-      if (ctrl === 78) return; // for some reason, some control change for effect provides this..does not match any of current effect change mapping
-      updateKnobValue(ctrl, value);
+      handleEffectChanged(data);
       break;
     case "EFFECT_ORDER_CHANGED":
       console.log(
@@ -271,6 +272,34 @@ const updateEffectState = (
   };
 };
 
+const handleEffectChanged = (data: Uint8Array<ArrayBufferLike>) => {
+  const secondByte = data[1];
+  const thirdByte = data[2];
+  if (secondByte === 78) return; // for some reason, some control change for effect provides this..does not match any of current effect change mapping
+
+  if (secondByte === 77) {
+    // Effect selection changed from one to another..
+    const category = effectsOrderMapping[thirdByte];
+
+    if (!state.currentPresetData.effects) return;
+    state.selectedEffectOption = state.currentPresetData.effects[category];
+  }
+  if (secondByte >= 1 && secondByte <= 16) {
+    // Means effect is being changed from NUX
+    // second byte determines effect type and third is the exact effect
+    const category = effectsOrderMapping[secondByte];
+    if (!category) return;
+    if (!EFFECT_CONFIG[category] || !EFFECT_CONFIG[category].options) return;
+    const effectOption = EFFECT_CONFIG[category]?.options[thirdByte - 1];
+    state.selectedEffectOption = {
+      ...state.selectedEffectOption,
+      ...effectOption,
+    };
+    console.log("NUX CHANGED EFFECT..", category, effectOption);
+  } else {
+    updateKnobValue(secondByte, thirdByte);
+  }
+};
 // Update knob value
 const updateKnobValue = (ctrl: number, value: number) => {
   const activeEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
@@ -345,6 +374,47 @@ const updateScene = (data: Uint8Array<ArrayBufferLike>) => {
 const changeScene = (sceneNumber: number) => {
   state.currentPresetData.activeSceneNumber = sceneNumber;
   state?.midiOutput?.send(CHANGE_SCENE_COMMAND(sceneNumber));
+};
+
+const mapDataBackToNUXFormat = () => {
+  if (!state.currentPresetData.presetNumber) return;
+
+  const base = ["F0", "43", "58", "70", "0B", "02"];
+  base.push(hexIndex(state.currentPresetData.presetNumber));
+
+  const addEffectBytes = (effectKey: EffectCategory) => {
+    const effect = state.currentPresetData.effects?.[effectKey];
+    if (!effect) return;
+
+    const statusByte = effect.active ? "00" : "01";
+    const typeByte = effect.active ? effect.onByte : effect.offByte;
+
+    if (!typeByte) return;
+
+    base.push(statusByte, typeByte);
+  };
+
+  // Ensure EffectCategory is an enum or valid union type
+  const effectKeys: EffectCategory[] = [
+    EffectCategory.Wah,
+    EffectCategory.Comp,
+    EffectCategory.Efx,
+    EffectCategory.Amp,
+    EffectCategory.Eq,
+    EffectCategory.Gate,
+    EffectCategory.Mod,
+    EffectCategory.Delay,
+    EffectCategory.Reverb,
+    EffectCategory.Ir,
+    EffectCategory.Sr,
+    EffectCategory.Vol,
+  ];
+
+  effectKeys.forEach(addEffectBytes);
+
+  // Two empty bytes
+  base.push("00");
+  base.push("00");
 };
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..

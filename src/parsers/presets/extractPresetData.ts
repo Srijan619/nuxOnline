@@ -39,5 +39,4 @@ function extractCurrentPresetDetailData(
   };
   return data;
 }
-
 export { extractCurrentPresetBasicData, extractCurrentPresetDetailData };

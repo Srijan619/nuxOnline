@@ -63,7 +63,7 @@ const hoveredEffect = ref<Nux.EffectOption | null>(null);
 const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
 const getEffectImage = (category: string) => {
-  return `${category}.svg`;
+  return category ? `${category}.svg` : "";
 };
 
 const startHoverTimer = (effect: Nux.EffectOption) => {
