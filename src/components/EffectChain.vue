@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { ref, computed } from "vue";
 import type { Nux } from "../types/index.ts";
 import DragDropList from "./reusables/DragDropList.vue";
 
@@ -54,7 +54,6 @@ const effectList = computed({
     if (!state.currentPresetData) return;
     console.log("Request NUX to update effect order now...", newList);
     updateEffectOrder(newList);
-    //state.currentPresetData.effectsOrder = newList.map(effect => effect.id);
   },
 });
 
