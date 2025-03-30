@@ -1,4 +1,5 @@
 import type { Nux } from "../types";
+import { EffectCategory } from "../types/types";
 import { getEffectKnobs } from "./effectHelper";
 
 // Type for control ranges
@@ -83,7 +84,10 @@ const getUpdatedKnobControlsWithValues = (
   const controlValues = translateControlValues(input, controlRanges);
   const knobs = getEffectKnobs(effectOption);
   knobs?.forEach((knob: Nux.Knob, index: number) => {
-    knob.currentValue = controlValues[index] || 0;
+    knob.currentValue = Math.max(
+      knob.range[0],
+      Math.min(controlValues[index] || 0, knob.range[1]),
+    );
   });
   return knobs;
 };

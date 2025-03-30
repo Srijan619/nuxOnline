@@ -73,7 +73,7 @@ const MUFF_FUZZ_VARIANT: Nux.KnobEntry[] = [
 ];
 
 const KATANA_VARIANT: Nux.KnobEntry[] = [
-  ["boost", "BOOST"],
+  ["boost", "", [0, 1]],
   ["volume", "VOLUME"],
 ];
 
@@ -90,10 +90,10 @@ const RED_FUZZ_VARIANT: Nux.KnobEntry[] = [
 ];
 
 const TOUCH_WAH_VARIANT: Nux.KnobEntry[] = [
-  ["mode", "MODE"],
+  ["mode", "MODE", [0, 3]],
   ["decay", "DECAY"],
   ["sensitivity", "SENS"],
-  ["upDown", "Up/Down"],
+  ["up-down", "", [0, 1]],
 ];
 
 // Call populateEfxKnobs to get knob configurations for each effect

@@ -273,6 +273,7 @@ const updateEffectState = (
 };
 
 const handleEffectChanged = (data: Uint8Array<ArrayBufferLike>) => {
+  // There is a bug when amp is being changed, it sends IR signal too
   const secondByte = data[1];
   const thirdByte = data[2];
   if (secondByte === 78) return; // for some reason, some control change for effect provides this..does not match any of current effect change mapping
