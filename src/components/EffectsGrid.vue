@@ -30,11 +30,13 @@ defineProps({
 });
 // 🎭 composables
 import { useNUXMidiController } from "../composables/useNUXMidiController";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 const { state, toggleEffect } = useNUXMidiController();
 
-const selectedEffectColor = ref(state.selectedEffectOption.dominantColor);
+const selectedEffectColor = computed(
+  () => state.selectedEffectOption?.dominantColor,
+);
 
 const selectOption = (option: EffectConfig.EffectOption) => {
   const effectOption = {
