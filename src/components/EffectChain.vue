@@ -140,7 +140,8 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 }
 
 .effect-box.active {
-  box-shadow: 0 0 10px var(--retro-shadow);
+  border: none;
+  box-shadow: 0 0 0.3rem var(--effect-color);
 }
 
 .effect-box.inactive {
@@ -245,8 +246,8 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
     width: 1rem;
   }
   .effect-box {
-    width: 8rem;
-    height: 8rem;
+    width: 6rem;
+    height: 6rem;
   }
 }
 
@@ -256,8 +257,8 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
     max-width: 100%;
   }
   .effect-box {
-    width: 6rem;
-    height: 6rem;
+    width: 7.5rem;
+    height: 7.5rem;
   }
 }
 </style>

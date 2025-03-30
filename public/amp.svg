@@ -1,6 +1,6 @@
 <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
   <!-- Amplifier Body -->
-  <rect x="50" y="80" width="300" height="150" rx="10" fill="#c81c28" stroke="#1a1a1a" stroke-width="4" /> <!-- Main body -->
+  <rect x="50" y="80" width="300" height="150" rx="10" fill="#aa0310" stroke="#1a1a1a" stroke-width="4" /> <!-- Main body -->
   
   <!-- Speaker Grill -->
   <rect x="70" y="120" width="260" height="90" fill="#4a4a4a" stroke="#3a3a3a" stroke-width="2" />

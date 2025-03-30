@@ -5,7 +5,7 @@
   xmlns="http://www.w3.org/2000/svg"
 >
   <!-- Pedal Body (More Squared) -->
-  <rect x="10" y="10" width="80" height="130" rx="5" fill="#c3c967" stroke="#444" stroke-width="3"/> 
+  <rect x="10" y="10" width="80" height="130" rx="5" fill="#cfdc37" stroke="#444" stroke-width="3"/> 
 
   <!-- Large Knobs (For Attack, Sustain, Level) -->
   <circle cx="25" cy="35" r="12" fill="#555" stroke="#999" stroke-width="2"/>

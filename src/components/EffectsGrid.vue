@@ -57,7 +57,7 @@ const selectOption = (option: EffectConfig.EffectOption) => {
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
   margin: 1rem;
-  max-height: 10rem;
+  max-height: 7rem;
   overflow: scroll;
   scrollbar-width: none;
 }
@@ -69,7 +69,7 @@ const selectOption = (option: EffectConfig.EffectOption) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 0.4rem;
   background-color: v-bind(itemBackgroundColor);
   color: v-bind(itemTextColor);
   font-family: Arial, sans-serif;

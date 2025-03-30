@@ -5,7 +5,7 @@
   viewBox="0 0 100 150"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <rect x="10" y="10" width="80" height="130" rx="8" fill="#7d3471" stroke="#111" stroke-width="3"/> 
+  <rect x="10" y="10" width="80" height="130" rx="8" fill="#a142c5" stroke="#111" stroke-width="3"/> 
 
   <!-- Three Large Knobs (Decay, Mix, Tone) -->
   <circle cx="25" cy="35" r="12" fill="#444" stroke="#BBB" stroke-width="2"/>
