@@ -253,19 +253,19 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   }
 }
 
-@media (min-width: 1281px) and (max-width: 1600px) {
+@media (min-width: 1281px) and (max-width: 1800px) {
   /* Medium size for MacBooks and mid-sized screens */
   .effect-box {
-    width: 5rem;
-    height: 5rem;
+    width: 5.7rem;
+    height: 5.7rem;
   }
 }
 
-@media (min-width: 1601px) {
+@media (min-width: 1801px) {
   /* Larger effect box for big monitors */
   .effect-box {
-    width: 5.8rem;
-    height: 5.8rem;
+    width: 10rem;
+    height: 10rem;
   }
 }
 </style>
