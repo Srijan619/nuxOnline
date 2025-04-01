@@ -64,6 +64,11 @@ const efxControlRanges: ControlRange[] = [
   { startByte: 46 },
 ];
 
+const gateControlRanges: ControlRange[] = [
+  { startByte: 82, endByte: 83, isDoubleByte: true },
+  { startByte: 84 },
+];
+
 const getUpdatedKnobControlsWithValues = (
   effectOption: Nux.EffectOption,
   input: Uint8Array,
@@ -76,6 +81,10 @@ const getUpdatedKnobControlsWithValues = (
     case "efx":
       controlRanges = efxControlRanges;
       break;
+    case "gate":
+      controlRanges = gateControlRanges;
+      break;
+
     default:
       break;
   }
