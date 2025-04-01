@@ -69,6 +69,8 @@ const gateControlRanges: ControlRange[] = [
   { startByte: 84 },
 ];
 
+const wahControlRanges: ControlRange[] = [{ startByte: 27 }, { startByte: 29 }];
+
 const getUpdatedKnobControlsWithValues = (
   effectOption: Nux.EffectOption,
   input: Uint8Array,
@@ -84,7 +86,9 @@ const getUpdatedKnobControlsWithValues = (
     case "gate":
       controlRanges = gateControlRanges;
       break;
-
+    case "wah":
+      controlRanges = wahControlRanges;
+      break;
     default:
       break;
   }

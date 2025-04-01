@@ -130,6 +130,10 @@ function extractEffects(response: Uint8Array): Nux.Effect {
       ...effects.gate,
       knobs: [...getUpdatedKnobControlsWithValues(effects.gate, response)],
     },
+    wah: {
+      ...effects.wah,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.wah, response)],
+    },
   };
   return effects;
 }
