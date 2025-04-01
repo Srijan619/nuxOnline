@@ -134,6 +134,34 @@ function extractEffects(response: Uint8Array): Nux.Effect {
       ...effects.wah,
       knobs: [...getUpdatedKnobControlsWithValues(effects.wah, response)],
     },
+    comp: {
+      ...effects.comp,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.comp, response)],
+    },
+    reverb: {
+      ...effects.reverb,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.reverb, response)],
+    },
+    delay: {
+      ...effects.delay,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.delay, response)],
+    },
+    mod: {
+      ...effects.mod,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.mod, response)],
+    },
+    ir: {
+      ...effects.ir,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.ir, response)],
+    },
+    sr: {
+      ...effects.sr,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.sr, response)],
+    },
+    vol: {
+      ...effects.vol,
+      knobs: [...getUpdatedKnobControlsWithValues(effects.vol, response)],
+    },
   };
   return effects;
 }
