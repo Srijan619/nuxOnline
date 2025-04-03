@@ -31,6 +31,11 @@ onMounted(() => {
 </template>
 
 <style scoped>
+#nux-container {
+  display: flex;
+  justify-content: center;
+}
+
 .main-nux-container {
   display: grid;
   grid-template-columns: 0.1fr 1fr;
