@@ -1,0 +1,36 @@
+<svg
+  width="100"
+  height="150"
+  viewBox="0 0 100 150"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Pedal Body (Teal) -->
+  <rect x="10" y="10" width="80" height="130" rx="8" fill="#3b4c98" stroke="#111" stroke-width="3"/> 
+
+  <!-- Three Large Knobs (Speed, Depth, Tone) -->
+  <circle cx="25" cy="35" r="12" fill="#444" stroke="#BBB" stroke-width="2"/>
+  <circle cx="50" cy="35" r="12" fill="#444" stroke="#BBB" stroke-width="2"/>
+  <circle cx="75" cy="35" r="12" fill="#444" stroke="#BBB" stroke-width="2"/>
+
+  <!-- Knob Indicators -->
+  <line x1="25" y1="35" x2="25" y2="27" stroke="white" stroke-width="2"/>
+  <line x1="50" y1="35" x2="50" y2="27" stroke="white" stroke-width="2"/>
+  <line x1="75" y1="35" x2="75" y2="27" stroke="white" stroke-width="2"/>
+
+  <!-- Modulation Pattern: Spiral-like Line -->
+  <path d="M 15 75 Q 35 50, 50 75 T 85 75" stroke="white" stroke-width="3" fill="none"/>
+  <path d="M 15 85 Q 35 60, 50 85 T 85 85" stroke="white" stroke-width="2" fill="none"/>
+  <path d="M 15 95 Q 35 70, 50 95 T 85 95" stroke="white" stroke-width="1" fill="none"/>
+
+  <!-- LED Indicator -->
+  <circle cx="50" cy="110" r="6" fill="red" stroke="black" stroke-width="1"/>
+
+  <!-- Footswitch -->
+  <circle cx="50" cy="125" r="15" fill="#333" stroke="#666" stroke-width="3"/>
+
+  <!-- Label (Below the Knobs) -->
+  <text x="50" y="70" font-size="12" fill="white" font-family="Arial" font-weight="bold" text-anchor="middle">
+    MODULATION
+  </text>
+</svg>
+

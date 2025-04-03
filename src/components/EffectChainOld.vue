@@ -13,14 +13,9 @@
           @mouseover="startHoverTimer(item)"
           @mouseleave="clearHoverTimer"
         >
-          <svg class="effect-background" width="100%" height="100%">
-            <image
-              :xlink:href="getEffectImage(item.category)"
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMid slice"
-            />
-          </svg>
+          <div class="box-content">
+            <h3>{{ item.title }}</h3>
+          </div>
           <div v-if="index < effectList.length - 1" class="connector"></div>
         </div>
       </template>
@@ -29,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import type { Nux } from "../types/index.ts";
 import DragDropList from "./reusables/DragDropList.vue";
 
@@ -52,7 +47,9 @@ const effectList = computed({
   },
   set: (newList: Nux.EffectOption[]) => {
     if (!state.currentPresetData) return;
+    console.log("Request NUX to update effect order now...", newList);
     updateEffectOrder(newList);
+    //state.currentPresetData.effectsOrder = newList.map(effect => effect.id);
   },
 });
 
@@ -60,10 +57,6 @@ const hoveredEffect = ref<Nux.EffectOption | null>(null);
 
 // Hover timer map
 const hoverTimers = ref<Map<string, ReturnType<typeof setTimeout>>>(new Map());
-
-const getEffectImage = (category: string) => {
-  return category ? `${category}.svg` : "";
-};
 
 const startHoverTimer = (effect: Nux.EffectOption) => {
   if (!effect.id) return;
@@ -79,13 +72,6 @@ const startHoverTimer = (effect: Nux.EffectOption) => {
     }, 500),
   );
 };
-
-watch(
-  () => state.selectedEffectOption,
-  (newVal) => {
-    hoveredEffect.value = newVal;
-  },
-);
 
 const clearHoverTimer = () => {
   hoverTimers.value.forEach((timer) => clearTimeout(timer));
@@ -114,9 +100,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   gap: 1.5rem;
   scroll-behavior: smooth;
   padding: 1rem;
-  overflow-x: scroll;
 }
-
 .effect-box {
   position: relative;
   border-radius: 0.25rem;
@@ -126,40 +110,31 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  background: var(--retro-card-bg);
   transition: all 0.3s ease-in-out;
   isolation: isolate;
   flex-shrink: 0;
   overflow: visible;
 }
 
-.effect-background {
+.effect-box.effectHovered {
+  border: 2px solid var(--hover-glow-color);
+}
+
+.effect-box:before {
   position: absolute;
+  content: "";
   inset: 0.125rem;
   border-radius: 0.125rem;
+  background: var(--retro-card-inner);
   z-index: 1;
-}
-
-.effect-box.effectHovered {
-  animation: blink-border 1s infinite;
-  border: 2px solid transparent;
-  box-shadow: none !important;
-}
-
-@keyframes blink-border {
-  0% {
-    border-color: var(--hover-glow-color);
-  }
-  50% {
-    border-color: transparent;
-  }
-  100% {
-    border-color: var(--hover-glow-color);
-  }
+  /* Subtle grain texture */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAG0lEQVQYV2NkYGD4z8DAwMgABXAGNgGwSgAAAP8HFR4J1PAAAAAElFTkSuQmCC");
+  background-size: 4px 4px;
 }
 
 .effect-box.active {
-  border: 2px solid transparent;
-  box-shadow: 0 0 0.3rem var(--effect-color);
+  box-shadow: 0 0 10px var(--retro-shadow);
 }
 
 .effect-box.inactive {
@@ -171,40 +146,63 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   border-color: var(--hover-border-color, #ff6347);
 }
 
+.effect-box:hover .box-glow {
+  opacity: 0.4;
+}
+
+.effect-box:hover .box-content h3 {
+  color: var(--hover-text-color, #ff6347);
+}
+
+.effect-box:hover .connector {
+  background: var(--hover-connector-color, #ff6347);
+}
+
 /* Category-specific colors for vertical tag and connector */
 .wah {
   --effect-color: var(--wah-color);
 }
+
 .comp {
   --effect-color: var(--comp-color);
 }
+
 .efx {
   --effect-color: var(--efx-color);
 }
+
 .amp {
   --effect-color: var(--amp-color);
 }
+
 .eq {
   --effect-color: var(--eq-color);
 }
+
 .gate {
   --effect-color: var(--gate-color);
 }
+
 .mod {
   --effect-color: var(--mod-color);
 }
+
 .delay {
   --effect-color: var(--delay-color);
 }
+
 .reverb {
   --effect-color: var(--reverb-color);
 }
+
 .ir {
   --effect-color: var(--ir-color);
 }
+
 .sr {
   --effect-color: var(--sr-color);
 }
+
 .vol {
   --effect-color: var(--vol-color);
 }
@@ -224,6 +222,20 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   transform: translateX(0.2rem);
 }
 
+.box-content {
+  text-align: start;
+  z-index: 3;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.box-content h3 {
+  margin: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--retro-text-primary);
+}
+
 .connector {
   position: absolute;
   top: 50%;
@@ -232,6 +244,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
   width: 1.5rem;
   height: 0.15rem;
   background: var(--effect-color);
+  /* Full category color */
   transition: opacity 0.3s ease-in-out;
   z-index: 1;
 }
@@ -242,29 +255,47 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 
 .effect-box:hover .connector {
   opacity: 1;
+  background: var(--hover-connector-color, #ff6347);
 }
 
-@media (max-width: 1280px) {
-  /* Small effect box for laptops */
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .effect-chain-wrapper {
+    overflow-x: auto;
+  }
+
+  .effect-chain-wrapper::-webkit-scrollbar {
+    height: 8px;
+  }
+
   .effect-box {
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 6rem;
+    height: 3rem;
+  }
+
+  .box-content h3 {
+    font-size: 0.9rem;
+  }
+
+  .connector {
+    right: -1rem;
+    width: 1rem;
   }
 }
 
-@media (min-width: 1281px) and (max-width: 1800px) {
-  /* Medium size for MacBooks and mid-sized screens */
-  .effect-box {
-    width: 5.7rem;
-    height: 5.7rem;
+@media (min-width: 769px) {
+  .effect-chain-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
   }
-}
 
-@media (min-width: 1801px) {
-  /* Larger effect box for big monitors */
   .effect-box {
     width: 10rem;
-    height: 10rem;
+    height: 5rem;
+  }
+
+  .box-content h3 {
+    font-size: 0.8rem;
   }
 }
 </style>

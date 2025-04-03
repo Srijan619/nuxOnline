@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
+
+const { state, changePreset } = useNUXMidiController();
 
 const presetNumber = ref(0);
 const MIN_PRESET = 0;
@@ -10,43 +13,34 @@ const emit = defineEmits<{
   (e: "change-preset", newPresetNumber: number): void;
 }>();
 
-const changePreset = (direction: "up" | "down") => {
+const changePresetLocally = (direction: "up" | "down") => {
   if (direction === "up") {
-    presetNumber.value = Math.min(presetNumber.value + 1, MAX_PRESET);
+    presetNumber.value =
+      presetNumber.value === MAX_PRESET ? MIN_PRESET : presetNumber.value + 1;
   } else {
-    presetNumber.value = Math.max(presetNumber.value - 1, MIN_PRESET);
+    presetNumber.value =
+      presetNumber.value === MIN_PRESET ? MAX_PRESET : presetNumber.value - 1;
   }
   emit("change-preset", presetNumber.value);
 };
 
 watch(presetNumber, (newPresetNumber) => {
-  if (nuxMidiController.value) {
-    nuxMidiController.value.changePreset(newPresetNumber);
-    nuxMidiController.value.getDetailPresetData(newPresetNumber);
-  }
+  changePreset(newPresetNumber);
 });
-
-watch(
-  () => nuxMidiController.value,
-  (newValue) => {
-    if (newValue) {
-      newValue.changePreset(presetNumber.value);
-      newValue.getDetailPresetData(presetNumber.value);
-    }
-  },
-  { immediate: true },
-);
 </script>
 
 <template>
-  <div class="preset-change" :style="{
-    '--amp-active': nuxMidiController ? 'var(--amp-on)' : 'var(--amp-off)',
-  }">
-    <button class="preset-btn prev" @click="changePreset('down')" :disabled="presetNumber <= MIN_PRESET">
+  <div
+    class="preset-change"
+    :style="{
+      '--amp-active': state.deviceVersion ? 'var(--amp-on)' : 'var(--amp-off)',
+    }"
+  >
+    <button class="preset-btn prev" @click="changePresetLocally('down')">
       〈
     </button>
     <slot></slot>
-    <button class="preset-btn next" @click="changePreset('up')" :disabled="presetNumber >= MAX_PRESET">
+    <button class="preset-btn next" @click="changePresetLocally('up')">
       〉
     </button>
   </div>
@@ -78,18 +72,22 @@ watch(
   background: var(--amp-inner);
   /* Weathered metal texture with scratches */
   background-image:
-    linear-gradient(45deg,
+    linear-gradient(
+      45deg,
       rgba(0, 0, 0, 0.1) 25%,
       transparent 25%,
       transparent 75%,
       rgba(0, 0, 0, 0.1) 75%,
-      rgba(0, 0, 0, 0.1)),
-    linear-gradient(45deg,
+      rgba(0, 0, 0, 0.1)
+    ),
+    linear-gradient(
+      45deg,
       rgba(255, 255, 255, 0.05) 25%,
       transparent 25%,
       transparent 75%,
       rgba(255, 255, 255, 0.05) 75%,
-      rgba(255, 255, 255, 0.05));
+      rgba(255, 255, 255, 0.05)
+    );
   background-size: 8px 8px;
   z-index: 1;
 }

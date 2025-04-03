@@ -8,74 +8,23 @@ import ir from "../effects/ir";
 import mod from "../effects/mod";
 import reverb from "../effects/reverb";
 import wah from "../effects/wah";
+import type { EffectConfig } from "../types";
+import sr from "./sr";
+import vol from "./vol";
 
-export default {
-  effects: {
-    ...wah,
-    ...comp,
-    ...gate,
-    ...efx,
-    ...amp,
-    ...delay,
-    ...reverb,
-    sr: {
-      byte: 23,
-      category: "📡 S/R",
-      startOffByte: "41",
-      startOnByte: "01",
-      options: [
-        {
-          id: "S_R",
-          title: "S/R",
-          onByte: "00",
-          offByte: "01",
-          knobs: [
-            {
-              id: "send",
-              title: "SEND",
-              range: [0, 100],
-              ctrl: 72,
-            },
-            {
-              id: "return",
-              title: "RETURN",
-              range: [0, 100],
-              ctrl: 73,
-            },
-          ],
-          dominantColor: "#DCEDC8",
-        },
-      ],
-    },
-    vol: {
-      byte: 25,
-      category: "🔊 Volume",
-      options: [
-        {
-          id: "VOL",
-          title: "Volume",
-          onByte: "01",
-          offByte: "41",
-          knobs: [
-            {
-              id: "min",
-              title: "MIN",
-              range: [0, 100],
-              ctrl: 74,
-            },
-            {
-              id: "max",
-              title: "MAX",
-              range: [0, 100],
-              ctrl: 75,
-            },
-          ],
-          dominantColor: "#FFEE58",
-        },
-      ],
-    },
-    ...ir,
-    ...eq,
-    ...mod,
-  },
+const EFFECT_CONFIG: EffectConfig.EffectType = {
+  ...wah,
+  ...comp,
+  ...gate,
+  ...efx,
+  ...amp,
+  ...delay,
+  ...reverb,
+  ...sr,
+  ...vol,
+  ...ir,
+  ...eq,
+  ...mod,
 };
+
+export default EFFECT_CONFIG;

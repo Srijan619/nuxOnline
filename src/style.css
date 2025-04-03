@@ -13,6 +13,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   /* Amp */
+  --amp-secondary-border: #353600;
   --amp-border: #1f1f1f;
   --amp-on: #950c0c;
   --amp-off: #1f1f1f;
@@ -30,18 +31,19 @@
   --retro-glow: #00ffcc;
 
   --wah-color: #c28ab9;
-  --comp-color: #c3c967;
+  --comp-color: #cfdc37;
   --efx-color: #9f4b3e;
-  --amp-color: #c81c28;
+  --amp-color: #aa0310;
   --eq-color: #b3b3b3;
   --gate-color: #98b95f;
   --mod-color: #3b4c98;
   --delay-color: #6d9c8a;
-  --reverb-color: #7d3471;
-  --ir-color: #80ff80;
+  --reverb-color: #a142c5;
+  --ir-color: #79cff9;
   --sr-color: #61a839;
   --vol-color: #ffff55;
-  --undefined-color: "grey" /* Effects */ --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
+  --undefined-color: "grey"; /* Effects */
+  --retro-glow: rgba(255, 255, 255, 0.3); /* Neon glow */
   --retro-shadow: rgba(255, 255, 255, 0.2); /* Retro shadow */
 
   --hover-border-color: #ff6347;
@@ -86,7 +88,7 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
 }
 
 .card {
@@ -95,9 +97,10 @@ button:focus-visible {
 
 #app {
   width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
+}
+
+body {
+  overflow: hidden;
 }
 
 @media (prefers-color-scheme: light) {

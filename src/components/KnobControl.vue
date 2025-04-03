@@ -175,7 +175,7 @@ const onWheel = (e) => {
 onMounted(() => {
   const range = maxValue - minValue;
   const initialAngle = ((value.value - minValue) / range) * 360;
-  updateValue(initialAngle);
+  //updateValue(initialAngle);
 });
 
 defineExpose({ value });

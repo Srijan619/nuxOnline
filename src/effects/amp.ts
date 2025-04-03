@@ -1,11 +1,11 @@
-import type { KnobEntry } from "../types";
+import type { Nux } from "../types";
 import { populateKnobs } from "../utils/effectHelper";
 
-const populateAmpKnobs = (knobData: KnobEntry[] = PRIMARY_VARIANT) => {
+const populateAmpKnobs = (knobData: Nux.KnobEntry[] = PRIMARY_VARIANT) => {
   return populateKnobs(knobData, 24);
 };
 
-const PRIMARY_VARIANT: KnobEntry[] = [
+const PRIMARY_VARIANT: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["bass", "BASS"],
@@ -16,7 +16,7 @@ const PRIMARY_VARIANT: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const PRIMARY_BRIGHT_VARIANT: KnobEntry[] = [
+const PRIMARY_BRIGHT_VARIANT: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["bass", "BASS"],
@@ -26,7 +26,7 @@ const PRIMARY_BRIGHT_VARIANT: KnobEntry[] = [
   ["bias", "BIAS LEVEL"],
   ["level", "LEVEL"],
 ];
-const PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS: KnobEntry[] = [
+const PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["bass", "BASS"],
@@ -35,7 +35,7 @@ const PRIMARY_BRIGHT_VARIANT_WITHOUT_BIAS: KnobEntry[] = [
   ["bright", "", [0, 1]],
   ["level", "LEVEL"],
 ];
-const AGL_VARIANT: KnobEntry[] = [
+const AGL_VARIANT: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["bass", "BASS"],
@@ -45,7 +45,7 @@ const AGL_VARIANT: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const PRIMARY_VARIANT_WITHOUT_BIAS: KnobEntry[] = [
+const PRIMARY_VARIANT_WITHOUT_BIAS: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["bass", "BASS"],
@@ -55,7 +55,7 @@ const PRIMARY_VARIANT_WITHOUT_BIAS: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const SECOND_VARIANT: KnobEntry[] = [
+const SECOND_VARIANT: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["cut", "CUT"],
@@ -65,7 +65,7 @@ const SECOND_VARIANT: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const SECOND_VARIANT_WITHOUT_MIDDLE: KnobEntry[] = [
+const SECOND_VARIANT_WITHOUT_MIDDLE: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["master", "MASTER"],
   ["cut", "CUT"],
@@ -75,7 +75,7 @@ const SECOND_VARIANT_WITHOUT_MIDDLE: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const DGLASS_VARIANT: KnobEntry[] = [
+const DGLASS_VARIANT: Nux.KnobEntry[] = [
   ["master", "MASTER"],
   ["bass", "BASS"],
   ["1hz", "Hertz 1", [0, 2]],
@@ -86,7 +86,7 @@ const DGLASS_VARIANT: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const STARLIFT_VARIANT: KnobEntry[] = [
+const STARLIFT_VARIANT: Nux.KnobEntry[] = [
   ["bass", "BASS"],
   ["mid", "MID"],
   ["midfreq", "MID FREQ"],
@@ -96,7 +96,7 @@ const STARLIFT_VARIANT: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const PRINCETON_VARIANT: KnobEntry[] = [
+const PRINCETON_VARIANT: Nux.KnobEntry[] = [
   ["volume", "VOLUME"],
   ["treble", "TREBLE"],
   ["bass", "BASS"],
@@ -104,7 +104,7 @@ const PRINCETON_VARIANT: KnobEntry[] = [
   ["level", "LEVEL"],
 ];
 
-const TWEEDY_VARIANT: KnobEntry[] = [
+const TWEEDY_VARIANT: Nux.KnobEntry[] = [
   ["gain", "GAIN"],
   ["tone", "TONE"],
   ["master", "MASTER"],

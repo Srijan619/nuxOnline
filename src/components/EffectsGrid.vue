@@ -1,14 +1,14 @@
 <template>
   <div class="grid-container">
     <div
-      v-for="option in effectOptions"
+      v-for="option in state.selectedEffectOption?.options"
       :key="option.id"
       class="grid-item"
-      :class="{ active: option.id === selectedEffect.id }"
+      :class="{ active: option.id === state.selectedEffectOption.id }"
       :style="{
         border:
-          option.id === selectedEffect.id
-            ? `2px solid ${getMatchingEffectColor(selectedEffect)}`
+          option.id === state.selectedEffectOption.id
+            ? `2px solid ${option.dominantColor}`
             : 'none',
       }"
       @click="selectOption(option)"
@@ -19,11 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import type { EffectOption } from "../types/index.ts";
-import { getMatchingEffectColor } from "../utils/effectHelper.ts";
-import { nuxMidiController } from "../utils/NUXMidiController.ts";
-import effectsMapping from "../effects";
+import type { EffectConfig, Nux } from "../types/index.ts";
 
 defineProps({
   activeColor: { type: String, default: "var(--retro-glow)" },
@@ -32,29 +28,24 @@ defineProps({
   hoverColor: { type: String, default: "var(--hover-glow-color)" },
   gridGap: { type: String, default: ".5rem" },
 });
+// 🎭 composables
+import { useNUXMidiController } from "../composables/useNUXMidiController";
+import { computed, ref } from "vue";
 
-const selectedEffect = ref({});
+const { state, toggleEffect } = useNUXMidiController();
 
-const selectOption = (option: EffectOption) => {
-  nuxMidiController.value?.selectEffectOption(
-    { ...option, category: selectedEffect?.value.category },
-    selectedEffect?.value.index,
-  );
-};
-
-const effectOptions = computed(() => {
-  if (!selectedEffect.value) return [];
-  return effectsMapping?.effects[selectedEffect.value.category]?.options || [];
-});
-
-watch(
-  () => nuxMidiController.value?.selectedEffect,
-  async (newVal) => {
-    if (newVal) {
-      selectedEffect.value = newVal;
-    }
-  },
+const selectedEffectColor = computed(
+  () => state.selectedEffectOption?.dominantColor,
 );
+
+const selectOption = (option: EffectConfig.EffectOption) => {
+  const effectOption = {
+    ...option,
+    category: state.selectedEffectOption?.category,
+  } as Nux.EffectOption; //TODO: Fix this soft casting later...
+
+  toggleEffect(effectOption, state.selectedEffectOption?.index || 0);
+};
 </script>
 
 <style scoped>
@@ -68,7 +59,6 @@ watch(
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
   margin: 1rem;
-  max-height: 400px;
   overflow: scroll;
   scrollbar-width: none;
 }
@@ -80,7 +70,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 0.4rem;
   background-color: v-bind(itemBackgroundColor);
   color: v-bind(itemTextColor);
   font-family: Arial, sans-serif;
@@ -102,8 +92,8 @@ watch(
 
 .grid-item.active {
   box-shadow:
-    0 0 2px v-bind(getMatchingEffectColor(selectedEffect)),
-    0 0 2px v-bind(getMatchingEffectColor(selectedEffect));
+    0 0 2px v-bind(selectedEffectColor),
+    0 0 2px v-bind(selectedEffectColor);
   transform: scale(1.15);
 }
 

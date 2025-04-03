@@ -1,0 +1,38 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Amplifier Body -->
+  <rect x="50" y="80" width="300" height="150" rx="10" fill="#aa0310" stroke="#1a1a1a" stroke-width="4" /> <!-- Main body -->
+  
+  <!-- Speaker Grill -->
+  <rect x="70" y="120" width="260" height="90" fill="#4a4a4a" stroke="#3a3a3a" stroke-width="2" />
+  <!-- Grill pattern (simplified) -->
+  <pattern id="grillPattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+    <rect width="10" height="10" fill="#4a4a4a" />
+    <line x1="0" y1="0" x2="10" y2="0" stroke="#6a6a6a" stroke-width="1" />
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#6a6a6a" stroke-width="1" />
+  </pattern>
+  <rect x="70" y="120" width="260" height="90" fill="url(#grillPattern)" />
+
+  <!-- Control Panel -->
+  <rect x="70" y="90" width="260" height="20" fill="#1a1a1a" stroke="#0a0a0a" stroke-width="2" />
+  
+  <!-- Knobs -->
+  <circle cx="100" cy="100" r="6" fill="#ffffff" stroke="#000000" stroke-width="1" /> <!-- Knob 1 -->
+  <circle cx="130" cy="100" r="6" fill="#ffffff" stroke="#000000" stroke-width="1" /> <!-- Knob 2 -->
+  <circle cx="160" cy="100" r="6" fill="#ffffff" stroke="#000000" stroke-width="1" /> <!-- Knob 3 -->
+  <circle cx="190" cy="100" r="6" fill="#ffffff" stroke="#000000" stroke-width="1" /> <!-- Knob 4 -->
+  <circle cx="220" cy="100" r="6" fill="#ffffff" stroke="#000000" stroke-width="1" /> <!-- Knob 5 -->
+  
+  <!-- Input Jack -->
+  <circle cx="80" cy="100" r="4" fill="#000000" stroke="#ffffff" stroke-width="1" /> <!-- Input jack -->
+  
+  <!-- Power Switch -->
+  <rect x="300" y="95" width="20" height="10" fill="#000000" stroke="#ffffff" stroke-width="1" /> <!-- Power switch -->
+  
+  <!-- Handle on Top -->
+  <rect x="150" y="70" width="100" height="10" rx="5" fill="#1a1a1a" stroke="#0a0a0a" stroke-width="2" /> <!-- Handle -->
+  
+  <!-- Feet -->
+  <circle cx="70" cy="230" r="5" fill="#1a1a1a" /> <!-- Foot 1 -->
+  <circle cx="330" cy="230" r="5" fill="#1a1a1a" /> <!-- Foot 2 -->
+</svg>
+
