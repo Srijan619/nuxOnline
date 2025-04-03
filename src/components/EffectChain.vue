@@ -99,7 +99,7 @@ const showEffectOptions = (effect: Nux.EffectOption) => {
 const toggleEffectSelection = (effect: Nux.EffectOption) => {
   if (!effect.category) return;
   const index = getEffectIndexByCategory(effect.category);
-  if (!index) return;
+  if (index == null || index === -1) return;
   toggleEffect(effect, index);
 };
 </script>
