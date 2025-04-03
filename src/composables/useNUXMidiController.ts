@@ -100,7 +100,7 @@ const setupListeners = () => {
   isListenersAttached = true;
 
   state.midiInput.addListener("midimessage", (e: MessageEvent) => {
-    console.log("midimessage..", e);
+    // console.log("midimessage..", e);
     handleSysExResponse(e);
   });
   state.midiInput.addListener("sysex", (event: MessageEvent) => {
@@ -118,7 +118,6 @@ const handleSysExResponse = (event: MessageEvent) => {
     return;
   }
 
-  console.log(`✅ ${requestType} Response matched.`);
   switch (requestType) {
     case "DEVICE_VERSION":
       if (state.deviceVersion) return;
@@ -144,9 +143,6 @@ const handleSysExResponse = (event: MessageEvent) => {
       handleEffectChanged(data);
       break;
     case "EFFECT_ORDER_CHANGED":
-      console.log(
-        "Effect order changed signal received..refetching preset data..",
-      );
       requestUpdatedEffectsOrder();
       //We need to do ourselves optimistic update as NUX does not actually save when effect order is changed, so getting latest data does not help
       //getPresetData();
@@ -236,7 +232,6 @@ const toggleEffect = (effect: Nux.EffectOption, index: number) => {
   try {
     const message = [0xb0, parseInt(hexIndex(index), 16), intByteToSend];
     state.midiOutput?.send(message);
-    console.log(`MIDI message sent: ${message}`);
   } catch (error) {
     console.error("Error sending MIDI message", error);
     updateEffectState(effect, effectId, effect.active);
@@ -296,7 +291,6 @@ const handleEffectChanged = (data: Uint8Array<ArrayBufferLike>) => {
       ...state.selectedEffectOption,
       ...effectOption,
     };
-    console.log("NUX CHANGED EFFECT..", category, effectOption);
   } else {
     updateKnobValue(secondByte, thirdByte);
   }
@@ -305,7 +299,6 @@ const handleEffectChanged = (data: Uint8Array<ArrayBufferLike>) => {
 const updateKnobValue = (ctrl: number, value: number) => {
   const activeEffect = determineActiveEffectBasedOnCurrentKnob(ctrl);
   if (!activeEffect) return; // No action if control values can not be found...
-  console.log("Effect changed...", ctrl, value);
 
   const effects = getAndUpdateEffectByControlKnob(
     state.currentPresetData.effects,
@@ -420,7 +413,6 @@ const mapDataBackToNUXFormat = () => {
 
 // TODO: webmidi api says not to use this directly, so lets think about that later..
 const sendRawSysEx = (ctrl: number, value: number) => {
-  console.log("Sending raw sysex..", ctrl, value);
   state?.midiOutput?.send([176, ctrl, value]);
 };
 

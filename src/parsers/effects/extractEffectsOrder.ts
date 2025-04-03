@@ -29,7 +29,6 @@ const getEffectIndexByCategory = (
 const extractEffectsOrder = (data: Uint8Array) => {
   const slicedData = data.slice(147, 165);
   const effectsOrder: Nux.EffectCategory[] = [];
-  console.log("Effect order..", data);
   for (let i = 0; i < slicedData.length; ) {
     if (i % 3 === 0) {
       // Process single byte (like 1st, 4th, 7th, etc.)

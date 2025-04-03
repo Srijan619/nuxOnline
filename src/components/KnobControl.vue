@@ -173,7 +173,6 @@ const onWheel = (e) => {
 };
 
 onMounted(() => {
-  console.log("knocontrol initialvalue..", props);
   const range = maxValue - minValue;
   const initialAngle = ((value.value - minValue) / range) * 360;
   //updateValue(initialAngle);

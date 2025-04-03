@@ -52,7 +52,6 @@ const effectList = computed({
   },
   set: (newList: Nux.EffectOption[]) => {
     if (!state.currentPresetData) return;
-    console.log("Request NUX to update effect order now...", newList);
     updateEffectOrder(newList);
   },
 });

@@ -36,7 +36,6 @@ function extractPresetName(nameBytes: Uint8Array) {
   // Remove any non-alphanumeric characters (except space and dash)
   name = name.replace(/[^a-zA-Z0-9\s\-]/g, "");
 
-  console.log(`🎸 Preset name: "${name}"`);
   return name;
 }
 
