@@ -1,0 +1,47 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main body of the pedal -->
+  <rect x="50" y="50" width="300" height="200" fill="#D3C7A5" stroke="#000000" stroke-width="2" rx="10"/>
+
+  <!-- Black top panel for sliders -->
+  <rect x="70" y="70" width="260" height="60" fill="#1C2526" stroke="#000000" stroke-width="1"/>
+
+  <!-- Sliders (7 frequency sliders + 1 level slider) -->
+  <rect x="80" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 100Hz -->
+  <rect x="105" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 200Hz -->
+  <rect x="130" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 400Hz -->
+  <rect x="155" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 800Hz -->
+  <rect x="180" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 1.6kHz -->
+  <rect x="205" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 3.2kHz -->
+  <rect x="230" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- 6.4kHz -->
+  <rect x="255" y="80" width="10" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1"/> <!-- Level -->
+
+  <!-- Frequency labels (simplified) -->
+  <text x="80" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">100</text>
+  <text x="105" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">200</text>
+  <text x="130" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">400</text>
+  <text x="155" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">800</text>
+  <text x="180" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">1.6k</text>
+  <text x="205" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">3.2k</text>
+  <text x="230" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">6.4k</text>
+  <text x="255" y="65" font-size="10" fill="#FFFFFF" text-anchor="middle">Level</text>
+
+  <!-- Footswitch -->
+  <rect x="150" y="180" width="100" height="50" fill="#000000" stroke="#FFFFFF" stroke-width="2" rx="5"/>
+
+  <!-- Boss logo on footswitch (simplified as text) -->
+  <text x="200" y="210" font-size="20" fill="#FFFFFF" text-anchor="middle">BOSSYY</text>
+
+  <!-- Main label: "Equalizer GE-7" -->
+  <text x="200" y="160" font-size="30" fill="#000000" text-anchor="middle">Equalizer GE-7</text>
+
+  <!-- Input/Output labels -->
+  <text x="330" y="100" font-size="12" fill="#000000" text-anchor="middle">INPUT</text>
+  <text x="70" y="100" font-size="12" fill="#000000" text-anchor="middle">OUTPUT</text>
+
+  <!-- Input/Output jacks (simplified as circles) -->
+  <circle cx="330" cy="120" r="8" fill="#666666" stroke="#000000" stroke-width="1"/>
+  <circle cx="70" cy="120" r="8" fill="#666666" stroke="#000000" stroke-width="1"/>
+
+  <!-- Power switch/knob on the side (simplified) -->
+  <circle cx="50" cy="220" r="10" fill="#000000" stroke="#666666" stroke-width="1"/>
+</svg>
