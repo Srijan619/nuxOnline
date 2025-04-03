@@ -1,6 +1,6 @@
-import type { DeviceVersion } from "../../types";
+import type { Nux } from "../../types";
 
-function extractDeviceVersion(response: Uint8Array): DeviceVersion {
+function extractDeviceVersion(response: Uint8Array): Nux.DeviceVersion {
   if (response.length < 6) {
     console.warn("⚠️ Unexpected SysEx response length:", response);
     return { version: "Unknown" };

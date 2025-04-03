@@ -1,5 +1,4 @@
 import type { Nux } from "../types";
-import { EffectCategory } from "../types/types";
 import { getEffectKnobs } from "./effectHelper";
 
 // Type for control ranges
