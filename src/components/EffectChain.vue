@@ -163,7 +163,7 @@ const toggleEffectSelection = (effect: Nux.EffectOption) => {
 }
 
 .effect-box.inactive {
-  opacity: 0.7;
+  opacity: 0.3;
 }
 
 .effect-box:hover {
