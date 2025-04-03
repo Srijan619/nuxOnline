@@ -66,7 +66,6 @@ const initializeController = async () => {
     state.deviceName = nuxOutput.name;
     state.midiOutput = nuxOutput;
     state.midiInput = nuxInput;
-    state.isDeviceConnected = true;
 
     setupListeners();
     getDeviceVersion();
@@ -123,6 +122,9 @@ const handleSysExResponse = (event: MessageEvent) => {
       if (state.deviceVersion) return;
       state.deviceVersion =
         Parser.Device.extractDeviceVersion(data)?.version || "Unknown";
+      if (state.deviceVersion.startsWith("v4")) {
+        state.isDeviceConnected = true; // set device connected only for v4 now, for v5 it might break currently..
+      }
       break;
     case "CURRENT_PRESET_BASIC":
       state.currentPresetData =

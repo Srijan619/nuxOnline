@@ -14,7 +14,10 @@ onMounted(() => {
 <template>
   <div id="nux-container">
     <div v-if="!state.isDeviceConnected">
-      <p>Device is not connected</p>
+      <p>
+        Device is not connected. Make sure NUX-MG 30 is connected and you are
+        using firmware version 4.
+      </p>
     </div>
     <div v-else-if="state.isFetchingPresets" class="loading-container">
       <div class="spinner"></div>
