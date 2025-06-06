@@ -14,3 +14,5 @@ Some features are still in progress:
 
 Effects Mapping Across Scenes: Mapping effects to different scenes isn’t supported yet—stay tuned for updates!
 Preset Saving: Saving presets still requires the NUX MG-30 device itself, as direct preset storage isn’t implemented here.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_avKUWYolY8?si=KEjd3oDLig8NSgiF" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
